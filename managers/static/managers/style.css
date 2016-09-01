@@ -1,0 +1,31 @@
+/*@font-face {*/
+    /*font-family: 'Pixel';*/
+    /*src: url('font.ttf') format('truetype');*/
+    /*font-weight: normal;*/
+    /*font-style: normal;*/
+/*}*/
+@font-face {
+	font-family: 'Pixel';
+	src: url('fonts/font.eot');
+	src: url('fonts/font.woff') format('woff'), url('fonts/font.ttf') format('truetype'), url('fonts/font.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+body {
+    font-family: "Pixel";
+}
+
+
+
+p {
+    /*color: forestgreen;*/
+}
+.centered {
+    text-align: center;
+}
+.success {
+	background-color: darkgreen;
+}
+.failure {
+	background-color: red;
+}
