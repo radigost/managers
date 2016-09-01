@@ -1,17 +1,17 @@
-{
-  "name": "managers",
-  "version": "1.0.0",
-  "description": "",
-  "main": "webpack.config.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "nickolay polyakov",
-  "license": "ISC",
-"dependencies": {
-    "bower": "0.6.x"
-},
-"scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install"
-}
-}
+//{
+//  "name": "managers",
+//  "version": "1.0.0",
+//  "description": "",
+//  "main": "webpack.config.js",
+//  "scripts": {
+//    "test": "echo \"Error: no test specified\" && exit 1"
+//  },
+//  "author": "nickolay polyakov",
+//  "license": "ISC",
+//"dependencies": {
+//    "bower": "0.6.x"
+//},
+//"scripts": {
+//    "postinstall": "./node_modules/bower/bin/bower install"
+//}
+//}
