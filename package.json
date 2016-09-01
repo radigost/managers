@@ -11,6 +11,10 @@
     "bower": "1.7.x"
 },
 "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install angular"
+    "postinstall": "./node_modules/bower/bin/bower install angular",
+    "postinstall": "./node_modules/bower/bin/bower install angular-bootstrap",
+    "postinstall": "./node_modules/bower/bin/bower install lodash",
+    "postinstall": "./node_modules/bower/bin/bower install bootstrap",
+    "postinstall": "./node_modules/bower/bin/bower install restangular"
 }
 }
