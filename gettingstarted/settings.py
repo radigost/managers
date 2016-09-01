@@ -133,13 +133,6 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'djangobower.finders.BowerFinder',
 ]
-BOWER_COMPONENTS_ROOT = BASE_DIR
-BOWER_INSTALLED_APPS = (
-    'angular',
-    'bootstrap',
-    'lodash',
-    'restangular'
-)
 
 
 
@@ -147,6 +140,16 @@ BOWER_INSTALLED_APPS = (
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
+
+BOWER_COMPONENTS_ROOT = BASE_DIR
+BOWER_INSTALLED_APPS = (
+    'angular',
+    'bootstrap',
+    'lodash',
+    'restangular',
+    'angular-bootstrap',
+)
+
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
