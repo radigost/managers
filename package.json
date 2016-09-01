@@ -11,6 +11,6 @@
     "bower": "1.7.x"
 },
 "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install"
+    "postinstall": "./node_modules/bower/bin/bower install angular"
 }
 }
