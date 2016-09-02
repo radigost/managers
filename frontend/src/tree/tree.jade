@@ -1,0 +1,20 @@
+
+.centered
+    h3 Редактор диалога
+    h5 [[ctrl.treeType]]
+.container
+    .row
+        button.btn.btn-default(ng-click="ctrl.makeTree(ctrl.player)") Сделать дерево для Игрока
+        button.btn.btn-default(ng-click="ctrl.makeTree(ctrl.npc)") Сделать дерево для NPC
+        input(type = "checkbox" ng-model="ctrl.filterQ")
+
+        ul(ng-repeat="question in ctrl.tree | HasNoAnswer: ctrl.filterQ")
+            li [[question.id]]. [[question.text]]
+                span.label.label-primary(ng-if="question.type") [[question.type]]
+                //button.btn.btn-warning(ng-click="ctrl.openModal()") Редактировать
+                ul(ng-repeat="element in question.answers")
+                    li
+                        a [[element.id]]. [[element.text]]
+                            span.label.label-primary(ng-if="element.type") [[element.type]]
+
+

@@ -1,0 +1,88 @@
+.modal-header
+    button.close(ng-click='wizard.cancel()' )
+        span(aria-hidden='true') ×
+    .modal-title
+        h4
+            b Изменение вариантов ответа
+.modal-body
+    header Здесь показываем вопрос, варианты ответа и даем возможность либо выбрать еще один ответ либо добавить новый
+    //form.smart-form(name="addEntityForm" )
+    //    header Выберитие у кого нашли технику
+    //    fieldset
+    //        section
+    //            label.label Компания*
+    //            label.input
+    //                ui-select(
+    //                ng-model='wizard.service.selected.client'
+    //                theme = 'select2'
+    //                sortable='true'
+    //                title='Выберите период...'
+    //                on-select="$ctrl.service.groups.changeGroup($select.selected.id)"
+    //                required
+    //                )
+    //                    ui-select-match(placeholder='Клиент') [[$select.selected.name]]
+    //                    ui-select-choices(
+    //                    repeat='group in wizard.service.clients.items'
+    //                    refresh="wizard.service.refreshCompanies($select.search)"
+    //                    )
+    //                        span(ng-bind="group.name")
+    //    header Введите данные о технике
+    //    fieldset
+    //        section
+    //            label.label Выберите Тип техники:
+    //            label.input
+    //                ui-select(
+    //                ng-model='wizard.service.selected.group'
+    //                search-enabled='false'
+    //                theme = 'select2'
+    //                sortable='true'
+    //                title='Выберите период...'
+    //                on-select="wizard.service.refreshProducts()"
+    //                )
+    //                    ui-select-match(placeholder='Товарная группа') [[$select.selected.name]]
+    //                    ui-select-choices(repeat='group in wizard.service.groups.items')
+    //                        //span(ng-bind-html="$ctrl.makeSpacing(group.spacing)")
+    //                        span(ng-bind="group.name")
+    //        section
+    //            label.label Выберите Производителя техники:
+    //            label.input
+    //                ui-select(
+    //                ng-model='wizard.service.selected.producer'
+    //                search-enabled='false'
+    //                theme = 'select2'
+    //                sortable='true'
+    //                title='Выберите период...'
+    //                on-select="wizard.service.refreshProducts()"
+    //                )
+    //                    ui-select-match(placeholder='Производители') [[$select.selected.name]]
+    //                    ui-select-choices(
+    //                    repeat='group in wizard.service.producers.items'
+    //                    )
+    //                        span(ng-bind="group.name")
+    //        section
+    //            label.label Модель*
+    //            label.label(ng-show="wizard.hasNoModels()") Нет моделей по вашим условиям!
+    //            label.input
+    //                ui-select(
+    //                ng-model='wizard.service.selected.model'
+    //                theme = 'select2'
+    //                sortable='true'
+    //                title='Выберите период...'
+    //                on-select="$ctrl.service.groups.changeGroup($select.selected.id)"
+    //                required
+    //                )
+    //                    ui-select-match(placeholder='Модели техники') [[$select.selected.name]]
+    //                    ui-select-choices(
+    //                    repeat='model in wizard.service.models.items'
+    //                    refresh="wizard.service.refreshProducts($select.search)"
+    //                    )
+    //                        span(ng-bind="model.name")
+    //        section
+    //            label.label Серийный номер*
+    //            label.input
+    //                input(type="text" ng-model="wizard.service.selected.sn" name="sn" required )
+
+.modal-footer
+    button.btn(ng-click="wizard.cancel()") Отменить
+    button.btn(ng-disabled="addEntityForm.$invalid " ng-click="wizard.save()" ) Сохранить
+    //ng-disabled="!wizard.service.canSave"
