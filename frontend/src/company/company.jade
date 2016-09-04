@@ -3,6 +3,7 @@
     h3 [[ctrl.gameName]]
 .container
     .row
+        a(href = "/managers/#/game") Назад
         .panel.panel-default.col-lg-4
             .panel-body
                 .media
@@ -28,28 +29,28 @@
 
 
         .panel.panel-default.col-lg-8
-            .panel
-                p Фильтры
-            .panel
-                p Список организаций
-            .panel.panel-default(ng-repeat="lead in ctrl.company.items")
+            .panel.panel-default
                 .panel-body
                     .media
                         .media-left.media-middle
-                            img(src="../static/managers/img/building[[lead.id]].png" width=100 height=150)
+                            img(src="../static/managers/img/building[[ctrl.company.current.id]].png" width=100 height=150)
                         .media-body
                                     h1
-                                        a(href="" ng-click="ctrl.goToCompany(lead.id)") [[lead.name]]
+                                        a(href="") [[ctrl.company.current.name]]
 
                                     .col-md-6
-                                        p Размер компании: [[lead.size]]
-                                        p История сделок:
+                                        p Размер : [[ctrl.company.current.size]]
+                                        p [[ctrl.company.current.description]]
+                                        p
                                             i.fa.fa-dollar(aria-hidden='true' style="color:red;")
-                                    .col-md-6
-                                        .media-left.media-middle
-                                            img(src="../static/managers/img/secretar[[lead.id]].png" width=75 height=100)
-                                            a.btn.btn-success(ng-click="ctrl.goToTalk(lead.id)") Позвонить
-                                        .media-body
+            h5 Сотрудники:
+            .panel.panel-default
+                .panel-body
+                    .col-md-6
+                        .media-left.media-middle
+                            img(src="../static/managers/img/secretar[[ctrl.company.current.id]].png" width=75 height=100)
+                            a.btn.btn-success(ng-click="ctrl.goToTalk(ctrl.company.current.id)") Позвонить
+                        .media-body
 
 
 

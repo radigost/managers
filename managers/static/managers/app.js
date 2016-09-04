@@ -69,6 +69,10 @@
 	      path: '/game',
 	      name: 'Game',
 	      component: 'game'
+	    }, {
+	      path: '/company',
+	      name: 'Company',
+	      component: 'company'
 	    }
 	  ]
 	}).config(function($locationProvider) {
@@ -82,6 +86,8 @@
 	__webpack_require__(11);
 
 	__webpack_require__(13);
+
+	__webpack_require__(15);
 
 
 /***/ },
@@ -107,6 +113,7 @@
 	    this.fillNextArrayOfQuestions = bind(this.fillNextArrayOfQuestions, this);
 	    this.findAnswerForQuestion = bind(this.findAnswerForQuestion, this);
 	    this.update = bind(this.update, this);
+	    this.$routerOnActivate = bind(this.$routerOnActivate, this);
 	    this.$onInit = bind(this.$onInit, this);
 	    this.gameName = "Окно переговоров";
 	    this.time = 100;
@@ -121,6 +128,10 @@
 
 	  appCtrl.prototype.$onInit = function() {
 	    return this.update(1);
+	  };
+
+	  appCtrl.prototype.$routerOnActivate = function(next) {
+	    return this.npcId = next.params.npcId;
 	  };
 
 	  appCtrl.prototype.update = function(questionId) {
@@ -223,7 +234,10 @@
 	angular.module('app').component('talk', {
 	  template: tpl(),
 	  controller: [appCtrl],
-	  controllerAs: 'ctrl'
+	  controllerAs: 'ctrl',
+	  bundings: {
+	    $router: '<'
+	  }
 	});
 
 
@@ -244,6 +258,7 @@
 	    this.name = "***";
 	    this.company = "Электрочугун инкорпорейтед";
 	    this.position = "(?)Секретарь";
+	    this.nameArray = ['Мария', ' Екатиерина', 'Василиса'];
 	    this.tree = [
 	      {
 	        questionId: 1,
@@ -319,7 +334,7 @@
 	        used: false
 	      }, {
 	        id: 6,
-	        text: "Меня зовут %PERSONNAME%",
+	        text: "Меня зовут PERSONNAME",
 	        used: false
 	      }, {
 	        id: 8,
@@ -368,6 +383,20 @@
 	        used: false
 	      }
 	    ];
+	    this.currentNpc = {
+	      id: 1,
+	      name: "Мария",
+	      companyId: 1,
+	      positionName: "Секретарь"
+	    };
+	    this.loadedData = [
+	      {
+	        id: 1,
+	        name: "Мария",
+	        companyId: 1,
+	        positionName: "Секретарь"
+	      }
+	    ];
 	  }
 
 	  Npc.prototype.findNode = function(questionId) {
@@ -377,11 +406,17 @@
 	  };
 
 	  Npc.prototype.findCurrent = function() {
-	    var choiceIndex;
+	    var choiceIndex, i;
 	    choiceIndex = this.branch.choices[0];
-	    return this.current = _.find(this.nodes, {
+	    this.current = _.find(this.nodes, {
 	      id: choiceIndex
 	    });
+	    if (choiceIndex === 6) {
+	      i = _.random(0, this.nameArray.length + 1, false);
+	      this.name = this.nameArray[i];
+	      this.current.text = _.replace(this.current.text, 'PERSONNAME', this.name);
+	      return console.log(this.current.text);
+	    }
 	  };
 
 	  Npc.prototype.fail = function() {
@@ -559,7 +594,7 @@
 
 	var pug = __webpack_require__(5);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager.png\" width=\"100\" height=\"150\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Fgame\"\u003EЗакончить разговор\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--p [[ctrl.next.question]]--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\" ng-class=\"ctrl.checkColor()\"\u003E\u003Cp\u003EОставшееся время\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.time]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: [[ctrl.time]]%\"\u003E\u003C!--| [[ctrl.time]]--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fp\u003E\u003C!--ol--\u003E\u003C!--    li(ng-repeat='item in ctrl.history') -[[item]]--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg class=\"media-object\" src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar.png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003EИмя-[[ctrl.npc.name]]\u003C\u002Fli\u003E\u003Cli\u003EКомпания- [[ctrl.npc.company]]\u003C\u002Fli\u003E\u003Cli\u003EДолжность- [[ctrl.npc.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\" ng-show=\"!ctrl.notTheEnd()\"\u003E\u003Cp\u003E[[ctrl.player.current.text]]\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" ng-show=\"ctrl.notTheEnd()\"\u003E\u003Cdiv class=\"panel-header\"\u003EВарианты ответа\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"list-group\"\u003E\u003Ca class=\"list-group-item\" href=\"\" ng-repeat=\"element in ctrl.player.questionArray\" ng-click=\"ctrl.update(element.id)\"\u003E-[[element.text]]\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C!--div(ng-show='ctrl.isStatus(\"failure\")') Проигрышь--\u003E\u003C!--div(ng-show='ctrl.isStatus(\"success\")') Выигрышь!--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\"\u003E\u003Cp\u003E[[ctrl.npc.current.text]]\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-12\"\u003E\u003Cdiv class=\"page-header\"\u003E\u003Cp\u003EИстория разговора\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Col\u003E\u003Cli ng-repeat=\"item in ctrl.history\"\u003E-[[item.text]]\u003C\u002Fli\u003E\u003C\u002Fol\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager.png\" width=\"100\" height=\"150\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Fgame\"\u003EЗакончить разговор\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--p [[ctrl.next.question]]--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\" ng-class=\"ctrl.checkColor()\"\u003E\u003Cp\u003EОставшееся время\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.time]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: [[ctrl.time]]%\"\u003E\u003C!--| [[ctrl.time]]--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fp\u003E\u003C!--ol--\u003E\u003C!--    li(ng-repeat='item in ctrl.history') -[[item]]--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg class=\"media-object\" src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[ctrl.npcId]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003EИмя-[[ctrl.npc.currentNpc.name]]\u003C\u002Fli\u003E\u003Cli\u003EКомпания- [[ctrl.npc.currentNpc.companyId]]\u003C\u002Fli\u003E\u003Cli\u003EДолжность- [[ctrl.npc.currentNpc.positionName]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\" ng-show=\"!ctrl.notTheEnd()\"\u003E\u003Cp\u003E[[ctrl.player.current.text]]\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" ng-show=\"ctrl.notTheEnd()\"\u003E\u003Cdiv class=\"panel-header\"\u003EВарианты ответа\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"list-group\"\u003E\u003Ca class=\"list-group-item\" href=\"\" ng-repeat=\"element in ctrl.player.questionArray\" ng-click=\"ctrl.update(element.id)\"\u003E-[[element.text]]\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C!--div(ng-show='ctrl.isStatus(\"failure\")') Проигрышь--\u003E\u003C!--div(ng-show='ctrl.isStatus(\"success\")') Выигрышь!--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\"\u003E\u003Cp\u003E[[ctrl.npc.current.text]]\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-12\"\u003E\u003Cdiv class=\"page-header\"\u003E\u003Cp\u003EИстория разговора\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Col\u003E\u003Cli ng-repeat=\"item in ctrl.history\"\u003E-[[item.text]]\u003C\u002Fli\u003E\u003C\u002Fol\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -985,71 +1020,48 @@
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Npc, Player, gameCtrl, tpl,
+	var Company, Npc, Player, gameCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 	Npc = __webpack_require__(2);
 
 	Player = __webpack_require__(3);
 
+	Company = __webpack_require__(17);
+
 	tpl = __webpack_require__(12);
 
 	gameCtrl = (function() {
 	  function gameCtrl() {
+	    this.goToCompany = bind(this.goToCompany, this);
+	    this.goToTalk = bind(this.goToTalk, this);
 	    this.$onInit = bind(this.$onInit, this);
 	    this.gameName = "Основной экран";
 	    this.npc = new Npc;
 	    this.player = new Player;
+	    this.company = new Company;
 	    this.gamestat = {
 	      money: 500
-	    };
-	    this.leads = {
-	      items: [
-	        {
-	          id: 1,
-	          name: "Восток Инк"
-	        }, {
-	          id: 2,
-	          name: "Дальний восток "
-	        }, {
-	          id: 3,
-	          name: "Ближний Восток"
-	        }, {
-	          id: 4,
-	          name: "Опиум для народа"
-	        }, {
-	          id: 5,
-	          name: "Все Вани"
-	        }, {
-	          id: 6,
-	          name: "Дик и к "
-	        }, {
-	          id: 7,
-	          name: "Бразерхуд оф стил"
-	        }, {
-	          id: 8,
-	          name: "Сестрихуд оф ситец"
-	        }, {
-	          id: 9,
-	          name: "Бардук"
-	        }, {
-	          id: 10,
-	          name: "Вести"
-	        }, {
-	          id: 11,
-	          name: "Бардлагок инкорпорейтед"
-	        }, {
-	          id: 12,
-	          name: "Богатые беженцы"
-	        }, {
-	          id: 13,
-	          name: "Богач и Богач"
-	        }
-	      ]
 	    };
 	  }
 
 	  gameCtrl.prototype.$onInit = function() {};
+
+	  gameCtrl.prototype.goToTalk = function(id) {
+	    return this.$router.navigate([
+	      'Talk', {
+	        npcId: id
+	      }
+	    ]);
+	  };
+
+	  gameCtrl.prototype.goToCompany = function(id) {
+	    return this.$router.navigate([
+	      'Company', {
+	        companyId: id
+	      }
+	    ]);
+	  };
 
 	  return gameCtrl;
 
@@ -1058,7 +1070,10 @@
 	angular.module('app').component('game', {
 	  template: tpl(),
 	  controller: [gameCtrl],
-	  controllerAs: 'ctrl'
+	  controllerAs: 'ctrl',
+	  bindings: {
+	    $router: '<'
+	  }
 	});
 
 
@@ -1068,7 +1083,7 @@
 
 	var pug = __webpack_require__(5);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager.png\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.gamestat.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cspan\u003EExp\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\"\u003E\u003Cdiv class=\"panel\"\u003E\u003Cp\u003EФильтры\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel\"\u003E\u003Cp\u003EСписок организаций\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" ng-repeat=\"lead in ctrl.leads.items\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fbuilding[[lead.id]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ch1\u003E\u003Ca\u003E[[lead.name]]\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cp\u003EРазмер : ***\u003C\u002Fp\u003E\u003Cp\u003E\u003Ci class=\"fa fa-dollar\" aria-hidden=\"true\" style=\"color:red\"\u003E\u003C\u002Fi\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[lead.id]].png\" width=\"75\" height=\"100\"\u003E\u003Ca class=\"btn btn-success\" href=\"\u002Fmanagers\u002F#\u002Ftalk\"\u003EПозвонить\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager.png\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.gamestat.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cspan\u003EExp\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\"\u003E\u003Cdiv class=\"panel\"\u003E\u003Cp\u003EФильтры\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel\"\u003E\u003Cp\u003EСписок организаций\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" ng-repeat=\"lead in ctrl.company.items\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fbuilding[[lead.id]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ch1\u003E\u003Ca href=\"\" ng-click=\"ctrl.goToCompany(lead.id)\"\u003E[[lead.name]]\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cp\u003EРазмер компании: [[lead.size]]\u003C\u002Fp\u003E\u003Cp\u003EИстория сделок:\u003Ci class=\"fa fa-dollar\" aria-hidden=\"true\" style=\"color:red\"\u003E\u003C\u002Fi\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[lead.id]].png\" width=\"75\" height=\"100\"\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToTalk(lead.id)\"\u003EПозвонить\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -1101,6 +1116,172 @@
 
 	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003C!--p Это главное меню. Отсюда можно начать новую игру и продолжить старую--\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-4 col-sm-offset-4\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Fgame\"\u003E Продолжить Игру\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Ftalk\"\u003EТур переговоров\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Ftree\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Новая игра--\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Загрузить--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Company, Player, companyCtrl, tpl,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+	Player = __webpack_require__(3);
+
+	Company = __webpack_require__(17);
+
+	tpl = __webpack_require__(16);
+
+	companyCtrl = (function() {
+	  function companyCtrl() {
+	    this.goToTalk = bind(this.goToTalk, this);
+	    this.$routerOnActivate = bind(this.$routerOnActivate, this);
+	    this.gameName = "Экран информации о компании";
+	    this.player = new Player;
+	    this.company = new Company;
+	  }
+
+	  companyCtrl.prototype.$routerOnActivate = function(next) {
+	    return this.company.selectCurrent(next.params.companyId);
+	  };
+
+	  companyCtrl.prototype.goToTalk = function(id) {
+	    return this.$router.navigate([
+	      'Talk', {
+	        npcId: id
+	      }
+	    ]);
+	  };
+
+	  return companyCtrl;
+
+	})();
+
+	angular.module('app').component('company', {
+	  template: tpl(),
+	  controller: [companyCtrl],
+	  controllerAs: 'ctrl',
+	  bindings: {
+	    $router: '<'
+	  }
+	});
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pug = __webpack_require__(5);
+
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Ca href=\"\u002Fmanagers\u002F#\u002Fgame\"\u003EНазад\u003C\u002Fa\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager.png\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.gamestat.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cspan\u003EExp\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\"\u003E\u003Cdiv class=\"panel panel-default\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fbuilding[[ctrl.company.current.id]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ch1\u003E\u003Ca href=\"\"\u003E[[ctrl.company.current.name]]\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cp\u003EРазмер : [[ctrl.company.current.size]]\u003C\u002Fp\u003E\u003Cp\u003E[[ctrl.company.current.description]]\u003C\u002Fp\u003E\u003Cp\u003E\u003Ci class=\"fa fa-dollar\" aria-hidden=\"true\" style=\"color:red\"\u003E\u003C\u002Fi\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Ch5\u003EСотрудники:\u003C\u002Fh5\u003E\u003Cdiv class=\"panel panel-default\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[ctrl.company.current.id]].png\" width=\"75\" height=\"100\"\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToTalk(ctrl.company.current.id)\"\u003EПозвонить\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	module.exports = template;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	var Company,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+	Company = (function() {
+	  function Company() {
+	    this.selectCurrent = bind(this.selectCurrent, this);
+	    this.current = {};
+	    this.items = [
+	      {
+	        id: 1,
+	        name: "Восток Инк",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "***"
+	      }, {
+	        id: 2,
+	        name: "Дальний восток ",
+	        staff: [],
+	        description: "Работают в строительсте. крутые ребята",
+	        size: "***"
+	      }, {
+	        id: 3,
+	        name: "Ближний Восток",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "**"
+	      }, {
+	        id: 4,
+	        name: "Опиум для народа",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "**"
+	      }, {
+	        id: 5,
+	        name: "Все Вани",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "**"
+	      }, {
+	        id: 6,
+	        name: "Дик и к ",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "****"
+	      }, {
+	        id: 7,
+	        name: "Бразерхуд оф стил",
+	        staff: [],
+	        description: "Военная компания с большой сетью по всей стране",
+	        size: "*"
+	      }, {
+	        id: 8,
+	        name: "Сестрихуд оф вуд",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "***"
+	      }, {
+	        id: 9,
+	        name: "Бардук",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "***"
+	      }, {
+	        id: 10,
+	        name: "Вести",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "**"
+	      }, {
+	        id: 11,
+	        name: "Бардлагок инкорпорейтед",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "*"
+	      }, {
+	        id: 12,
+	        name: "Богатые беженцы",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "****"
+	      }, {
+	        id: 13,
+	        name: "Богач и Богач",
+	        staff: [],
+	        description: "Самая крутая компания в мире",
+	        size: "**"
+	      }
+	    ];
+	  }
+
+	  Company.prototype.selectCurrent = function(id) {
+	    return this.current = _.find(this.items, (function(_this) {
+	      return function(element) {
+	        return element.id === _.toInteger(id);
+	      };
+	    })(this));
+	  };
+
+	  return Company;
+
+	})();
+
+	module.exports = Company;
+
 
 /***/ }
 /******/ ]);

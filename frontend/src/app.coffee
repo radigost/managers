@@ -17,6 +17,8 @@ angular.module('app').component('app',{
     {path: '/talk', name: 'Talk', component: 'talk' }
     {path: '/tree', name: 'Tree', component: 'tree' }
     {path: '/game', name: 'Game', component: 'game' }
+    {path: '/company', name: 'Company', component: 'company' }
+
 
   ]
 })
@@ -29,4 +31,5 @@ require('./talk/talk.coffee');
 require('./tree/tree.coffee');
 require('./game/game.coffee');
 require('./menu/menu.coffee');
+require('./company/company.coffee');
 

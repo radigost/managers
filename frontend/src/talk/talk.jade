@@ -25,12 +25,12 @@
             .panel-body
                 .media
                     .media-left.media-middle
-                        img.media-object(src="../static/managers/img/secretar.png" width=100 height=150)
+                        img.media-object(src="../static/managers/img/secretar[[ctrl.npcId]].png" width=100 height=150)
                     .media-body
                         ul
-                            li Имя-[[ctrl.npc.name]]
-                            li Компания- [[ctrl.npc.company]]
-                            li Должность- [[ctrl.npc.position]]
+                            li Имя-[[ctrl.npc.currentNpc.name]]
+                            li Компания- [[ctrl.npc.currentNpc.companyId]]
+                            li Должность- [[ctrl.npc.currentNpc.positionName]]
 
     .row
         .col-lg-6

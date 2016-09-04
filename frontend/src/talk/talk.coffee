@@ -17,6 +17,8 @@ class appCtrl
   $onInit:()=>
     @update 1
 
+  $routerOnActivate:(next)=>
+    @npcId=next.params.npcId
   update:(questionId)=>
     @time -= 30 if questionId>1
     @findAnswerForQuestion(questionId)
@@ -89,5 +91,7 @@ angular.module('app').component('talk',{
   template:tpl()
   controller:[appCtrl]
   controllerAs:'ctrl'
+  bundings:
+    $router:'<'
 })
 

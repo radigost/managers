@@ -3,3 +3,4 @@
  */
 Player = require('./player.coffee');
 Npc = require('./npc.coffee');
+Company = require('./Company.coffee');

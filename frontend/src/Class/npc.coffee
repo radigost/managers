@@ -4,6 +4,7 @@ class Npc
     @name="***"
     @company="Электрочугун инкорпорейтед"
     @position="(?)Секретарь"
+    @nameArray = ['Мария',' Екатиерина','Василиса']
     @tree = [
           {questionId:1,choices:[1,5]}
           {questionId:2,choices:[4]}
@@ -28,7 +29,7 @@ class Npc
       {id:7,text:"И вам добрый день!" ,used:false}
       {id:4,text:"А кто его спрашивает?" ,used:false}
       {id:5,text:"Алло?" ,used:false}
-      {id:6,text:"Меня зовут %PERSONNAME%" ,used:false}
+      {id:6,text:"Меня зовут PERSONNAME" ,used:false}
       {id:8,text:"Вы знаете, он сейчас находится на совещании, но вы можете оставить информацию о вашей компании у нас на электронной почте" ,used:false}
       {id:9,text:"%EMAIL%, Можете высысылать на него информацию, и мы с вами свяжемся, если нам будет интересно" ,used:false}
       {id:10,text:"Нет не надо нас набирать, мы вас сами наберем, до свидания!" ,used:false,type:"failure"}
@@ -40,12 +41,25 @@ class Npc
       {id:16,text:"А что вам конкретно нужно, вы хотите что то предложить?" ,used:false}
       {id:17,text:"А он о вас знает, как вас представить?" ,used:false}
       ]
+    @currentNpc={id:1,name:"Мария",companyId:1,positionName:"Секретарь"}
+    @loadedData = [
+      {id:1,name:"Мария",companyId:1,positionName:"Секретарь"}
+    ]
 
   findNode:(questionId)=>
     @branch  = _.find(@tree,{questionId:questionId})
   findCurrent:()=>
     choiceIndex = @branch.choices[0]
     @current =  _.find(@nodes, id: choiceIndex)
+
+    if choiceIndex  == 6
+      i = _.random(0,@nameArray.length+1,false)
+      @name = @nameArray[i]
+      @current.text = _.replace(@current.text,'PERSONNAME',@name)
+      console.log @current.text
+
+
+
   fail:=>
     @current = {id:null,text:"Извините, Всего доброго! (звук кладущейся трубки)"}
   succeed:=>
