@@ -19,6 +19,8 @@ class appCtrl
 
   $routerOnActivate:(next)=>
     @npcId=next.params.npcId
+    @npc.selectNpc(@npcId)
+
   update:(questionId)=>
     @time -= 30 if questionId>1
     @findAnswerForQuestion(questionId)

@@ -85,9 +85,9 @@
 
 	__webpack_require__(11);
 
-	__webpack_require__(13);
+	__webpack_require__(16);
 
-	__webpack_require__(15);
+	__webpack_require__(18);
 
 
 /***/ },
@@ -131,7 +131,8 @@
 	  };
 
 	  appCtrl.prototype.$routerOnActivate = function(next) {
-	    return this.npcId = next.params.npcId;
+	    this.npcId = next.params.npcId;
+	    return this.npc.selectNpc(this.npcId);
 	  };
 
 	  appCtrl.prototype.update = function(questionId) {
@@ -252,6 +253,7 @@
 	  function Npc() {
 	    this.succeed = bind(this.succeed, this);
 	    this.fail = bind(this.fail, this);
+	    this.selectNpc = bind(this.selectNpc, this);
 	    this.findCurrent = bind(this.findCurrent, this);
 	    this.findNode = bind(this.findNode, this);
 	    this.type = 'npc';
@@ -383,20 +385,75 @@
 	        used: false
 	      }
 	    ];
-	    this.currentNpc = {
-	      id: 1,
-	      name: "Мария",
-	      companyId: 1,
-	      positionName: "Секретарь"
-	    };
 	    this.loadedData = [
 	      {
 	        id: 1,
 	        name: "Мария",
 	        companyId: 1,
 	        positionName: "Секретарь"
+	      }, {
+	        id: 2,
+	        name: "Екатерина",
+	        companyId: 2,
+	        positionName: "Главный секретарь"
+	      }, {
+	        id: 3,
+	        name: "Василиса",
+	        companyId: 3,
+	        positionName: "Помощник директора"
+	      }, {
+	        id: 4,
+	        name: "Лейла",
+	        companyId: 4,
+	        positionName: "Менеджер"
+	      }, {
+	        id: 5,
+	        name: "Елена",
+	        companyId: 5,
+	        positionName: "Секретарь"
+	      }, {
+	        id: 6,
+	        name: "Анна",
+	        companyId: 6,
+	        positionName: "Секретарь"
+	      }, {
+	        id: 7,
+	        name: "Галина",
+	        companyId: 7,
+	        positionName: "Помощник директора"
+	      }, {
+	        id: 8,
+	        name: "Ольга",
+	        companyId: 8,
+	        positionName: "Менеджер"
+	      }, {
+	        id: 9,
+	        name: "Зарина",
+	        companyId: 9,
+	        positionName: "Помощник директора"
+	      }, {
+	        id: 10,
+	        name: "Гюйра",
+	        companyId: 10,
+	        positionName: "Секретарь"
+	      }, {
+	        id: 11,
+	        name: "Наталья",
+	        companyId: 11,
+	        positionName: "Помощник директора"
+	      }, {
+	        id: 12,
+	        name: "Оксана",
+	        companyId: 12,
+	        positionName: "Секретарь"
+	      }, {
+	        id: 13,
+	        name: "Ксения",
+	        companyId: 13,
+	        positionName: "Менеджер"
 	      }
 	    ];
+	    this.currentNpc = {};
 	  }
 
 	  Npc.prototype.findNode = function(questionId) {
@@ -406,17 +463,23 @@
 	  };
 
 	  Npc.prototype.findCurrent = function() {
-	    var choiceIndex, i;
+	    var choiceIndex, name;
 	    choiceIndex = this.branch.choices[0];
 	    this.current = _.find(this.nodes, {
 	      id: choiceIndex
 	    });
 	    if (choiceIndex === 6) {
-	      i = _.random(0, this.nameArray.length + 1, false);
-	      this.name = this.nameArray[i];
-	      this.current.text = _.replace(this.current.text, 'PERSONNAME', this.name);
-	      return console.log(this.current.text);
+	      name = this.currentNpc.name;
+	      return this.current.text = _.replace(this.current.text, 'PERSONNAME', name);
 	    }
+	  };
+
+	  Npc.prototype.selectNpc = function(id) {
+	    return this.currentNpc = _.find(this.loadedData, (function(_this) {
+	      return function(element) {
+	        return element.id === id;
+	      };
+	    })(this));
 	  };
 
 	  Npc.prototype.fail = function() {
@@ -1027,9 +1090,11 @@
 
 	Player = __webpack_require__(3);
 
-	Company = __webpack_require__(17);
+	Company = __webpack_require__(12);
 
-	tpl = __webpack_require__(12);
+	tpl = __webpack_require__(13);
+
+	__webpack_require__(20);
 
 	gameCtrl = (function() {
 	  function gameCtrl() {
@@ -1079,103 +1144,6 @@
 
 /***/ },
 /* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var pug = __webpack_require__(5);
-
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager.png\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.gamestat.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cspan\u003EExp\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\"\u003E\u003Cdiv class=\"panel\"\u003E\u003Cp\u003EФильтры\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel\"\u003E\u003Cp\u003EСписок организаций\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" ng-repeat=\"lead in ctrl.company.items\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fbuilding[[lead.id]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ch1\u003E\u003Ca href=\"\" ng-click=\"ctrl.goToCompany(lead.id)\"\u003E[[lead.name]]\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cp\u003EРазмер компании: [[lead.size]]\u003C\u002Fp\u003E\u003Cp\u003EИстория сделок:\u003Ci class=\"fa fa-dollar\" aria-hidden=\"true\" style=\"color:red\"\u003E\u003C\u002Fi\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[lead.id]].png\" width=\"75\" height=\"100\"\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToTalk(lead.id)\"\u003EПозвонить\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
-	module.exports = template;
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var menuCtrl, tpl;
-
-	tpl = __webpack_require__(14);
-
-	menuCtrl = (function() {
-	  function menuCtrl() {}
-
-	  return menuCtrl;
-
-	})();
-
-	angular.module('app').component('menu', {
-	  template: tpl(),
-	  controller: [menuCtrl],
-	  controllerAs: 'ctrl'
-	});
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var pug = __webpack_require__(5);
-
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003C!--p Это главное меню. Отсюда можно начать новую игру и продолжить старую--\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-4 col-sm-offset-4\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Fgame\"\u003E Продолжить Игру\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Ftalk\"\u003EТур переговоров\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Ftree\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Новая игра--\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Загрузить--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
-	module.exports = template;
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Company, Player, companyCtrl, tpl,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-
-	Player = __webpack_require__(3);
-
-	Company = __webpack_require__(17);
-
-	tpl = __webpack_require__(16);
-
-	companyCtrl = (function() {
-	  function companyCtrl() {
-	    this.goToTalk = bind(this.goToTalk, this);
-	    this.$routerOnActivate = bind(this.$routerOnActivate, this);
-	    this.gameName = "Экран информации о компании";
-	    this.player = new Player;
-	    this.company = new Company;
-	  }
-
-	  companyCtrl.prototype.$routerOnActivate = function(next) {
-	    return this.company.selectCurrent(next.params.companyId);
-	  };
-
-	  companyCtrl.prototype.goToTalk = function(id) {
-	    return this.$router.navigate([
-	      'Talk', {
-	        npcId: id
-	      }
-	    ]);
-	  };
-
-	  return companyCtrl;
-
-	})();
-
-	angular.module('app').component('company', {
-	  template: tpl(),
-	  controller: [companyCtrl],
-	  controllerAs: 'ctrl',
-	  bindings: {
-	    $router: '<'
-	  }
-	});
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var pug = __webpack_require__(5);
-
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Ca href=\"\u002Fmanagers\u002F#\u002Fgame\"\u003EНазад\u003C\u002Fa\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager.png\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.gamestat.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cspan\u003EExp\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\"\u003E\u003Cdiv class=\"panel panel-default\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fbuilding[[ctrl.company.current.id]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ch1\u003E\u003Ca href=\"\"\u003E[[ctrl.company.current.name]]\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cp\u003EРазмер : [[ctrl.company.current.size]]\u003C\u002Fp\u003E\u003Cp\u003E[[ctrl.company.current.description]]\u003C\u002Fp\u003E\u003Cp\u003E\u003Ci class=\"fa fa-dollar\" aria-hidden=\"true\" style=\"color:red\"\u003E\u003C\u002Fi\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Ch5\u003EСотрудники:\u003C\u002Fh5\u003E\u003Cdiv class=\"panel panel-default\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[ctrl.company.current.id]].png\" width=\"75\" height=\"100\"\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToTalk(ctrl.company.current.id)\"\u003EПозвонить\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
-	module.exports = template;
-
-/***/ },
-/* 17 */
 /***/ function(module, exports) {
 
 	var Company,
@@ -1282,6 +1250,144 @@
 
 	module.exports = Company;
 
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pug = __webpack_require__(5);
+
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cplayer-info\u003E\u003C\u002Fplayer-info\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\"\u003E\u003Cdiv class=\"panel\"\u003E\u003Cp\u003EФильтры\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel\"\u003E\u003Cp\u003EСписок организаций\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" ng-repeat=\"lead in ctrl.company.items\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fbuilding[[lead.id]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ch1\u003E\u003Ca href=\"\" ng-click=\"ctrl.goToCompany(lead.id)\"\u003E[[lead.name]]\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cp\u003EРазмер компании: [[lead.size]]\u003C\u002Fp\u003E\u003Cp\u003EИстория сделок:\u003Ci class=\"fa fa-dollar\" aria-hidden=\"true\" style=\"color:red\"\u003E\u003C\u002Fi\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[lead.id]].png\" width=\"75\" height=\"100\"\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToTalk(lead.id)\"\u003EПозвонить\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	module.exports = template;
+
+/***/ },
+/* 14 */,
+/* 15 */,
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var menuCtrl, tpl;
+
+	tpl = __webpack_require__(17);
+
+	menuCtrl = (function() {
+	  function menuCtrl() {}
+
+	  return menuCtrl;
+
+	})();
+
+	angular.module('app').component('menu', {
+	  template: tpl(),
+	  controller: [menuCtrl],
+	  controllerAs: 'ctrl'
+	});
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pug = __webpack_require__(5);
+
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003C!--p Это главное меню. Отсюда можно начать новую игру и продолжить старую--\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-4 col-sm-offset-4\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Fgame\"\u003E Продолжить Игру\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Ftalk\"\u003EТур переговоров\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002Fmanagers\u002F#\u002Ftree\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Новая игра--\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Загрузить--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	module.exports = template;
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Company, Player, companyCtrl, tpl,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+	Player = __webpack_require__(3);
+
+	Company = __webpack_require__(12);
+
+	tpl = __webpack_require__(19);
+
+	companyCtrl = (function() {
+	  function companyCtrl() {
+	    this.goToTalk = bind(this.goToTalk, this);
+	    this.$routerOnActivate = bind(this.$routerOnActivate, this);
+	    this.gameName = "Экран информации о компании";
+	    this.player = new Player;
+	    this.company = new Company;
+	  }
+
+	  companyCtrl.prototype.$routerOnActivate = function(next) {
+	    return this.company.selectCurrent(next.params.companyId);
+	  };
+
+	  companyCtrl.prototype.goToTalk = function(id) {
+	    return this.$router.navigate([
+	      'Talk', {
+	        npcId: id
+	      }
+	    ]);
+	  };
+
+	  return companyCtrl;
+
+	})();
+
+	angular.module('app').component('company', {
+	  template: tpl(),
+	  controller: [companyCtrl],
+	  controllerAs: 'ctrl',
+	  bindings: {
+	    $router: '<'
+	  }
+	});
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pug = __webpack_require__(5);
+
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Ca href=\"\u002Fmanagers\u002F#\u002Fgame\"\u003EНазад\u003C\u002Fa\u003E\u003Cdiv class=\"panel panel-default col-lg-4\"\u003E\u003Cplayer-info\u003E\u003C\u002Fplayer-info\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\"\u003E\u003Cdiv class=\"panel panel-default\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fbuilding[[ctrl.company.current.id]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ch1\u003E\u003Ca href=\"\"\u003E[[ctrl.company.current.name]]\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cp\u003EРазмер : [[ctrl.company.current.size]]\u003C\u002Fp\u003E\u003Cp\u003E[[ctrl.company.current.description]]\u003C\u002Fp\u003E\u003Cp\u003EИстория сделок:\u003Ci class=\"fa fa-dollar\" aria-hidden=\"true\" style=\"color:red\"\u003E\u003C\u002Fi\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Ch5\u003EСотрудники:\u003C\u002Fh5\u003E\u003Cdiv class=\"panel panel-default\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[ctrl.company.current.id]].png\" width=\"75\" height=\"100\"\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToTalk(ctrl.company.current.id)\"\u003EПозвонить\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	module.exports = template;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Player, playerInfoCtrl, tpl,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+	Player = __webpack_require__(3);
+
+	tpl = __webpack_require__(21);
+
+	playerInfoCtrl = (function() {
+	  function playerInfoCtrl() {
+	    this.$onInit = bind(this.$onInit, this);
+	    this.player = new Player;
+	  }
+
+	  playerInfoCtrl.prototype.$onInit = function() {};
+
+	  return playerInfoCtrl;
+
+	})();
+
+	angular.module('app').component('playerInfo', {
+	  template: tpl(),
+	  controller: [playerInfoCtrl],
+	  controllerAs: 'ctrl'
+	});
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pug = __webpack_require__(5);
+
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager.png\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.gamestat.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E\u003C\u002Fi\u003E\u003Cspan\u003EExp\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	module.exports = template;
 
 /***/ }
 /******/ ]);

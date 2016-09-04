@@ -29,6 +29,8 @@
     "coffee-script": "^1.10.0",
     "jasmine-core": "^2.4.1",
     "pug": "^2.0.0-beta5",
-    "pug-loader": "^2.2.1"
+    "pug-loader": "^2.2.1",
+    "source-map-support": "^0.4.2",
+    "webpack": "^1.13.2"
   }
 }

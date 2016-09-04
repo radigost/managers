@@ -2,6 +2,7 @@ Npc = require('../Class/npc.coffee')
 Player = require('../Class/player.coffee')
 Company = require('../Class/Company.coffee')
 tpl = require('./game.jade')
+require('../Components/playerInfo/playerInfo.coffee')
 
 class gameCtrl
   constructor:()->
