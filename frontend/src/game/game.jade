@@ -3,33 +3,33 @@
     h3 [[ctrl.gameName]]
 .container
     .row
-        .panel.panel-default.col-lg-4
-           player-info
+        .col-lg-4
+            .panel.panel-default(style="background-color:#C4D9D4;")
+               player-info
 
 
-        .panel.panel-default.col-lg-8
-            .panel
-                p Фильтры
-            .panel
-                p Список организаций
-            .panel.panel-default(ng-repeat="lead in ctrl.company.items")
+        .panel.panel-default.col-lg-8(style="background-color:#C4D9D4;")
+            .panel(style="background-color:#C4D9D4;")
+                h3 Список организаций
+            .panel.panel-default(ng-repeat="lead in ctrl.company.items")(style="background-color:#F8FBF4;")
                 .panel-body
                     .media
                         .media-left.media-middle
                             img(src="../static/managers/img/building[[lead.id]].png" width=100 height=150)
                         .media-body
-                                    h1
-                                        a(href="" ng-click="ctrl.goToCompany(lead.id)") [[lead.name]]
-
-                                    .col-md-6
-                                        p Размер компании: [[lead.size]]
-                                        p История сделок:
-                                            i.fa.fa-dollar(aria-hidden='true' style="color:red;")
-                                    .col-md-6
-                                        .media-left.media-middle
-                                            img(src="../static/managers/img/secretar[[lead.id]].png" width=75 height=100)
-                                            a.btn.btn-success(ng-click="ctrl.goToTalk(lead.id)") Позвонить
-                                        .media-body
+                            h1
+                                a(href="" ng-click="ctrl.goToCompany(lead.id)" style=";") [[lead.name]]
+                            .row
+                                .col-md-6
+                                    p Размер компании: [[lead.size]]
+                                    p История сделок:
+                                        i.fa.fa-dollar(aria-hidden='true' style="color:#A14E71;")
+                                    a.btn.btn-success(ng-click="ctrl.goToTalk(lead.id)")(style="background-color:#40423F;") Позвонить
+                                //.col-md-6
+                                //    .media-left.media-middle
+                                //        img(src="../static/managers/img/secretar[[lead.id]].png" width=75 height=100)
+                                //        a.btn.btn-success(ng-click="ctrl.goToTalk(lead.id)") Позвонить
+                                    .media-body
 
 
 

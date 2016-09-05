@@ -2,8 +2,10 @@ class Player
   constructor:->
     @type = 'player'
     @name="Рикки Рома"
+    @fakeName = "Иван Иванович"
     @company="Гленгарри Глен Росс"
-    @position="младший менеджер"
+    @money = "500 000"
+    @position="Младший менеджер"
     @nodes = [
           {id:1,text:"Добрый день!"}
           {id:2,text:"А можно %LPRNAME%?"}
@@ -40,11 +42,29 @@ class Player
     if @branch
       @questionArray = _.filter @nodes, (element)=>
           _.includes @branch.choices, element.id
+
+      _.forEach @questionArray,(element)=>
+        if element.text.indexOf("%USERNAME%")
+          name = @name
+          element.text = _.replace(element.text,'%USERNAME%',name)
+      _.forEach @questionArray,(element)=>
+        if element.text.indexOf("%FAKEUSERNAME%")
+          name = @fakeName
+          element.text = _.replace(element.text,'%FAKEUSERNAME%',name)
+      _.forEach @questionArray,(element)=>
+        if element.text.indexOf("%LPRNAME%")
+          name = "Михаила Сергеевича"
+          element.text = _.replace(element.text,'%LPRNAME%',name)
+
+
+          @fakeName
     else
       @questionArray = []
 
   findCurrent:(questionId)=>
     @current = _.find(@nodes, id: questionId)
+
+
   fail:=>
     @current = {id:null,text:"Эммм..ну до свиданья"}
   succeed:=>

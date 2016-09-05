@@ -3,13 +3,14 @@
     h3 [[ctrl.gameName]]
 .container
     .row
-        a(href = "/managers/#/game") Назад
-        .panel.panel-default.col-lg-4
-            player-info
+        .col-lg-4
+            .panel.panel-default(style="background-color:#C4D9D4;")
+                player-info
 
-
-        .panel.panel-default.col-lg-8
-            .panel.panel-default
+        .col-lg-8
+            .panel.panel-default(style="background-color:#C4D9D4;")
+                .panel-heading(style="background-color:#ffffff;")
+                    a(href = "/managers/#/game") Назад
                 .panel-body
                     .media
                         .media-left.media-middle
@@ -22,15 +23,15 @@
                                         p Размер : [[ctrl.company.current.size]]
                                         p [[ctrl.company.current.description]]
                                         p История сделок:
-                                            i.fa.fa-dollar(aria-hidden='true' style="color:red;")
-            h5 Сотрудники:
-            .panel.panel-default
-                .panel-body
-                    .col-md-6
-                        .media-left.media-middle
-                            img(src="../static/managers/img/secretar[[ctrl.company.current.id]].png" width=75 height=100)
-                            a.btn.btn-success(ng-click="ctrl.goToTalk(ctrl.company.current.id)") Позвонить
-                        .media-body
+                                            i.fa.fa-dollar(aria-hidden='true' style="color:#A14E71;")
+                    h5 Сотрудники:
+                    .panel.panel-default
+                        .panel-body(style="background-color:#F8FBF4;")
+                            .col-md-6
+                                .media-left.media-middle
+                                    img(src="../static/managers/img/secretar[[ctrl.company.current.id]].png" width=75 height=100)
+                                    a.btn.btn-success(ng-click="ctrl.goToTalk(ctrl.company.current.id)") Позвонить
+                                .media-body
 
 
 

@@ -23,4 +23,5 @@ class Company
         element.id == _.toInteger id
 
 
+
 module.exports = Company

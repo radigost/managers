@@ -11,7 +11,7 @@ angular.module('app', [
 
 
 angular.module('app').component('app',{
-  template: '<ng-outlet></ng-outlet>\n',
+  template: '<ng-outlet ></ng-outlet>\n',
   $routeConfig: [
     {path: '/', name: 'Menu', component: 'menu' }
     {path: '/talk', name: 'Talk', component: 'talk' }

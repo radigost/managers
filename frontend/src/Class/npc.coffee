@@ -1,10 +1,10 @@
 class Npc
   constructor:->
     @type='npc'
-    @name="***"
-    @company="Электрочугун инкорпорейтед"
-    @position="(?)Секретарь"
-    @nameArray = ['Мария',' Екатиерина','Василиса']
+#    @name="***"
+#    @company="Электрочугун инкорпорейтед"
+#    @position="(?)Секретарь"
+#    @nameArray = ['Мария',' Екатиерина','Василиса']
     @tree = [
           {questionId:1,choices:[1,5]}
           {questionId:2,choices:[4]}
@@ -65,14 +65,14 @@ class Npc
     choiceIndex = @branch.choices[0]
     @current =  _.find(@nodes, id: choiceIndex)
 
-    if choiceIndex  == 6
+    if @current.text.indexOf("PERSONNAME")
       name = @currentNpc.name
       @current.text = _.replace(@current.text,'PERSONNAME',name)
 
   selectNpc:(id)=>
-    @currentNpc=_.find(@loadedData,(element)=>
-      element.id == id
-    )
+    @currentNpc=_.find @loadedData,(element)=>
+      element.id == _.toInteger id
+
 
 
   fail:=>

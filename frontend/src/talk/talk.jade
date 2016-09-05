@@ -3,53 +3,66 @@
     h3 [[ctrl.gameName]]
 .container
     .row
-        .panel.panel-default.col-lg-4
-            .panel-body
-                img(src="../static/managers/img/manager.png" width=100 height=150)
+        .col-lg-4
+            .panel.panel-default(style="background-color:#C4D9D4;")
+                .panel-body
+                    //img(src="../static/managers/img/manager.png" width=100 height=150)
+                    .media
+                        .media-left.media-middle
+                            img.media-object(src="../static/managers/img/manager.png" width=100 height=150)
+                        .media-body
+                            ul
+                                li [[ctrl.player.name]]
+                                li "[[ctrl.player.company]]"
+                                li [[ctrl.player.position]]
+                    .media
+                        .media-left
 
-                .media
-                    .media-left
-
-                    .media-body
-                        a(href="/managers/#/game").btn.btn-default.btn-lg.btn-block Закончить разговор
-                //p [[ctrl.next.question]]
-        .panel.panel-default.col-lg-4
-            .panel-body(ng-class="ctrl.checkColor()")
-                p Оставшееся время
-                    .progress
-                        .progress-bar.progress-bar-info(role='progressbar', aria-valuenow='[[ctrl.time]]', aria-valuemin='0', aria-valuemax='100', style='width: [[ctrl.time]]%;')
-                            //| [[ctrl.time]]
-                //ol
-                //    li(ng-repeat='item in ctrl.history') -[[item]]
-        .panel.panel-default.col-lg-4
-            .panel-body
-                .media
-                    .media-left.media-middle
-                        img.media-object(src="../static/managers/img/secretar[[ctrl.npcId]].png" width=100 height=150)
-                    .media-body
-                        ul
-                            li Имя-[[ctrl.npc.currentNpc.name]]
-                            li Компания- [[ctrl.npc.currentNpc.companyId]]
-                            li Должность- [[ctrl.npc.currentNpc.positionName]]
+                        .media-body
+                            a(href="/managers/#/game").btn.btn-default.btn-lg.btn-block Закончить разговор
+                    //p [[ctrl.next.question]]
+        .col-lg-4
+            .panel.panel-default(style="background-color:#C4D9D4;")
+                .panel-body(ng-class="ctrl.checkColor()")
+                    p Оставшееся время
+                        .progress
+                            .progress-bar.progress-bar-info(role='progressbar', aria-valuenow='[[ctrl.time]]', aria-valuemin='0', aria-valuemax='100', style='width: [[ctrl.time]]%;')
+                                //| [[ctrl.time]]
+                    //ol
+                    //    li(ng-repeat='item in ctrl.history') -[[item]]
+        .col-lg-4
+            .panel.panel-default(style="background-color:#C4D9D4;")
+                .panel-body
+                    .media
+                        .media-left.media-middle
+                            img.media-object(src="../static/managers/img/secretar[[ctrl.npcId]].png" width=100 height=150)
+                        .media-body
+                            ul
+                                li [[ctrl.npc.currentNpc.name]]
+                                li "[[ctrl.company.current.name]]"
+                                li [[ctrl.npc.currentNpc.positionName]]
 
     .row
         .col-lg-6
             .panel.panel-default(ng-show="!ctrl.notTheEnd()")
-                p [[ctrl.player.current.text]]
-            .panel.panel-default(ng-show="ctrl.notTheEnd()")
+                .panel-body
+                    p [[ctrl.player.current.text]]
+            .panel.panel-default(ng-show="ctrl.notTheEnd()")(style="background-color:#C4D9D4;")
                   .panel-header
-                    | Варианты ответа
+
                   .panel-body
+                    h5
+                       b Выберите варианты ответа
+
                     .list-group
-                      a(href="").list-group-item( ng-repeat='element in ctrl.player.questionArray', ng-click='ctrl.update(element.id)') -[[element.text]]
-                    //div(ng-show='ctrl.isStatus("failure")') Проигрышь
-                    //div(ng-show='ctrl.isStatus("success")') Выигрышь!
+                      a(href="").list-group-item( ng-repeat='element in ctrl.player.questionArray', ng-click='ctrl.update(element.id)' style="background-color:#F8FBF4;") -&nbsp;[[element.text]]
         .col-lg-6
+            .panel.panel-default(style="background-color:#C4D9D4;")
+                .panel-body
+                    p [[ctrl.npc.current.text]]
+        .col-lg-12
             .panel.panel-default
-                p [[ctrl.npc.current.text]]
-        .panel.panel-default.col-lg-12
-            .page-header
-                p История разговора
-            .panel-body
-                ol
-                    li(ng-repeat='item in ctrl.history') -[[item.text]]
+                .panel-body
+                    p История разговора
+                    ol
+                        li(ng-repeat='item in ctrl.history') -[[item.text]]

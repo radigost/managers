@@ -1,5 +1,6 @@
 Npc = require('../Class/npc.coffee')
 Player = require('../Class/player.coffee')
+Company = require('../Class/Company.coffee')
 tpl = require('./talk.jade')
 
 class appCtrl
@@ -9,6 +10,7 @@ class appCtrl
     @history = []
     @npc = new Npc
     @player = new Player
+    @company = new Company
     @result = {
       end:false
       type:""
@@ -20,6 +22,7 @@ class appCtrl
   $routerOnActivate:(next)=>
     @npcId=next.params.npcId
     @npc.selectNpc(@npcId)
+    @company.selectCurrent(@npc.currentNpc.companyId)
 
   update:(questionId)=>
     @time -= 30 if questionId>1
@@ -40,9 +43,12 @@ class appCtrl
     if @isStatus('failure')
       @npc.fail()
       @player.fail()
+      @time = 0
+
     else if @isStatus('success')
       @npc.succeed()
       @player.succeed()
+      @time = 0
     @player.findNode(@npc.current.id)
 
   checkColor:()=>
@@ -65,6 +71,7 @@ class appCtrl
       if (@npc.current.type =="failure") || @time <=0
         @result.end = true
         @result.type = "failure"
+
 
       if (@npc.current.type =="success")
         @result.end = true
