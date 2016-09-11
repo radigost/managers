@@ -21,8 +21,6 @@ describe 'TreeSpec', ->
         expect(ctrl.npc).toBeDefined()
         expect(ctrl.gamestat).toBeDefined()
         expect(ctrl.gamestat.money).toBeDefined()
-        expect(ctrl.leads).toBeDefined()
-        expect(ctrl.leads.items).toBeDefined()
 
       it 'Methods in component to be defined',->
         expect(ctrl.$onInit).toBeDefined()

@@ -18,9 +18,9 @@ describe 'Classes', ->
 
   describe 'newgame', ->
     it 'should have variables', ->
-      expect(npc.name).toBeDefined()
-      expect(npc.company).toBeDefined()
-      expect(npc.position).toBeDefined()
+#      expect(npc.name).toBeDefined()
+#      expect(npc.company).toBeDefined()
+#      expect(npc.position).toBeDefined()
       expect(npc.tree).toBeDefined()
       expect(npc.nodes).toBeDefined()
       expect(npc.nodes[0].id).toBeDefined()

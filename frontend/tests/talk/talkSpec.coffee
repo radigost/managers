@@ -91,7 +91,7 @@ describe 'TalkTest', ->
 
       expect(ctrl.player.findCurrent).toHaveBeenCalled()
       expect(ctrl.player.findCurrent.calls.argsFor(0)).toEqual([2])
-      expect(ctrl.player.current.text).toEqual("А можно %LPRNAME%?")
+      expect(ctrl.player.current.text).toEqual("А можно Михаила Сергеевича?")
 
       expect(ctrl.npc.findCurrent).toHaveBeenCalled()
 
