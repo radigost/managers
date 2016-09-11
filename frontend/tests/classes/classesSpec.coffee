@@ -1,7 +1,7 @@
 describe 'Classes', ->
 
   player = new Player()
-  npc = new Npc()
+  npc = new newgame()
   describe 'Player', ->
     it 'should have variables', ->
       expect(player.name).toBeDefined()
@@ -16,7 +16,7 @@ describe 'Classes', ->
 
 
 
-  describe 'Npc', ->
+  describe 'newgame', ->
     it 'should have variables', ->
       expect(npc.name).toBeDefined()
       expect(npc.company).toBeDefined()

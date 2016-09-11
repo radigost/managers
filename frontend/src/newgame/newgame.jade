@@ -1,0 +1,69 @@
+
+.centered
+    h3 [[ctrl.gameName]]
+.container
+    .row
+        .col-lg-12
+            .row
+                .col-lg-6
+                    .panel.panel-default(style="background-color:#C4D9D4;")
+                        .panel-body
+                            table
+                                tr(ng-repeat="element in ctrl.stats.items")
+                                    td [[element.caption]]
+                                    td
+                                        .btn-group
+                                            button.btn.btn-default(ng-click="ctrl.minus(element.id)") -
+                                            button.btn.btn-default [[element.value]]
+                                            button.btn.btn-default(ng-click="ctrl.plus(element.id)") +
+
+                    .panel.panel-default(style="background-color:#C4D9D4;")
+                        .panel-body
+                            table
+                                tr
+                                    td Перки(Доступно-2):
+                                        button.btn.btn-default +
+                                    td
+                                        small Парень с заводского
+                                        button.close(type='button', aria-label='Close')
+                                            span(aria-hidden='true') ×
+
+                    .panel.panel-default(style="background-color:#C4D9D4;")
+                        .panel-body
+                            table
+                                tr
+                                    td
+                                        .btn-group
+                                            button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                                                | Специализация
+                                                span.caret
+                                            ul.dropdown-menu
+                                                li(ng-repeat="sp in ctrl.specialties.items")
+                                                    a(ng-click="ctrl.chooseSpecialty(sp.id)" href='' tooltip-placement="right" uib-tooltip="[[sp.tooltip]]") [[sp.caption]]
+                                    td [[ctrl.specialties.current.caption]]
+
+
+                .col-lg-3
+                    .panel.panel-default(style="background-color:#C4D9D4;")
+                        .panel-body
+                            img(src="../../static/managers/img/manager[[ctrl.player.playerAvatarID]].png" width=100 height=150)
+                            .btn-group
+                                button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                                    | Выбрать Аватар
+                                    span.caret
+                                ul.dropdown-menu
+                                    a(href="" ng-repeat="element in ctrl.elements")(style="background-color:#F8FBF4;")
+                                        img(src="../static/managers/img/manager[[element]].png"  ng-click="ctrl.chooseAvatar(element)" width=50 height=75)
+                            p
+                                ul
+                                    li(tooltip-placement="left" uib-tooltip="Деньги") $: 0
+                                    li(tooltip-placement="left" uib-tooltip="Влияет на возможность аргументировать возражения по продукту, нормально разговаривать с техническими директорами") Знание продукта: 0
+                                    li(tooltip-placement="left" uib-tooltip="Cколько нужно делать мин звонков в день") min Звонков: 6
+                                    li(tooltip-placement="left" uib-tooltip="Cколько максимум можно сделать звонков") max Звонков: 15
+
+            .row(style="height:250px;")
+                        .col-lg-4
+                        .col-lg-4.btn.btn-default.btn-lg
+                            a(ng-click="ctrl.startGame(ctrl.player.playerAvatarID)")
+                                span Начать игру
+                        .col-lg-4

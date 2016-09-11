@@ -5,7 +5,7 @@
     .row
         .col-lg-4
             .panel.panel-default(style="background-color:#C4D9D4;")
-               player-info
+               player-info(player="ctrl.player")
 
 
         .panel.panel-default.col-lg-8(style="background-color:#C4D9D4;")
@@ -24,7 +24,9 @@
                                     p Размер компании: [[lead.size]]
                                     p История сделок:
                                         i.fa.fa-dollar(aria-hidden='true' style="color:#A14E71;")
+                                    a.btn.btn-success(ng-click="ctrl.goToCompany(lead.id)")(style="background-color:#40423F;") Инфо
                                     a.btn.btn-success(ng-click="ctrl.goToTalk(lead.id)")(style="background-color:#40423F;") Позвонить
+
                                 //.col-md-6
                                 //    .media-left.media-middle
                                 //        img(src="../static/managers/img/secretar[[lead.id]].png" width=75 height=100)

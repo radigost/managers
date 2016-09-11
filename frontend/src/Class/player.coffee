@@ -5,6 +5,7 @@ class Player
     @fakeName = "Иван Иванович"
     @company="Гленгарри Глен Росс"
     @money = "500 000"
+    @playerAvatarID = 2
     @position="Младший менеджер"
     @nodes = [
           {id:1,text:"Добрый день!"}
@@ -64,7 +65,9 @@ class Player
   findCurrent:(questionId)=>
     @current = _.find(@nodes, id: questionId)
 
-
+  choosePlayer:(playerAvatarID)=>
+    if playerAvatarID
+      @playerAvatarID = playerAvatarID
   fail:=>
     @current = {id:null,text:"Эммм..ну до свиданья"}
   succeed:=>

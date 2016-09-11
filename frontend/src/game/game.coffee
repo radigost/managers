@@ -14,7 +14,8 @@ class gameCtrl
       money:500
     }
 
-
+  $routerOnActivate:(next)=>
+    @player.choosePlayer(next.params.playerAvatarId)
 
   $onInit:()=>
 

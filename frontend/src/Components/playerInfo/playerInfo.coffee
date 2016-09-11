@@ -5,7 +5,7 @@ tpl = require('./playerInfo.jade')
 class playerInfoCtrl
   constructor:()->
 #    @gameName = "Экран информации о компании"
-    @player = new Player
+#    @player = new Player
 #    @company = new Company
 
   $onInit:()=>
@@ -16,7 +16,8 @@ angular.module('app').component('playerInfo',{
   template:tpl()
   controller:[playerInfoCtrl]
   controllerAs:'ctrl'
-#  bindings:
+  bindings:
+    player:'<'
 #    $router:'<'
 })
 
