@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'hello',
     'managers',
-    'djangobower',
+    # 'djangobower',
 )
 
 MIDDLEWARE_CLASSES = (
