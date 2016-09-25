@@ -1531,9 +1531,9 @@
 	  }
 
 	  menuCtrl.prototype.$onInit = function() {
-	    return this.Restangular.one('api/v1/persons').get().then((function(_this) {
+	    return this.Restangular.one('api/v1/persons/3').get().then((function(_this) {
 	      return function(res) {
-	        return console.log(res.results);
+	        return console.log(res);
 	      };
 	    })(this));
 	  };

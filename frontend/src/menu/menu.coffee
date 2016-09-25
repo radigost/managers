@@ -5,8 +5,8 @@ class menuCtrl
   constructor:(@uibModal,@Restangular)->
 #    console.log 'menu',@
   $onInit:()=>
-    @Restangular.one('api/v1/persons').get().then (res)=>
-      console.log res.results
+    @Restangular.one('api/v1/persons/3').get().then (res)=>
+      console.log res
 
   help:()=>
     @modal = @uibModal.open
