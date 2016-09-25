@@ -1523,10 +1523,20 @@
 	__webpack_require__(21);
 
 	menuCtrl = (function() {
-	  function menuCtrl(uibModal) {
+	  function menuCtrl(uibModal, Restangular) {
 	    this.uibModal = uibModal;
+	    this.Restangular = Restangular;
 	    this.help = bind(this.help, this);
+	    this.$onInit = bind(this.$onInit, this);
 	  }
+
+	  menuCtrl.prototype.$onInit = function() {
+	    return this.Restangular.one('api/v1/persons').get().then((function(_this) {
+	      return function(res) {
+	        return console.log(res.results);
+	      };
+	    })(this));
+	  };
 
 	  menuCtrl.prototype.help = function() {
 	    return this.modal = this.uibModal.open({
@@ -1542,7 +1552,7 @@
 
 	angular.module('app').component('menu', {
 	  template: tpl(),
-	  controller: ['$uibModal', menuCtrl],
+	  controller: ['$uibModal', 'Restangular', menuCtrl],
 	  controllerAs: 'ctrl'
 	});
 

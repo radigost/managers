@@ -2,8 +2,12 @@ tpl = require('./menu.jade')
 modalTpl = require('./modal.jade')
 require './modal.coffee'
 class menuCtrl
-  constructor:(@uibModal)->
+  constructor:(@uibModal,@Restangular)->
 #    console.log 'menu',@
+  $onInit:()=>
+    @Restangular.one('api/v1/persons').get().then (res)=>
+      console.log res.results
+
   help:()=>
     @modal = @uibModal.open
       controller : 'modalCtrl'
@@ -15,7 +19,7 @@ class menuCtrl
 
 angular.module('app').component('menu',{
   template:tpl()
-  controller:['$uibModal',menuCtrl]
+  controller:['$uibModal','Restangular',menuCtrl]
   controllerAs:'ctrl'
 })
 
