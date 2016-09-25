@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
-from .views import answer, lookForAnswer, getArrayOfAnswers
+# from .views import answer, lookForAnswer, getArrayOfAnswers
 from django.http import QueryDict, HttpRequest
 
 
