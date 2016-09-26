@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	angular.module('app', ['restangular', 'ngComponentRouter', 'ui.bootstrap']).config(function($interpolateProvider) {
+	angular.module('app', ['restangular', 'ngComponentRouter', 'ui.bootstrap', 'ngStorage']).config(function($interpolateProvider) {
 	  $interpolateProvider.startSymbol('[[');
 	  $interpolateProvider.endSymbol(']]');
 	});
@@ -81,7 +81,7 @@
 	  ]
 	}).config(function($locationProvider) {
 	  return $locationProvider.html5Mode(false);
-	}).value('$routerRootComponent', 'app');
+	}).value('$routerRootComponent', 'app').value('$clientId', '3');
 
 	__webpack_require__(1);
 
@@ -525,8 +525,9 @@
 	    this.choosePlayer = bind(this.choosePlayer, this);
 	    this.findCurrent = bind(this.findCurrent, this);
 	    this.findNode = bind(this.findNode, this);
+	    this.init = bind(this.init, this);
 	    this.type = 'player';
-	    this.name = "Рикки Рома";
+	    this.name = "";
 	    this.fakeName = "Иван Иванович";
 	    this.company = "Гленгарри Глен Росс";
 	    this.money = "500 000";
@@ -620,6 +621,10 @@
 	      }
 	    ];
 	  }
+
+	  Player.prototype.init = function(info) {
+	    return this.name = info.first_name || this.name;
+	  };
 
 	  Player.prototype.findNode = function(questionId) {
 	    this.branch = _.find(this.tree, {
@@ -1252,14 +1257,16 @@
 	__webpack_require__(14);
 
 	gameCtrl = (function() {
-	  function gameCtrl() {
+	  function gameCtrl(Restangular, PlayerEntity, localStorage) {
+	    this.Restangular = Restangular;
+	    this.PlayerEntity = PlayerEntity;
+	    this.localStorage = localStorage;
 	    this.goToCompany = bind(this.goToCompany, this);
 	    this.goToTalk = bind(this.goToTalk, this);
 	    this.$onInit = bind(this.$onInit, this);
 	    this.$routerOnActivate = bind(this.$routerOnActivate, this);
 	    this.gameName = "Основной экран";
 	    this.npc = new Npc;
-	    this.player = new Player;
 	    this.company = new Company;
 	    this.gamestat = {
 	      money: 500
@@ -1267,7 +1274,13 @@
 	  }
 
 	  gameCtrl.prototype.$routerOnActivate = function(next) {
-	    return this.player.choosePlayer(next.params.playerAvatarId);
+	    this.id = this.localStorage.player.id;
+	    return this.Restangular.one('api/v1/persons/', this.id).get().then((function(_this) {
+	      return function(res) {
+	        console.log(res);
+	        _this.player = _this.PlayerEntity(res);
+	      };
+	    })(this));
 	  };
 
 	  gameCtrl.prototype.$onInit = function() {};
@@ -1294,12 +1307,20 @@
 
 	angular.module('app').component('game', {
 	  template: tpl(),
-	  controller: [gameCtrl],
+	  controller: ['Restangular', 'PlayerEntity', '$localStorage', gameCtrl],
 	  controllerAs: 'ctrl',
 	  bindings: {
 	    $router: '<'
 	  }
-	});
+	}).factory('PlayerEntity', [
+	  function() {
+	    return function(res) {
+	      this.player = new Player();
+	      this.player.init(res);
+	      return this.player;
+	    };
+	  }
+	]);
 
 
 /***/ },
@@ -1323,7 +1344,9 @@
 	tpl = __webpack_require__(15);
 
 	playerInfoCtrl = (function() {
-	  function playerInfoCtrl() {
+	  function playerInfoCtrl(Restangular, PlayerEntity) {
+	    this.Restangular = Restangular;
+	    this.PlayerEntity = PlayerEntity;
 	    this.$onInit = bind(this.$onInit, this);
 	  }
 
@@ -1335,7 +1358,7 @@
 
 	angular.module('app').component('playerInfo', {
 	  template: tpl(),
-	  controller: [playerInfoCtrl],
+	  controller: ['Restangular', 'PlayerEntity', playerInfoCtrl],
 	  controllerAs: 'ctrl',
 	  bindings: {
 	    player: '<'
@@ -1349,7 +1372,7 @@
 
 	var pug = __webpack_require__(6);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager[[ctrl.player.playerAvatarID]].png\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\" style=\"background-color:#40423F\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003C!--li [[ctrl.player.name]]--\u003E\u003C!--li \" [[ctrl.player.company]] \"--\u003E\u003C!--li [[ctrl.player.position]]--\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.player.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EЗвонки сегодня\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E6\u002F10\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EОпыт\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E1293\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager[[ctrl.player.playerAvatarID]].png\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\" style=\"background-color:#40423F\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.player.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EЗвонки сегодня\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E6\u002F10\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EОпыт\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E1293\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -1523,19 +1546,19 @@
 	__webpack_require__(21);
 
 	menuCtrl = (function() {
-	  function menuCtrl(uibModal, Restangular) {
+	  function menuCtrl(uibModal, Restangular, clientId, localStorage) {
 	    this.uibModal = uibModal;
 	    this.Restangular = Restangular;
+	    this.clientId = clientId;
+	    this.localStorage = localStorage;
 	    this.help = bind(this.help, this);
 	    this.$onInit = bind(this.$onInit, this);
 	  }
 
 	  menuCtrl.prototype.$onInit = function() {
-	    return this.Restangular.one('api/v1/persons/3').get().then((function(_this) {
-	      return function(res) {
-	        return console.log(res);
-	      };
-	    })(this));
+	    return this.localStorage.player = {
+	      id: this.clientId
+	    };
 	  };
 
 	  menuCtrl.prototype.help = function() {
@@ -1552,7 +1575,7 @@
 
 	angular.module('app').component('menu', {
 	  template: tpl(),
-	  controller: ['$uibModal', 'Restangular', menuCtrl],
+	  controller: ['$uibModal', 'Restangular', '$clientId', '$localStorage', menuCtrl],
 	  controllerAs: 'ctrl'
 	});
 
@@ -1563,7 +1586,7 @@
 
 	var pug = __webpack_require__(6);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003C!--p Это главное меню. Отсюда можно начать новую игру и продолжить старую--\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fnewgame\"\u003E Новая игра\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fgame\"\u003E Продолжить Игру\u003C\u002Fa\u003E\u003C!--a(href=\"\u002F#\u002Ftalk\").btn.btn-default.btn-lg.btn-block Тур переговоров--\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Ftree\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Новая игра--\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Загрузить--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003C!--p Это главное меню. Отсюда можно начать новую игру и продолжить старую--\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fnewgame\"\u003E Новая игра\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fgame?id=[[ctrl.clientId]]\"\u003E Продолжить Игру\u003C\u002Fa\u003E\u003C!--a(href=\"\u002F#\u002Ftalk\").btn.btn-default.btn-lg.btn-block Тур переговоров--\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Ftree\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Новая игра--\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Загрузить--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },

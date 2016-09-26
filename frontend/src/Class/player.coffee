@@ -1,7 +1,7 @@
 class Player
   constructor:->
     @type = 'player'
-    @name="Рикки Рома"
+    @name=""
     @fakeName = "Иван Иванович"
     @company="Гленгарри Глен Росс"
     @money = "500 000"
@@ -38,6 +38,9 @@ class Player
       {questionId:16,choices:[5,14,15]}
       {questionId:17,choices:[16]}
     ]
+  init:(info)=>
+    @name =info.first_name || @name
+
   findNode:(questionId)=>
     @branch  =_.find(@tree,{questionId:questionId})
     if @branch

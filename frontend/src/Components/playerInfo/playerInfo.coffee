@@ -3,21 +3,22 @@ Player = require('../../Class/player.coffee')
 tpl = require('./playerInfo.jade')
 
 class playerInfoCtrl
-  constructor:()->
-#    @gameName = "Экран информации о компании"
-#    @player = new Player
-#    @company = new Company
+  constructor:(@Restangular,@PlayerEntity)->
 
   $onInit:()=>
 
+#    @player = new @PlayerFactory({id:1})
+#    console.log "player is ",@player,@playerS
 
 
 angular.module('app').component('playerInfo',{
   template:tpl()
-  controller:[playerInfoCtrl]
+  controller:['Restangular','PlayerEntity',playerInfoCtrl]
   controllerAs:'ctrl'
   bindings:
     player:'<'
 #    $router:'<'
 })
+
+
 

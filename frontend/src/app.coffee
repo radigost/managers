@@ -4,6 +4,7 @@ angular.module('app', [
   'restangular',
   'ngComponentRouter',
   'ui.bootstrap'
+  'ngStorage'
 ]).config ($interpolateProvider) ->
   $interpolateProvider.startSymbol '[['
   $interpolateProvider.endSymbol ']]'
@@ -27,6 +28,7 @@ angular.module('app').component('app',{
   $locationProvider.html5Mode(false);
 )
 .value('$routerRootComponent', 'app')
+.value('$clientId','3')
 
 require('./talk/talk.coffee');
 require('./tree/tree.coffee');
