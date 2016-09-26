@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from django.contrib.postgres.fields import JSONField
 
 from django.db import models
 
@@ -12,6 +13,9 @@ class Person(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     company_id=models.ForeignKey(Company, on_delete=models.CASCADE,default=1)
+    stats = JSONField(default={
+        'money':0
+    })
 
 
 class Users(models.Model):
