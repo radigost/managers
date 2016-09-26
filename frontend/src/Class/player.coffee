@@ -4,7 +4,7 @@ class Player
     @name=""
     @fakeName = "Иван Иванович"
     @company="Гленгарри Глен Росс"
-    @money = "500 000"
+    @money = ""
     @playerAvatarID = 2
     @position="Младший менеджер"
     @nodes = [
@@ -39,7 +39,10 @@ class Player
       {questionId:17,choices:[16]}
     ]
   init:(info)=>
+#    console.log info.stats.money
     @name =info.first_name || @name
+    @stats = info.stats
+    return
 
   findNode:(questionId)=>
     @branch  =_.find(@tree,{questionId:questionId})

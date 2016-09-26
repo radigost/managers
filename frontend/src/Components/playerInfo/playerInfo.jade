@@ -10,7 +10,7 @@
                 li " [[ctrl.player.company]] "
                 li [[ctrl.player.position]]
             ul
-                li  $ [[ctrl.player.money]]
+                li  $ [[ctrl.player.stats.money]]
                 li
                     i.fa.fa-phone(aria-hidden='true') &nbsp;
                     span Звонки сегодня
@@ -21,7 +21,7 @@
                     i.fa.fa-angle-double-up(aria-hidden='true') &nbsp;
                     span Опыт
                     .progress
-                        .progress-bar.progress-bar-info(role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', style='width: 60%;')
-                            span 1293
+                        .progress-bar.progress-bar-info(role='progressbar', aria-valuenow='[[ctrl.player.stats.exp]]', aria-valuemin='0', aria-valuemax='100', style='width: 60%;')
+                            span [[ctrl.player.stats.exp]]
 
 

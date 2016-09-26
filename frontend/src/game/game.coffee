@@ -10,9 +10,9 @@ class gameCtrl
     @npc = new Npc
 #    @player = new Player
     @company = new Company
-    @gamestat = {
-      money:500
-    }
+#    @gamestat = {
+#      money:500
+#    }
 
   $routerOnActivate:(next)=>
     @id = @localStorage.player.id

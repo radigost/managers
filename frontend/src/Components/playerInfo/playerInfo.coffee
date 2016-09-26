@@ -6,6 +6,7 @@ class playerInfoCtrl
   constructor:(@Restangular,@PlayerEntity)->
 
   $onInit:()=>
+    console.log @player
 
 #    @player = new @PlayerFactory({id:1})
 #    console.log "player is ",@player,@playerS
