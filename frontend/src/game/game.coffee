@@ -1,23 +1,19 @@
 Npc = require('../Class/npc.coffee')
-Player = require('../Class/player.coffee')
+#Player = require('../Class/player.coffee')
 Company = require('../Class/Company.coffee')
 tpl = require('./game.jade')
 require('../Components/playerInfo/playerInfo.coffee')
+require '../lib/factories.coffee'
 
 class gameCtrl
   constructor:(@Restangular,@PlayerEntity,@localStorage)->
     @gameName = "Основной экран"
     @npc = new Npc
-#    @player = new Player
     @company = new Company
-#    @gamestat = {
-#      money:500
-#    }
 
   $routerOnActivate:(next)=>
     @id = @localStorage.player.id
     @Restangular.one('api/v1/persons/',@id).get().then (res)=>
-      console.log res
       @player = @PlayerEntity(res)
       return
 
@@ -39,11 +35,4 @@ angular.module('app').component('game',{
     $router:'<'
 })
 
-.factory('PlayerEntity',[
-      -> (res)->
-#        console.log "Factory",@,res
-        @player =  new Player()
-        @player.init(res)
-        return @player
-])
 

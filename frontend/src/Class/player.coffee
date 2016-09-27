@@ -3,10 +3,10 @@ class Player
     @type = 'player'
     @name=""
     @fakeName = "Иван Иванович"
-    @company="Гленгарри Глен Росс"
+    @company=""
     @money = ""
     @playerAvatarID = 2
-    @position="Младший менеджер"
+    @position=""
     @nodes = [
           {id:1,text:"Добрый день!"}
           {id:2,text:"А можно %LPRNAME%?"}
@@ -39,9 +39,7 @@ class Player
       {questionId:17,choices:[16]}
     ]
   init:(info)=>
-#    console.log info.stats.money
-    @name =info.first_name || @name
-    @stats = info.stats
+    _.extend @,info
     return
 
   findNode:(questionId)=>

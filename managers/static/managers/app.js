@@ -89,11 +89,11 @@
 
 	__webpack_require__(12);
 
-	__webpack_require__(16);
+	__webpack_require__(17);
 
-	__webpack_require__(18);
+	__webpack_require__(19);
 
-	__webpack_require__(22);
+	__webpack_require__(23);
 
 
 /***/ },
@@ -529,10 +529,10 @@
 	    this.type = 'player';
 	    this.name = "";
 	    this.fakeName = "Иван Иванович";
-	    this.company = "Гленгарри Глен Росс";
+	    this.company = "";
 	    this.money = "";
 	    this.playerAvatarID = 2;
-	    this.position = "Младший менеджер";
+	    this.position = "";
 	    this.nodes = [
 	      {
 	        id: 1,
@@ -623,8 +623,7 @@
 	  }
 
 	  Player.prototype.init = function(info) {
-	    this.name = info.first_name || this.name;
-	    this.stats = info.stats;
+	    _.extend(this, info);
 	  };
 
 	  Player.prototype.findNode = function(questionId) {
@@ -1244,18 +1243,18 @@
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Company, Npc, Player, gameCtrl, tpl,
+	var Company, Npc, gameCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 	Npc = __webpack_require__(2);
-
-	Player = __webpack_require__(3);
 
 	Company = __webpack_require__(4);
 
 	tpl = __webpack_require__(13);
 
 	__webpack_require__(14);
+
+	__webpack_require__(16);
 
 	gameCtrl = (function() {
 	  function gameCtrl(Restangular, PlayerEntity, localStorage) {
@@ -1275,7 +1274,6 @@
 	    this.id = this.localStorage.player.id;
 	    return this.Restangular.one('api/v1/persons/', this.id).get().then((function(_this) {
 	      return function(res) {
-	        console.log(res);
 	        _this.player = _this.PlayerEntity(res);
 	      };
 	    })(this));
@@ -1310,15 +1308,7 @@
 	  bindings: {
 	    $router: '<'
 	  }
-	}).factory('PlayerEntity', [
-	  function() {
-	    return function(res) {
-	      this.player = new Player();
-	      this.player.init(res);
-	      return this.player;
-	    };
-	  }
-	]);
+	});
 
 
 /***/ },
@@ -1372,11 +1362,30 @@
 
 	var pug = __webpack_require__(6);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager[[ctrl.player.playerAvatarID]].png\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\" style=\"background-color:#40423F\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.player.stats.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EЗвонки сегодня\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E6\u002F10\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EОпыт\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.exp]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.exp]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.player.image_path]]\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\" style=\"background-color:#40423F\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.player.stats.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EЗвонки сегодня\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.calls_done]]\" aria-valuemin=\"0\" aria-valuemax=\"[[ctrl.player.stats.calls_min]]\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.calls_done]]\u002F[[ctrl.player.stats.calls_min]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EОпыт\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.exp]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.exp]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
 /* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Player;
+
+	Player = __webpack_require__(3);
+
+	angular.module('app').factory('PlayerEntity', [
+	  function() {
+	    return function(res) {
+	      this.player = new Player();
+	      this.player.init(res);
+	      return this.player;
+	    };
+	  }
+	]);
+
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Company, Player, gameCtrl, tpl,
@@ -1386,7 +1395,7 @@
 
 	Company = __webpack_require__(4);
 
-	tpl = __webpack_require__(17);
+	tpl = __webpack_require__(18);
 
 	gameCtrl = (function() {
 	  function gameCtrl() {
@@ -1524,7 +1533,7 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(6);
@@ -1533,17 +1542,17 @@
 	module.exports = template;
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var menuCtrl, modalTpl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	tpl = __webpack_require__(19);
+	tpl = __webpack_require__(20);
 
-	modalTpl = __webpack_require__(20);
+	modalTpl = __webpack_require__(21);
 
-	__webpack_require__(21);
+	__webpack_require__(22);
 
 	menuCtrl = (function() {
 	  function menuCtrl(uibModal, Restangular, clientId, localStorage) {
@@ -1581,7 +1590,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(6);
@@ -1590,7 +1599,7 @@
 	module.exports = template;
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(6);
@@ -1599,7 +1608,7 @@
 	module.exports = template;
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	var modalCtrl,
@@ -1623,7 +1632,7 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Company, Player, companyCtrl, tpl,
@@ -1633,7 +1642,7 @@
 
 	Company = __webpack_require__(4);
 
-	tpl = __webpack_require__(23);
+	tpl = __webpack_require__(24);
 
 	companyCtrl = (function() {
 	  function companyCtrl() {
@@ -1671,7 +1680,7 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(6);
