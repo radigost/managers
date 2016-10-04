@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from managers.models import Person, Company, Npc
+from django.contrib.auth.models import User, Group
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -24,3 +25,13 @@ class NpcSerializer(serializers.ModelSerializer):
 
 
 
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('url', 'username', 'email', 'groups')
+
+
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('url', 'name')
