@@ -2,13 +2,16 @@
 
 from django.shortcuts import render
 from rest_framework import viewsets
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView,View
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
-from django.contrib.auth import login
+from django.contrib.auth import login,logout
+from django.http import HttpResponseRedirect
 
 from api.v1.serializers import PersonSerializer,CompanySerializer,NpcSerializer
 from .models import Person,Company,Npc
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='/login/')
 def index(request):
     template = 'managers/index.html'
     context = {
@@ -58,3 +61,12 @@ class LoginFormView(FormView):
         # Выполняем аутентификацию пользователя.
         login(self.request, self.user)
         return super(LoginFormView, self).form_valid(form)
+
+
+class LogoutView(View):
+    def get(self, request):
+        # Выполняем выход для пользователя, запросившего данное представление.
+        logout(request)
+
+        # После чего, перенаправляем пользователя на главную страницу.
+        return HttpResponseRedirect("/")
