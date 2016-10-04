@@ -3,8 +3,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 
-from api.v1.serializers import PersonSerializer,CompanySerializer
-from .models import Person,Company
+from api.v1.serializers import PersonSerializer,CompanySerializer,NpcSerializer
+from .models import Person,Company,Npc
 
 def index(request):
     template = 'managers/index.html'

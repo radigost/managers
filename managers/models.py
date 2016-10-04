@@ -8,7 +8,8 @@ from django.db import models
 class Company(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=150)
-
+    description = models.CharField(max_length=350, default=None,null=True)
+    size = models.IntegerField(default=None,null=True)
     def __unicode__(self):
         return self.name
 
@@ -22,19 +23,30 @@ class Position(models.Model):
 class Person(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
-    image_path = models.CharField(max_length=150, null=True)
+    company = models.CharField(max_length=250)
+    # company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
+    image_path = models.CharField(max_length=150, null=True,default=None)
+    position = models.ForeignKey(Position, on_delete=models.SET_NULL, default=None,null=True)
+    stats = JSONField(default={
+        'money': 0
+    })
+    related_companies = models.ManyToManyField(Company,null=True)
+
+    def __unicode__(self):
+        return '%s, - %s in  %s ' % ( self.name,self.position,self.company)
+
+class Npc(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=30)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE,default=None,null=True)
+    image_path = models.CharField(max_length=150, null=True,default=None)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, default=None,null=True)
     stats = JSONField(default={
         'money': 0
     })
 
-
     def __unicode__(self):
         return '%s, - %s in  %s ' % ( self.name,self.position,self.company)
-
-
-
 
 
 class Users(models.Model):

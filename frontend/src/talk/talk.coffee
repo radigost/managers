@@ -1,30 +1,33 @@
-Npc = require('../Class/npc.coffee')
-Player = require('../Class/player.coffee')
-Company = require('../Class/Company.coffee')
+#Npc = require('../Class/npc.coffee')
+require('../Class/player.coffee')
+require('../Class/Company.coffee')
+require('../Class/factories.coffee')
 tpl = require('./talk.jade')
 
 class appCtrl
-  constructor:()->
+  constructor:(@player,@NpcFactory,@company,@Restangular)->
     @gameName = "Окно переговоров"
     @time = 100
     @history = []
-    @npc = new Npc
-    @player = new Player
-    @company = new Company
+#    @npc = new Npc
     @result = {
       end:false
       type:""
     }
 
-  $onInit:()=>
-    @update 1
+
 
   $routerOnActivate:(next)=>
+    @player.init()
     @npcId=next.params.npcId
-    @npc.selectNpc(@npcId)
-    @company.selectCurrent(@npc.currentNpc.companyId)
+    @npc = @NpcFactory(@Restangular)
+    @npc.selectCurrent(@npcId)
+#    console.log @npc
+#    @company.selectCurrent(@npc.current.id)
+    @update 1
 
   update:(questionId)=>
+    console.log @npc.current
     @time -= 30 if questionId>1
     @findAnswerForQuestion(questionId)
     @checkForSuccess()
@@ -98,7 +101,7 @@ class appCtrl
 
 angular.module('app').component('talk',{
   template:tpl()
-  controller:[appCtrl]
+  controller:['Player','NpcFactory','Company','Restangular',appCtrl]
   controllerAs:'ctrl'
   bundings:
     $router:'<'

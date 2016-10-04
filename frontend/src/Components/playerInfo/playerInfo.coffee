@@ -3,7 +3,7 @@ Player = require('../../Class/player.coffee')
 tpl = require('./playerInfo.jade')
 
 class playerInfoCtrl
-  constructor:(@Restangular,@PlayerEntity)->
+  constructor:(@Restangular)->
 
   $onInit:()=>
     console.log @player
@@ -14,7 +14,7 @@ class playerInfoCtrl
 
 angular.module('app').component('playerInfo',{
   template:tpl()
-  controller:['Restangular','PlayerEntity',playerInfoCtrl]
+  controller:['Restangular',playerInfoCtrl]
   controllerAs:'ctrl'
   bindings:
     player:'<'

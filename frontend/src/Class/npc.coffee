@@ -1,10 +1,6 @@
 class Npc
-  constructor:->
+  constructor:(@Restangular)->
     @type='npc'
-#    @name="***"
-#    @company="Электрочугун инкорпорейтед"
-#    @position="(?)Секретарь"
-#    @nameArray = ['Мария',' Екатиерина','Василиса']
     @tree = [
           {questionId:1,choices:[1,5]}
           {questionId:2,choices:[4]}
@@ -58,7 +54,11 @@ class Npc
     ]
     @currentNpc={}
 
-
+  init:(id)=>
+    @currentNpc=_.find @loadedData,(element)=>
+      element.id == _.toInteger id
+  initNew:(Restangular)=>
+    return new Npc(Restangular)
   findNode:(questionId)=>
     @branch  = _.find(@tree,{questionId:questionId})
   findCurrent:()=>
@@ -68,16 +68,27 @@ class Npc
     if @current.text.indexOf("PERSONNAME")
       name = @currentNpc.name
       @current.text = _.replace(@current.text,'PERSONNAME',name)
+  selectCurrent:(id)=>
+    @Restangular.one('api/v1/npc/',id).get().then (res)=>
+      console.log res
+      @current = res
+      return
 
   selectNpc:(id)=>
     @currentNpc=_.find @loadedData,(element)=>
       element.id == _.toInteger id
 
 
-
   fail:=>
     @current = {id:null,text:"Извините, Всего доброго! (звук кладущейся трубки)"}
   succeed:=>
     @current = {id:null,text:"Давайте соединю"}
+
+
+
+angular.module('app').service('Npc', [
+  'Restangular'
+  Npc
+])
 
 module.exports = Npc

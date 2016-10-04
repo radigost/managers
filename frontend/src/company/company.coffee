@@ -1,17 +1,19 @@
-Player = require('../Class/player.coffee')
-Company = require('../Class/Company.coffee')
+#Company = require('../Class/Company.coffee')
+require '../Class/Company.coffee'
 tpl = require('./company.jade')
+require '../Class/appService.coffee'
+require '../Components/npcInfo/npcInfo.coffee'
+
 
 class companyCtrl
-  constructor:()->
+  constructor:(@service,@company)->
     @gameName = "Экран информации о компании"
-    @player = new Player
-    @company = new Company
 
 
   $routerOnActivate:(next)=>
     @company.selectCurrent(next.params.companyId)
-
+    @service.init()
+    console.log @company
 
   goToTalk:(id)=>
     @$router.navigate(['Talk', {npcId: id}]);
@@ -20,7 +22,7 @@ class companyCtrl
 
 angular.module('app').component('company',{
   template:tpl()
-  controller:[companyCtrl]
+  controller:['appService','Company',companyCtrl]
   controllerAs:'ctrl'
   bindings:
     $router:'<'

@@ -2,11 +2,12 @@
 from django.conf.urls import url,include
 
 from rest_framework import routers
-from .views import PersonViewSet,CompanyViewSet
+from .views import PersonViewSet,CompanyViewSet,NpcViewSet
 
 router = routers.DefaultRouter()
 router.register(r'persons', PersonViewSet)
 router.register(r'companies', CompanyViewSet)
+router.register(r'npc', NpcViewSet)
 
 
 urlpatterns = [

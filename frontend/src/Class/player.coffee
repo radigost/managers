@@ -1,5 +1,5 @@
 class Player
-  constructor:->
+  constructor:(@Restangular,@localStorage)->
     @type = 'player'
     @name=""
     @fakeName = "Иван Иванович"
@@ -38,8 +38,10 @@ class Player
       {questionId:16,choices:[5,14,15]}
       {questionId:17,choices:[16]}
     ]
-  init:(info)=>
-    _.extend @,info
+  init:()=>
+    @id = @localStorage.player.id
+    @Restangular.one('api/v1/persons/',@id).get().then (res)=>
+        _.extend @,res
     return
 
   findNode:(questionId)=>
@@ -76,5 +78,15 @@ class Player
     @current = {id:null,text:"Эммм..ну до свиданья"}
   succeed:=>
     @current = {id:null,text:"Да, спасибо большое"}
+
+
+angular.module('app').service('Player', [
+  'Restangular'
+  '$localStorage'
+  Player
+])
+
+
+
 
 module.exports = Player
