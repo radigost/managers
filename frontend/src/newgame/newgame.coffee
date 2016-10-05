@@ -58,6 +58,7 @@ class gameCtrl
       maxCalls:14
       first_name:"Иван"
       last_name:"Иванов"
+      company:"Абырвалг инкорпорейтед"
      }
     @generateImages()
 
