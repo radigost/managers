@@ -28,7 +28,7 @@ angular.module('app').component('app',{
   $locationProvider.html5Mode(false);
 )
 .value('$routerRootComponent', 'app')
-.value('$clientId','3')
+#.value('$clientId','3')
 
 require('./talk/talk.coffee');
 require('./tree/tree.coffee');
