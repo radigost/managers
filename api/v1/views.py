@@ -45,5 +45,5 @@ class MyView(APIView):
 
     def get(self, request, format=None):
         user_id = request.user.id
-        content = {'user_id': user_id }
+        content = {'user_id': user_id}
         return Response(content)
