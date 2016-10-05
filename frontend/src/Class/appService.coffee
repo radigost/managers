@@ -5,8 +5,7 @@ class appService
     @inited = false
 
   init:()=>
-    if !@inited
-      @player.init()
+    @player.init()
 
 angular.module('app').service('appService', [
   'Restangular'

@@ -7,10 +7,15 @@
                 .thumbnail(style="background-color:#FFF7EC;")
                     img(src="../../static/managers/img/winner.jpg" height="250px" width="250px" align="middle").img-responsive
                     a(href="/#/newgame").btn.btn-default.btn-lg.btn-block  Новая игра
-                    a(href="/#/game?id=[[ctrl.clientId]]").btn.btn-default.btn-lg.btn-block  Продолжить Игру
+                    //a(href="/#/game?id=[[ctrl.clientId]]").btn.btn-default.btn-lg.btn-block  Продолжить Игру
                     //a(href="/#/talk").btn.btn-default.btn-lg.btn-block Тур переговоров
                     a(href="/#/tree").btn.btn-default.btn-lg.btn-block Редактор диалогов
                     a(ng-click="ctrl.help()").btn.btn-default.btn-lg.btn-block Помощь
+                .thumbnail(style="background-color:#FFF7EC;")
+                    h4.text-center Продолжить игру
+
+                    a(ng-click="ctrl.goToGame(player.id)" ng-repeat="player in ctrl.players").btn.btn-default.btn-lg.btn-block [[player.name]]
+                        img(src="../../static/managers/img/[[player.image_path]]" height="50px" width="50px" align="middle").img-responsive
         .col-sm-2.col-lg-4
     //li
     //    a(href="") Новая игра

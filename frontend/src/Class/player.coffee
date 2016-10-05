@@ -40,8 +40,10 @@ class Player
     ]
   init:()=>
     @id = @localStorage.player.id
+    console.log "initing",@id
     @Restangular.one('api/v1/persons/',@id).get().then (res)=>
-        _.extend @,res
+      console.log res
+      _.extend @,res
     return
 
   findNode:(questionId)=>

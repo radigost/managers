@@ -7,23 +7,27 @@ class menuCtrl
   $onInit:()=>
 
     @Restangular.one('api/v1/my/').get().then (res)=>
-      console.log res
-#      @player = @PlayerFactory(res)
+      @localStorage.user = {id : res.user_id}
+      @Restangular.one('api/v1/persons?owner_id='+res.user_id).get().then (res)=>
+        @players = res
       return
-    @localStorage.player = {id: @clientId}
+
+  goToGame:(playerId)=>
+    @localStorage.player.id = playerId
+    @$router.navigate(['Game'])
+
 
   help:()=>
     @modal = @uibModal.open
       controller : 'modalCtrl'
       controllerAs:'$ctrl'
       template: modalTpl()
-#      resolve:
-#        reason:=>
-#          return value
 
 angular.module('app').component('menu',{
   template:tpl()
   controller:['$uibModal','Restangular','$localStorage',menuCtrl]
   controllerAs:'ctrl'
+  bindings:
+    $router:'<'
 })
 

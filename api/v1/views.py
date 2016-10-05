@@ -7,12 +7,24 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from django.contrib.auth.models import User, Group
 from .serializers import PersonSerializer,CompanySerializer,NpcSerializer,UserSerializer,GroupSerializer
-
-
+from django.shortcuts import get_object_or_404
 
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
+    def list(self, request, format=None):
+        owner = request.query_params['owner_id']
+        queryset = Person.objects.filter(owner_id = owner)
+        serializer = PersonSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        print str(pk)
+        queryset = Person.objects.all()
+        person = get_object_or_404(queryset, pk=pk)
+        serializer = PersonSerializer(person)
+        return Response(serializer.data)
+
 
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()

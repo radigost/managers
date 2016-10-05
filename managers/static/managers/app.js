@@ -368,8 +368,10 @@
 
 	  Player.prototype.init = function() {
 	    this.id = this.localStorage.player.id;
+	    console.log("initing", this.id);
 	    this.Restangular.one('api/v1/persons/', this.id).get().then((function(_this) {
 	      return function(res) {
+	        console.log(res);
 	        return _.extend(_this, res);
 	      };
 	    })(this));
@@ -1366,9 +1368,7 @@
 	  }
 
 	  appService.prototype.init = function() {
-	    if (!this.inited) {
-	      return this.player.init();
-	    }
+	    return this.player.init();
 	  };
 
 	  return appService;
@@ -1554,18 +1554,26 @@
 	    this.Restangular = Restangular;
 	    this.localStorage = localStorage;
 	    this.help = bind(this.help, this);
+	    this.goToGame = bind(this.goToGame, this);
 	    this.$onInit = bind(this.$onInit, this);
 	  }
 
 	  menuCtrl.prototype.$onInit = function() {
-	    this.Restangular.one('api/v1/my/').get().then((function(_this) {
+	    return this.Restangular.one('api/v1/my/').get().then((function(_this) {
 	      return function(res) {
-	        console.log(res);
+	        _this.localStorage.user = {
+	          id: res.user_id
+	        };
+	        _this.Restangular.one('api/v1/persons?owner_id=' + res.user_id).get().then(function(res) {
+	          return _this.players = res;
+	        });
 	      };
 	    })(this));
-	    return this.localStorage.player = {
-	      id: this.clientId
-	    };
+	  };
+
+	  menuCtrl.prototype.goToGame = function(playerId) {
+	    this.localStorage.player.id = playerId;
+	    return this.$router.navigate(['Game']);
 	  };
 
 	  menuCtrl.prototype.help = function() {
@@ -1583,7 +1591,10 @@
 	angular.module('app').component('menu', {
 	  template: tpl(),
 	  controller: ['$uibModal', 'Restangular', '$localStorage', menuCtrl],
-	  controllerAs: 'ctrl'
+	  controllerAs: 'ctrl',
+	  bindings: {
+	    $router: '<'
+	  }
 	});
 
 
@@ -1593,7 +1604,7 @@
 
 	var pug = __webpack_require__(7);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003C!--p Это главное меню. Отсюда можно начать новую игру и продолжить старую--\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fnewgame\"\u003E Новая игра\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fgame?id=[[ctrl.clientId]]\"\u003E Продолжить Игру\u003C\u002Fa\u003E\u003C!--a(href=\"\u002F#\u002Ftalk\").btn.btn-default.btn-lg.btn-block Тур переговоров--\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Ftree\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Новая игра--\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Загрузить--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003C!--p Это главное меню. Отсюда можно начать новую игру и продолжить старую--\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fnewgame\"\u003E Новая игра\u003C\u002Fa\u003E\u003C!--a(href=\"\u002F#\u002Fgame?id=[[ctrl.clientId]]\").btn.btn-default.btn-lg.btn-block  Продолжить Игру--\u003E\u003C!--a(href=\"\u002F#\u002Ftalk\").btn.btn-default.btn-lg.btn-block Тур переговоров--\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Ftree\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Ch4 class=\"text-center\"\u003EПродолжить игру\u003C\u002Fh4\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.goToGame(player.id)\" ng-repeat=\"player in ctrl.players\"\u003E[[player.name]]\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[player.image_path]]\" height=\"50px\" width=\"50px\" align=\"middle\"\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Новая игра--\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Загрузить--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
