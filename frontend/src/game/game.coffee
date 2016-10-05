@@ -12,6 +12,7 @@ class gameCtrl
     @company = new Company
 
   $routerOnActivate:(next)=>
+    console.log next
     @service.init()
 
   goToTalk:(id)=>

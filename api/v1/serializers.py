@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from managers.models import Person, Company, Npc
+from managers.models import Person, Company, Npc,Industry
 from django.contrib.auth.models import User, Group
 
 
@@ -22,6 +22,9 @@ class NpcSerializer(serializers.ModelSerializer):
     position = serializers.StringRelatedField()
     class Meta:
         model = Npc
+class IndustrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Industry
 
 
 

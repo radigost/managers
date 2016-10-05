@@ -2,11 +2,12 @@
 
 from rest_framework import viewsets
 from managers.views import Person,Company,Npc
+from managers.models import Industry
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from django.contrib.auth.models import User, Group
-from .serializers import PersonSerializer,CompanySerializer,NpcSerializer,UserSerializer,GroupSerializer
+from .serializers import PersonSerializer,CompanySerializer,NpcSerializer,UserSerializer,GroupSerializer,IndustrySerializer
 from django.shortcuts import get_object_or_404
 
 class PersonViewSet(viewsets.ModelViewSet):
@@ -38,6 +39,10 @@ class CompanyViewSet(viewsets.ModelViewSet):
 class NpcViewSet(viewsets.ModelViewSet):
     queryset = Npc.objects.all()
     serializer_class = NpcSerializer
+
+class IndustryViewSet(viewsets.ModelViewSet):
+    queryset = Industry.objects.all()
+    serializer_class = IndustrySerializer
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -52,6 +57,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
 
 
 class MyView(APIView):

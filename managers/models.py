@@ -10,6 +10,7 @@ class Company(models.Model):
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=350, default=None,null=True)
     size = models.IntegerField(default=None,null=True)
+    industry = models.ForeignKey('Industry',on_delete=models.CASCADE,default=1)
     def __unicode__(self):
         return self.name
 
@@ -53,3 +54,8 @@ class Npc(models.Model):
 class Users(models.Model):
     login = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
+class Industry(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=30)
+    def __unicode__(self):
+        return self.name

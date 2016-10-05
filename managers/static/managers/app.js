@@ -89,11 +89,11 @@
 
 	__webpack_require__(13);
 
-	__webpack_require__(18);
+	__webpack_require__(19);
 
-	__webpack_require__(20);
+	__webpack_require__(21);
 
-	__webpack_require__(24);
+	__webpack_require__(25);
 
 
 /***/ },
@@ -1263,6 +1263,7 @@
 	  }
 
 	  gameCtrl.prototype.$routerOnActivate = function(next) {
+	    console.log(next);
 	    return this.service.init();
 	  };
 
@@ -1302,7 +1303,7 @@
 
 	var pug = __webpack_require__(7);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.service.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cplayer-info player=\"ctrl.service.player\"\u003E\u003C\u002Fplayer-info\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel\" style=\"background-color:#C4D9D4\"\u003E\u003Ch3\u003EСписок организаций\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" ng-repeat=\"lead in ctrl.service.player.related_companies\" style=\"background-color:#F8FBF4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fbuilding[[lead.id]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ch1\u003E\u003Ca href=\"\" ng-click=\"ctrl.goToCompany(lead.id)\"\u003E[[lead.name]]\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cp\u003EРазмер компании: [[lead.size]]\u003C\u002Fp\u003E\u003Cp\u003EИстория сделок:\u003Ci class=\"fa fa-dollar\" aria-hidden=\"true\" style=\"color:#A14E71\"\u003E\u003C\u002Fi\u003E\u003C\u002Fp\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToCompany(lead.id)\" style=\"background-color:#40423F\"\u003EИнфо\u003C\u002Fa\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToTalk(lead.id)\" style=\"background-color:#40423F\"\u003EПозвонить\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C!--.col-md-6--\u003E\u003C!--    .media-left.media-middle--\u003E\u003C!--        img(src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[lead.id]].png\" width=75 height=100)--\u003E\u003C!--        a.btn.btn-success(ng-click=\"ctrl.goToTalk(lead.id)\") Позвонить.media-body--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.service.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cplayer-info player=\"ctrl.service.player\"\u003E\u003C\u002Fplayer-info\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel\" style=\"background-color:#C4D9D4\"\u003E\u003Ch3\u003EСписок организаций\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" ng-repeat=\"lead in ctrl.service.companies\" style=\"background-color:#F8FBF4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fbuilding[[lead.id]].png\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ch1\u003E\u003Ca href=\"\" ng-click=\"ctrl.goToCompany(lead.id)\"\u003E[[lead.name]]\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-md-6\"\u003E\u003Cp\u003EРазмер компании: [[lead.size]]\u003C\u002Fp\u003E\u003Cp\u003EИстория сделок:\u003Ci class=\"fa fa-dollar\" aria-hidden=\"true\" style=\"color:#A14E71\"\u003E\u003C\u002Fi\u003E\u003C\u002Fp\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToCompany(lead.id)\" style=\"background-color:#40423F\"\u003EИнфо\u003C\u002Fa\u003E\u003Ca class=\"btn btn-success\" ng-click=\"ctrl.goToTalk(lead.id)\" style=\"background-color:#40423F\"\u003EПозвонить\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C!--.col-md-6--\u003E\u003C!--    .media-left.media-middle--\u003E\u003C!--        img(src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fsecretar[[lead.id]].png\" width=75 height=100)--\u003E\u003C!--        a.btn.btn-success(ng-click=\"ctrl.goToTalk(lead.id)\") Позвонить.media-body--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -1368,7 +1369,12 @@
 	  }
 
 	  appService.prototype.init = function() {
-	    return this.player.init();
+	    this.player.init();
+	    return this.Restangular.one('api/v1/companies/').get().then((function(_this) {
+	      return function(res) {
+	        return _this.companies = res.results;
+	      };
+	    })(this));
 	  };
 
 	  return appService;
@@ -1379,7 +1385,8 @@
 
 
 /***/ },
-/* 18 */
+/* 18 */,
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Company, gameCtrl, tpl,
@@ -1387,7 +1394,7 @@
 
 	Company = __webpack_require__(3);
 
-	tpl = __webpack_require__(19);
+	tpl = __webpack_require__(20);
 
 	gameCtrl = (function() {
 	  function gameCtrl(localStorage, Restangular, cookies) {
@@ -1640,7 +1647,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(7);
@@ -1649,17 +1656,17 @@
 	module.exports = template;
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var menuCtrl, modalTpl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	tpl = __webpack_require__(21);
+	tpl = __webpack_require__(22);
 
-	modalTpl = __webpack_require__(22);
+	modalTpl = __webpack_require__(23);
 
-	__webpack_require__(23);
+	__webpack_require__(24);
 
 	menuCtrl = (function() {
 	  function menuCtrl(uibModal, Restangular, localStorage) {
@@ -1714,7 +1721,7 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(7);
@@ -1723,7 +1730,7 @@
 	module.exports = template;
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(7);
@@ -1732,7 +1739,7 @@
 	module.exports = template;
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports) {
 
 	var modalCtrl,
@@ -1756,7 +1763,7 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var companyCtrl, tpl,
@@ -1764,11 +1771,11 @@
 
 	__webpack_require__(3);
 
-	tpl = __webpack_require__(25);
+	tpl = __webpack_require__(26);
 
 	__webpack_require__(17);
 
-	__webpack_require__(26);
+	__webpack_require__(27);
 
 	companyCtrl = (function() {
 	  function companyCtrl(service, company) {
@@ -1808,7 +1815,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(7);
@@ -1817,7 +1824,7 @@
 	module.exports = template;
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var npcInfoCtrl, tpl,
@@ -1825,7 +1832,7 @@
 
 	__webpack_require__(4);
 
-	tpl = __webpack_require__(27);
+	tpl = __webpack_require__(28);
 
 	npcInfoCtrl = (function() {
 	  function npcInfoCtrl(Restangular, NpcFactory) {
@@ -1855,7 +1862,7 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(7);
