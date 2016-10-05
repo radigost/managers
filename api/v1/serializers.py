@@ -13,7 +13,7 @@ class CompanySerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     # company = serializers.StringRelatedField()
     position = serializers.StringRelatedField()
-    related_companies = CompanySerializer(many=True)
+    related_companies = CompanySerializer(many=True,read_only=True)
     class Meta:
         model = Person
 

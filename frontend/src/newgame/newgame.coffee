@@ -3,7 +3,7 @@ Company = require('../Class/Company.coffee')
 tpl = require('./newgame.jade')
 
 class gameCtrl
-  constructor:()->
+  constructor:(@localStorage,@Restangular,@cookies)->
     @images = []
     @gameName = "Экран выбора персонажа"
     @stats = {
@@ -41,21 +41,25 @@ class gameCtrl
     }
     @points = 5
   $onInit:()=>
+    @Restangular.one('api/v1/persons').get().then (res)=>
+      @players = res
+      return
     @current =
     {
-      personality:
-        activeness:5
-        network:5
-        psychology:5
-        intellect:5
-        introversion:5
-      specialties:[@specialties.items[0]]
-      perks:[]
-      image:''
-      money:15
-      knowProduct:1
-      minCalls:7
-      maxCalls:14
+      stats:
+        personality:
+          activeness:5
+          network:5
+          psychology:5
+          intellect:5
+          introversion:5
+        specialties:[@specialties.items[0]]
+        knowProduct:1
+        minCalls:7
+        maxCalls:14
+        perks:[]
+        money:15
+      image_path:''
       first_name:"Иван"
       last_name:"Иванов"
       company:"Абырвалг инкорпорейтед"
@@ -66,14 +70,14 @@ class gameCtrl
 
   plus:(what)=>
     r = _.find @stats.items, {id:what}
-    if @current.personality[r.name] < r.max and @points>0
-      @current.personality[r.name]++
+    if @current.stats.personality[r.name] < r.max and @points>0
+      @current.stats.personality[r.name]++
       @points--
     return
   minus:(what)=>
     r = _.find @stats.items, {id:what}
-    if @current.personality[r.name] > r.min
-      @current.personality[r.name]--
+    if @current.stats.personality[r.name] > r.min
+      @current.stats.personality[r.name]--
       @points++
 #      r.value--
     return
@@ -97,7 +101,7 @@ class gameCtrl
   chooseIndustry:(id)=>
     @current.industry = _.find(@indusrty.items,{id:id})
   chooseAvatar:(image_path)=>
-    @current.image = image_path
+    @current.image_path = image_path
 
 
   startGame:(id)=>
@@ -110,17 +114,24 @@ class gameCtrl
     for name in names
       for i in [1..11]
         @images.push(name+i+'.png')
-    @current.image  = @images[0]
+    @current.image_path  = @images[0]
 
   create:()=>
-    console.log @
+    console.log @localStorage.user.id
+    s =  @cookies.getAll()
+    @current.name = @current.first_name+@current.last_name
+    @current.related_companies = [1..10]
+    @current.owner = @localStorage.user.id
+    @Restangular.one('/api/v1/persons/').post('',@current,'',{'X-CSRFToken':s.csrftoken}).then (res)=>
+      console.log res
+      return
 
 
 
 
 angular.module('app').component('newgame',{
   template:tpl()
-  controller:[gameCtrl]
+  controller:['$localStorage','Restangular','$cookies',gameCtrl]
   controllerAs:'ctrl'
   bindings:
     $router:'<'

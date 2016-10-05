@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	angular.module('app', ['restangular', 'ngComponentRouter', 'ui.bootstrap', 'ngStorage']).config(function($interpolateProvider) {
+	angular.module('app', ['restangular', 'ngComponentRouter', 'ui.bootstrap', 'ngStorage', 'ngCookies']).config(function($interpolateProvider) {
 	  $interpolateProvider.startSymbol('[[');
 	  $interpolateProvider.endSymbol(']]');
 	});
@@ -1390,7 +1390,10 @@
 	tpl = __webpack_require__(19);
 
 	gameCtrl = (function() {
-	  function gameCtrl() {
+	  function gameCtrl(localStorage, Restangular, cookies) {
+	    this.localStorage = localStorage;
+	    this.Restangular = Restangular;
+	    this.cookies = cookies;
 	    this.create = bind(this.create, this);
 	    this.generateImages = bind(this.generateImages, this);
 	    this.startGame = bind(this.startGame, this);
@@ -1502,21 +1505,28 @@
 	  }
 
 	  gameCtrl.prototype.$onInit = function() {
+	    this.Restangular.one('api/v1/persons').get().then((function(_this) {
+	      return function(res) {
+	        _this.players = res;
+	      };
+	    })(this));
 	    this.current = {
-	      personality: {
-	        activeness: 5,
-	        network: 5,
-	        psychology: 5,
-	        intellect: 5,
-	        introversion: 5
+	      stats: {
+	        personality: {
+	          activeness: 5,
+	          network: 5,
+	          psychology: 5,
+	          intellect: 5,
+	          introversion: 5
+	        },
+	        specialties: [this.specialties.items[0]],
+	        knowProduct: 1,
+	        minCalls: 7,
+	        maxCalls: 14,
+	        perks: [],
+	        money: 15
 	      },
-	      specialties: [this.specialties.items[0]],
-	      perks: [],
-	      image: '',
-	      money: 15,
-	      knowProduct: 1,
-	      minCalls: 7,
-	      maxCalls: 14,
+	      image_path: '',
 	      first_name: "Иван",
 	      last_name: "Иванов",
 	      company: "Абырвалг инкорпорейтед"
@@ -1529,8 +1539,8 @@
 	    r = _.find(this.stats.items, {
 	      id: what
 	    });
-	    if (this.current.personality[r.name] < r.max && this.points > 0) {
-	      this.current.personality[r.name]++;
+	    if (this.current.stats.personality[r.name] < r.max && this.points > 0) {
+	      this.current.stats.personality[r.name]++;
 	      this.points--;
 	    }
 	  };
@@ -1540,8 +1550,8 @@
 	    r = _.find(this.stats.items, {
 	      id: what
 	    });
-	    if (this.current.personality[r.name] > r.min) {
-	      this.current.personality[r.name]--;
+	    if (this.current.stats.personality[r.name] > r.min) {
+	      this.current.stats.personality[r.name]--;
 	      this.points++;
 	    }
 	  };
@@ -1575,7 +1585,7 @@
 	  };
 
 	  gameCtrl.prototype.chooseAvatar = function(image_path) {
-	    return this.current.image = image_path;
+	    return this.current.image_path = image_path;
 	  };
 
 	  gameCtrl.prototype.startGame = function(id) {
@@ -1596,11 +1606,23 @@
 	        this.images.push(name + i + '.png');
 	      }
 	    }
-	    return this.current.image = this.images[0];
+	    return this.current.image_path = this.images[0];
 	  };
 
 	  gameCtrl.prototype.create = function() {
-	    return console.log(this);
+	    var s;
+	    console.log(this.localStorage.user.id);
+	    s = this.cookies.getAll();
+	    this.current.name = this.current.first_name + this.current.last_name;
+	    this.current.related_companies = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+	    this.current.owner = this.localStorage.user.id;
+	    return this.Restangular.one('/api/v1/persons/').post('', this.current, '', {
+	      'X-CSRFToken': s.csrftoken
+	    }).then((function(_this) {
+	      return function(res) {
+	        console.log(res);
+	      };
+	    })(this));
 	  };
 
 	  return gameCtrl;
@@ -1609,7 +1631,7 @@
 
 	angular.module('app').component('newgame', {
 	  template: tpl(),
-	  controller: [gameCtrl],
+	  controller: ['$localStorage', 'Restangular', '$cookies', gameCtrl],
 	  controllerAs: 'ctrl',
 	  bindings: {
 	    $router: '<'
@@ -1623,7 +1645,7 @@
 
 	var pug = __webpack_require__(7);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-12\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"form-horizontal\"\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EИмя\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.first_name\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EФамилия\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.last_name\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EНазвание компании\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.company\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Ch4\u003EОсталось очков - [[ctrl.points]]\u003C\u002Fh4\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ctable\u003E\u003Ctr ng-repeat=\"element in ctrl.stats.items\"\u003E\u003Ctd\u003E[[element.caption]]\u003C\u002Ftd\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.minus(element.id)\"\u003E-\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\"\u003E[[ctrl.current.personality[element.name] ]]\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.plus(element.id)\"\u003E+\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003C\u002Ftable\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ctable\u003E\u003Ctr\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EСпециализация\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Cli ng-repeat=\"sp in ctrl.specialties.items\"\u003E\u003Ca ng-click=\"ctrl.chooseSpecialty(sp.id)\" href=\"\" tooltip-placement=\"right\" uib-tooltip=\"[[sp.tooltip]]\"\u003E[[sp.caption]]\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003Ctd\u003E[[ctrl.current.specialties[0].caption]]\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003Ctr\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EСектор работы компании\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Cli ng-repeat=\"element in ctrl.indusrty.items\"\u003E\u003Ca ng-click=\"ctrl.chooseIndustry(element.id)\" href=\"\" tooltip-placement=\"right\" uib-tooltip=\"[[element.tooltip]]\"\u003E[[element.caption]]\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003Ctd\u003E[[ctrl.current.industry.caption]]\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003C\u002Ftable\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-3\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ch4\u003E[[ctrl.current.first_name]] [[ctrl.current.last_name]]\u003C\u002Fh4\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.current.image]]\" width=\"100\" height=\"150\"\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EВыбрать Аватар\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Ca href=\"\" ng-repeat=\"element in ctrl.images\" style=\"background-color:#F8FBF4\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[element]]\" ng-click=\"ctrl.chooseAvatar(element)\" width=\"50\" height=\"75\"\u003E\u003C\u002Fa\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003Cp\u003E\u003Cul\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Деньги\"\u003E$: [[ctrl.current.money]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Влияет на возможность аргументировать возражения по продукту, нормально разговаривать с техническими директорами\"\u003EЗнание продукта: [[ctrl.current.knowProduct]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько нужно делать мин звонков в день\"\u003Emin Звонков: [[ctrl.current.minCalls]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько максимум можно сделать звонков\"\u003Emax Звонков:[[ctrl.current.maxCalls]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"row\" style=\"height:250px\"\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4 btn btn-default btn-lg\"\u003E\u003Ca ng-click=\"ctrl.create()\"\u003E\u003Cspan\u003EСоздать Персонажа\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-12\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"form-horizontal\"\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EИмя\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.first_name\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EФамилия\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.last_name\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EНазвание компании\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.company\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Ch4\u003EОсталось очков - [[ctrl.points]]\u003C\u002Fh4\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ctable\u003E\u003Ctr ng-repeat=\"element in ctrl.stats.items\"\u003E\u003Ctd\u003E[[element.caption]]\u003C\u002Ftd\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.minus(element.id)\"\u003E-\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\"\u003E[[ctrl.current.stats.personality[element.name] ]]\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.plus(element.id)\"\u003E+\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003C\u002Ftable\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ctable\u003E\u003Ctr\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EСпециализация\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Cli ng-repeat=\"sp in ctrl.specialties.items\"\u003E\u003Ca ng-click=\"ctrl.chooseSpecialty(sp.id)\" href=\"\" tooltip-placement=\"right\" uib-tooltip=\"[[sp.tooltip]]\"\u003E[[sp.caption]]\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003Ctd\u003E[[ctrl.current.specialties[0].caption]]\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003Ctr\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EСектор работы компании\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Cli ng-repeat=\"element in ctrl.indusrty.items\"\u003E\u003Ca ng-click=\"ctrl.chooseIndustry(element.id)\" href=\"\" tooltip-placement=\"right\" uib-tooltip=\"[[element.tooltip]]\"\u003E[[element.caption]]\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003Ctd\u003E[[ctrl.current.industry.caption]]\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003C\u002Ftable\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-3\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ch4\u003E[[ctrl.current.first_name]] [[ctrl.current.last_name]]\u003C\u002Fh4\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.current.image_path]]\" width=\"100\" height=\"150\"\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EВыбрать Аватар\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Ca href=\"\" ng-repeat=\"element in ctrl.images\" style=\"background-color:#F8FBF4\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[element]]\" ng-click=\"ctrl.chooseAvatar(element)\" width=\"50\" height=\"75\"\u003E\u003C\u002Fa\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003Cp\u003E\u003Cul\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Деньги\"\u003E$: [[ctrl.current.money]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Влияет на возможность аргументировать возражения по продукту, нормально разговаривать с техническими директорами\"\u003EЗнание продукта: [[ctrl.current.knowProduct]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько нужно делать мин звонков в день\"\u003Emin Звонков: [[ctrl.current.minCalls]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько максимум можно сделать звонков\"\u003Emax Звонков:[[ctrl.current.maxCalls]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"row\" style=\"height:250px\"\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4 btn btn-default btn-lg\"\u003E\u003Ca ng-click=\"ctrl.create()\"\u003E\u003Cspan\u003EСоздать Персонажа\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -1650,14 +1672,16 @@
 	  }
 
 	  menuCtrl.prototype.$onInit = function() {
-	    return this.Restangular.one('api/v1/my/').get().then((function(_this) {
+	    this.Restangular.one('api/v1/my/').get().then((function(_this) {
 	      return function(res) {
-	        _this.localStorage.user = {
+	        return _this.localStorage.user = {
 	          id: res.user_id
 	        };
-	        _this.Restangular.one('api/v1/persons?owner_id=' + res.user_id).get().then(function(res) {
-	          return _this.players = res;
-	        });
+	      };
+	    })(this));
+	    return this.Restangular.one('api/v1/persons').get().then((function(_this) {
+	      return function(res) {
+	        _this.players = res;
 	      };
 	    })(this));
 	  };

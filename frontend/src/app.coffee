@@ -5,6 +5,7 @@ angular.module('app', [
   'ngComponentRouter',
   'ui.bootstrap'
   'ngStorage'
+  'ngCookies'
 ]).config ($interpolateProvider) ->
   $interpolateProvider.startSymbol '[['
   $interpolateProvider.endSymbol ']]'

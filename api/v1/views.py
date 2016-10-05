@@ -13,7 +13,8 @@ class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
     def list(self, request, format=None):
-        owner = request.query_params['owner_id']
+        # owner = request.query_params['owner_id']
+        owner = request.user.id
         queryset = Person.objects.filter(owner_id = owner)
         serializer = PersonSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -24,6 +25,10 @@ class PersonViewSet(viewsets.ModelViewSet):
         person = get_object_or_404(queryset, pk=pk)
         serializer = PersonSerializer(person)
         return Response(serializer.data)
+
+    # def create(self, request):
+    #     print str(request)
+    #     super()
 
 
 class CompanyViewSet(viewsets.ModelViewSet):

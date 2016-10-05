@@ -8,8 +8,8 @@ class menuCtrl
 
     @Restangular.one('api/v1/my/').get().then (res)=>
       @localStorage.user = {id : res.user_id}
-      @Restangular.one('api/v1/persons?owner_id='+res.user_id).get().then (res)=>
-        @players = res
+    @Restangular.one('api/v1/persons').get().then (res)=>
+      @players = res
       return
 
   goToGame:(playerId)=>

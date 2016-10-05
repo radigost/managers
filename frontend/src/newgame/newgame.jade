@@ -29,7 +29,7 @@
                                     td
                                         .btn-group
                                             button.btn.btn-default(ng-click="ctrl.minus(element.id)") -
-                                            button.btn.btn-default [[ctrl.current.personality[element.name] ]]
+                                            button.btn.btn-default [[ctrl.current.stats.personality[element.name] ]]
                                             button.btn.btn-default(ng-click="ctrl.plus(element.id)") +
 
 
@@ -63,7 +63,7 @@
                     .panel.panel-default(style="background-color:#C4D9D4;")
                         .panel-body
                             h4 [[ctrl.current.first_name]] [[ctrl.current.last_name]]
-                            img(src="../../static/managers/img/[[ctrl.current.image]]" width=100 height=150)
+                            img(src="../../static/managers/img/[[ctrl.current.image_path]]" width=100 height=150)
                             .btn-group
                                 button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                                     | Выбрать Аватар
