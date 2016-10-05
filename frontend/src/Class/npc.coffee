@@ -70,7 +70,7 @@ class Npc
       @current.text = _.replace(@current.text,'PERSONNAME',name)
   selectCurrent:(id)=>
     @Restangular.one('api/v1/npc/',id).get().then (res)=>
-      console.log res
+#      console.log res
       @current = res
       return
 

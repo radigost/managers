@@ -2,7 +2,7 @@
 from django.conf.urls import url,include
 
 from rest_framework import routers
-from views import PersonViewSet,CompanyViewSet,NpcViewSet,UserViewSet,GroupViewSet
+from views import PersonViewSet,CompanyViewSet,NpcViewSet,UserViewSet,GroupViewSet,MyView
 
 router = routers.DefaultRouter()
 router.register(r'persons', PersonViewSet)
@@ -13,5 +13,6 @@ router.register(r'groups', GroupViewSet)
 
 
 urlpatterns = [
-    url(r'api/v1/', include(router.urls))
+    url(r'api/v1/', include(router.urls)),
+    url(r'api/v1/my', MyView.as_view(),name='my')
 ]

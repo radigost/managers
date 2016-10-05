@@ -30,6 +30,7 @@ class Person(models.Model):
     stats = JSONField(default={
         'money': 0
     })
+    owner = models.ForeignKey('auth.User', related_name='persons',default=1)
     related_companies = models.ManyToManyField(Company,null=True)
 
     def __unicode__(self):
