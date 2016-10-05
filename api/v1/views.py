@@ -2,6 +2,9 @@
 
 from rest_framework import viewsets
 from managers.views import Person,Company,Npc
+from rest_framework.views import APIView
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
 from django.contrib.auth.models import User, Group
 from .serializers import PersonSerializer,CompanySerializer,NpcSerializer,UserSerializer,GroupSerializer
 
@@ -32,3 +35,15 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+class MyView(APIView):
+    """
+    A view that returns the count of active users in JSON.
+    """
+    renderer_classes = (JSONRenderer, )
+
+    def get(self, request, format=None):
+        user_id = request.user.id
+        content = {'user_id': user_id }
+        return Response(content)

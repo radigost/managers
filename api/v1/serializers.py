@@ -26,9 +26,10 @@ class NpcSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    persons = serializers.PrimaryKeyRelatedField(many=True, queryset=Person.objects.all())
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'groups')
+        fields = ('url', 'username', 'email', 'groups', 'persons')
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):

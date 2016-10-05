@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from django.views.generic.edit import FormView,View
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import login,logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 
 from api.v1.serializers import PersonSerializer,CompanySerializer,NpcSerializer
 from .models import Person,Company,Npc
@@ -13,11 +13,15 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/login/')
 def index(request):
+    # print request.user.id
     template = 'managers/index.html'
     context = {
         'latest_question_list': 5,
     }
     return render(request,template,context)
+# @login_required(login_url='/login/')
+# def index(request):
+#     return HttpResponse(request.user.id)
 
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()

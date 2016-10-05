@@ -500,7 +500,6 @@
 	  Npc.prototype.selectCurrent = function(id) {
 	    return this.Restangular.one('api/v1/npc/', id).get().then((function(_this) {
 	      return function(res) {
-	        console.log(res);
 	        _this.current = res;
 	      };
 	    })(this));
