@@ -86,13 +86,13 @@
 
 	__webpack_require__(4);
 
-	__webpack_require__(10);
+	__webpack_require__(9);
 
-	__webpack_require__(14);
+	__webpack_require__(13);
 
-	__webpack_require__(25);
+	__webpack_require__(26);
 
-	__webpack_require__(27);
+	__webpack_require__(29);
 
 
 /***/ },
@@ -379,9 +379,9 @@
 
 	__webpack_require__(5);
 
-	__webpack_require__(7);
+	__webpack_require__(6);
 
-	tpl = __webpack_require__(9);
+	tpl = __webpack_require__(8);
 
 	appCtrl = (function() {
 	  function appCtrl(player, NpcFactory, Restangular) {
@@ -545,7 +545,6 @@
 	    this.fakeName = "Иван Иванович";
 	    this.company = "";
 	    this.money = "";
-	    this.playerAvatarID = 2;
 	    this.position = "";
 	    this.nodes = [
 	      {
@@ -725,46 +724,13 @@
 
 /***/ },
 /* 6 */
-/***/ function(module, exports) {
-
-	var Company,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-
-	Company = (function() {
-	  function Company(Restangular, localStorage) {
-	    this.Restangular = Restangular;
-	    this.localStorage = localStorage;
-	    this.selectCurrent = bind(this.selectCurrent, this);
-	    this.current = {};
-	    this.items = [];
-	  }
-
-	  Company.prototype.selectCurrent = function(id) {
-	    return this.Restangular.one('api/v1/companies/', id).get().then((function(_this) {
-	      return function(res) {
-	        _this.current = res;
-	      };
-	    })(this));
-	  };
-
-	  return Company;
-
-	})();
-
-	angular.module('app').service('Company', ['Restangular', '$localStorage', Company]);
-
-	module.exports = Company;
-
-
-/***/ },
-/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Npc;
 
 	__webpack_require__(5);
 
-	Npc = __webpack_require__(8);
+	Npc = __webpack_require__(7);
 
 	angular.module('app').factory('Person', [
 	  function() {
@@ -792,7 +758,7 @@
 
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports) {
 
 	var Npc,
@@ -1008,7 +974,7 @@
 
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
@@ -1017,21 +983,21 @@
 	module.exports = template;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Npc, Player, modalTpl, tpl, treeCtrl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	Npc = __webpack_require__(8);
+	Npc = __webpack_require__(7);
 
 	Player = __webpack_require__(5);
 
-	tpl = __webpack_require__(11);
+	tpl = __webpack_require__(10);
 
-	modalTpl = __webpack_require__(12);
+	modalTpl = __webpack_require__(11);
 
-	__webpack_require__(13);
+	__webpack_require__(12);
 
 	treeCtrl = (function() {
 	  function treeCtrl(uibModal) {
@@ -1121,7 +1087,7 @@
 
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
@@ -1130,7 +1096,7 @@
 	module.exports = template;
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
@@ -1139,7 +1105,7 @@
 	module.exports = template;
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	var modalCtrl,
@@ -1170,21 +1136,23 @@
 
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var gameCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	tpl = __webpack_require__(15);
+	tpl = __webpack_require__(14);
 
-	__webpack_require__(16);
+	__webpack_require__(15);
+
+	__webpack_require__(17);
 
 	__webpack_require__(18);
 
-	__webpack_require__(19);
+	__webpack_require__(20);
 
-	__webpack_require__(21);
+	__webpack_require__(24);
 
 	gameCtrl = (function() {
 	  function gameCtrl(service) {
@@ -1218,38 +1186,45 @@
 	      path: '/company-detail',
 	      name: 'CompanyDetail',
 	      component: 'companyDetail'
+	    }, {
+	      path: '/profile',
+	      name: 'Profile',
+	      component: 'profile'
 	    }
 	  ]
 	});
 
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.service.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cplayer-info player=\"ctrl.service.player\"\u003E\u003C\u002Fplayer-info\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\" style=\"background-color:#C4D9D4\"\u003E\u003Cng-outlet\u003E\u003C\u002Fng-outlet\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.service.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cplayer-info player=\"ctrl.service.player\" router=\"ctrl.$router\"\u003E\u003C\u002Fplayer-info\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default col-lg-8\" style=\"background-color:#C4D9D4\"\u003E\u003Cng-outlet\u003E\u003C\u002Fng-outlet\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Player, playerInfoCtrl, tpl,
+	var playerInfoCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	Player = __webpack_require__(5);
-
-	tpl = __webpack_require__(17);
+	tpl = __webpack_require__(16);
 
 	playerInfoCtrl = (function() {
 	  function playerInfoCtrl(Restangular) {
 	    this.Restangular = Restangular;
+	    this.goToProfile = bind(this.goToProfile, this);
 	    this.$onInit = bind(this.$onInit, this);
 	  }
 
 	  playerInfoCtrl.prototype.$onInit = function() {};
+
+	  playerInfoCtrl.prototype.goToProfile = function() {
+	    return this.router.navigate(['Profile']);
+	  };
 
 	  return playerInfoCtrl;
 
@@ -1260,22 +1235,23 @@
 	  controller: ['Restangular', playerInfoCtrl],
 	  controllerAs: 'ctrl',
 	  bindings: {
-	    player: '<'
+	    player: '<',
+	    router: '<'
 	  }
 	});
 
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.player.image_path]]\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\" style=\"background-color:#40423F\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.player.stats.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EЗвонки сегодня\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.calls_done]]\" aria-valuemin=\"0\" aria-valuemax=\"[[ctrl.player.stats.calls_min]]\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.calls_done]]\u002F[[ctrl.player.stats.calls_min]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EОпыт\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.exp]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.exp]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.player.image_path]]\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\" ng-click=\"ctrl.goToProfile()\" style=\"background-color:#40423F\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.player.stats.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EЗвонки сегодня\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.calls_done]]\" aria-valuemin=\"0\" aria-valuemax=\"[[ctrl.player.stats.calls_min]]\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.calls_done]]\u002F[[ctrl.player.stats.calls_min]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EОпыт\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.exp]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.exp]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var appService,
@@ -1309,15 +1285,15 @@
 
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var companyListCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	__webpack_require__(18);
+	__webpack_require__(17);
 
-	tpl = __webpack_require__(20);
+	tpl = __webpack_require__(19);
 
 	companyListCtrl = (function() {
 	  function companyListCtrl(service) {
@@ -1348,7 +1324,7 @@
 
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
@@ -1357,17 +1333,17 @@
 	module.exports = template;
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var companyDetailCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	tpl = __webpack_require__(22);
+	tpl = __webpack_require__(21);
 
-	__webpack_require__(23);
+	__webpack_require__(22);
 
-	__webpack_require__(18);
+	__webpack_require__(17);
 
 	companyDetailCtrl = (function() {
 	  function companyDetailCtrl(service, company) {
@@ -1405,7 +1381,7 @@
 
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
@@ -1414,15 +1390,15 @@
 	module.exports = template;
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var npcInfoCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	__webpack_require__(7);
+	__webpack_require__(6);
 
-	tpl = __webpack_require__(24);
+	tpl = __webpack_require__(23);
 
 	npcInfoCtrl = (function() {
 	  function npcInfoCtrl(Restangular, NpcFactory) {
@@ -1451,7 +1427,7 @@
 
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
@@ -1460,15 +1436,58 @@
 	module.exports = template;
 
 /***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var profileCtrl, tpl,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+	tpl = __webpack_require__(25);
+
+	__webpack_require__(17);
+
+	profileCtrl = (function() {
+	  function profileCtrl(service, Restangular) {
+	    this.service = service;
+	    this.Restangular = Restangular;
+	    this.$onInit = bind(this.$onInit, this);
+	  }
+
+	  profileCtrl.prototype.$onInit = function() {};
+
+	  return profileCtrl;
+
+	})();
+
+	angular.module('app').component('profile', {
+	  template: tpl(),
+	  controller: ['gameService', 'Restangular', profileCtrl],
+	  controllerAs: 'ctrl',
+	  bindings: {
+	    $router: '<'
+	  }
+	});
+
+
+/***/ },
 /* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pug = __webpack_require__(2);
+
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-heading\" style=\"background-color:#ffffff\"\u003E\u003Ca href=\"\u002F#\u002Fgame\"\u003EНазад\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003C!--.media-left.media-middle--\u003E\u003C!--    img(src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.service.player.image_path]]\" width=100 height=150)--\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.service.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.service.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.service.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.service.player.stats.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EЗвонки сегодня\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.service.player.stats.calls_done]]\" aria-valuemin=\"0\" aria-valuemax=\"[[ctrl.service.player.stats.calls_min]]\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.service.player.stats.calls_done]]\u002F[[ctrl.service.player.stats.calls_min]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EОпыт\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.service.player.stats.exp]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.service.player.stats.exp]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cp\u003E\u003Cul\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Деньги\"\u003E$: [[ctrl.service.player.stats.money]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Влияет на возможность аргументировать возражения по продукту, нормально разговаривать с техническими директорами\"\u003EЗнание продукта: [[ctrl.service.player.stats.knowProduct]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько нужно делать мин звонков в день\"\u003Emin Звонков: [[ctrl.service.player.stats.minCalls]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько максимум можно сделать звонков\"\u003Emax Звонков:[[ctrl.service.player.stats.maxCalls]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	module.exports = template;
+
+/***/ },
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Company, gameCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	Company = __webpack_require__(6);
+	Company = __webpack_require__(27);
 
-	tpl = __webpack_require__(26);
+	tpl = __webpack_require__(28);
 
 	gameCtrl = (function() {
 	  function gameCtrl(localStorage, Restangular, cookies) {
@@ -1721,7 +1740,40 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
+/***/ function(module, exports) {
+
+	var Company,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+	Company = (function() {
+	  function Company(Restangular, localStorage) {
+	    this.Restangular = Restangular;
+	    this.localStorage = localStorage;
+	    this.selectCurrent = bind(this.selectCurrent, this);
+	    this.current = {};
+	    this.items = [];
+	  }
+
+	  Company.prototype.selectCurrent = function(id) {
+	    return this.Restangular.one('api/v1/companies/', id).get().then((function(_this) {
+	      return function(res) {
+	        _this.current = res;
+	      };
+	    })(this));
+	  };
+
+	  return Company;
+
+	})();
+
+	angular.module('app').service('Company', ['Restangular', '$localStorage', Company]);
+
+	module.exports = Company;
+
+
+/***/ },
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
@@ -1730,17 +1782,17 @@
 	module.exports = template;
 
 /***/ },
-/* 27 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var menuCtrl, modalTpl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	tpl = __webpack_require__(28);
+	tpl = __webpack_require__(30);
 
-	modalTpl = __webpack_require__(29);
+	modalTpl = __webpack_require__(31);
 
-	__webpack_require__(30);
+	__webpack_require__(32);
 
 	menuCtrl = (function() {
 	  function menuCtrl(uibModal, Restangular, localStorage) {
@@ -1795,7 +1847,7 @@
 
 
 /***/ },
-/* 28 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
@@ -1804,7 +1856,7 @@
 	module.exports = template;
 
 /***/ },
-/* 29 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(2);
@@ -1813,7 +1865,7 @@
 	module.exports = template;
 
 /***/ },
-/* 30 */
+/* 32 */
 /***/ function(module, exports) {
 
 	var modalCtrl,

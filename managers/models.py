@@ -25,14 +25,13 @@ class Person(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
     company = models.CharField(max_length=250)
-    # companyDetail = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     image_path = models.CharField(max_length=150, null=True,default=None)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, default=None,null=True)
     stats = JSONField(default={
         'money': 0
     })
     owner = models.ForeignKey('auth.User', related_name='persons',default=1)
-    related_companies = models.ManyToManyField(Company,null=True)
+    related_companies = models.ManyToManyField(Company)
 
     def __unicode__(self):
         return '%s, - %s in  %s ' % ( self.name,self.position,self.company)
@@ -59,3 +58,13 @@ class Industry(models.Model):
     name = models.CharField(max_length=30)
     def __unicode__(self):
         return self.name
+
+# class Node(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     category =  JSONField(default={
+#         'category': ['player'],
+#         'type':'null'
+#     })
+#     text  = models.CharField(max_length=250)
+#     def __unicode__(self):
+#         return self.text

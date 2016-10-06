@@ -5,7 +5,6 @@ class Player
     @fakeName = "Иван Иванович"
     @company=""
     @money = ""
-    @playerAvatarID = 2
     @position=""
     @nodes = [
           {id:1,text:"Добрый день!"}

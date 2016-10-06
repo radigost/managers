@@ -1,0 +1,33 @@
+.panel-heading(style="background-color:#ffffff;")
+    a(href = "/#/game") Назад
+.panel-body
+    .media
+        //.media-left.media-middle
+        //    img(src="../../static/managers/img/[[ctrl.service.player.image_path]]" width=100 height=150)
+        .media-body
+            ul
+                li [[ctrl.service.player.name]]
+                li " [[ctrl.service.player.company]] "
+                li [[ctrl.service.player.position]]
+            ul
+                li  $ [[ctrl.service.player.stats.money]]
+                li
+                    i.fa.fa-phone(aria-hidden='true') &nbsp;
+                    span Звонки сегодня
+                    .progress
+                        .progress-bar.progress-bar-info(role='progressbar', aria-valuenow='[[ctrl.service.player.stats.calls_done]]', aria-valuemin='0', aria-valuemax='[[ctrl.service.player.stats.calls_min]]', style='width: 60%;')
+                            span [[ctrl.service.player.stats.calls_done]]/[[ctrl.service.player.stats.calls_min]]
+                li
+                    i.fa.fa-angle-double-up(aria-hidden='true') &nbsp;
+                    span Опыт
+                    .progress
+                        .progress-bar.progress-bar-info(role='progressbar', aria-valuenow='[[ctrl.service.player.stats.exp]]', aria-valuemin='0', aria-valuemax='100', style='width: 60%;')
+                            span [[ctrl.service.player.stats.exp]]
+
+
+            p
+                ul
+                    li(tooltip-placement="left" uib-tooltip="Деньги") $: [[ctrl.service.player.stats.money]]
+                    li(tooltip-placement="left" uib-tooltip="Влияет на возможность аргументировать возражения по продукту, нормально разговаривать с техническими директорами") Знание продукта: [[ctrl.service.player.stats.knowProduct]]
+                    li(tooltip-placement="left" uib-tooltip="Cколько нужно делать мин звонков в день") min Звонков: [[ctrl.service.player.stats.minCalls]]
+                    li(tooltip-placement="left" uib-tooltip="Cколько максимум можно сделать звонков") max Звонков:[[ctrl.service.player.stats.maxCalls]]
