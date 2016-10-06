@@ -6,7 +6,7 @@ class npcInfoCtrl
   constructor:(@Restangular,@NpcFactory)->
 
   $onInit:()=>
-    console.log @id
+#    console.log @id
     @npc = @NpcFactory(@Restangular)
     @npc.selectCurrent(@id)
 

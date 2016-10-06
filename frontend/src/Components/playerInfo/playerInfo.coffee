@@ -4,13 +4,8 @@ tpl = require('./playerInfo.jade')
 
 class playerInfoCtrl
   constructor:(@Restangular)->
-
   $onInit:()=>
-    console.log @player
-
-#    @player = new @PlayerFactory({id:1})
-#    console.log "player is ",@player,@playerS
-
+#    console.log @player
 
 angular.module('app').component('playerInfo',{
   template:tpl()
@@ -18,7 +13,6 @@ angular.module('app').component('playerInfo',{
   controllerAs:'ctrl'
   bindings:
     player:'<'
-#    $router:'<'
 })
 
 

@@ -1,15 +1,55 @@
+{% load static %}
+
+<script type="text/javascript" src='{% static 'angular/angular.js' %}'></script>
+<script src="https://npmcdn.com/@angular/router@0.2.0/angular1/angular_1_router.js"></script>
+{#<script type="text/javascript" src='{% static 'angular/angular_1_router.js' %}'></script>#}
+<script type="text/javascript" src='{% static 'angular-bootstrap/ui-bootstrap.js' %}'></script>
+<script type="text/javascript" src='{% static 'angular-bootstrap/ui-bootstrap-tpls.js' %}'></script>
+<script type="text/javascript" src='{% static 'lodash/dist/lodash.js' %}'></script>
+<script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+{#<script type="text/javascript" src='{% static 'jquery/dist/jquery.js' %}'></script>#}
+{#<script type="text/javascript" src='{% static 'bootstrap/js/bootstrap.js' %}'></script>#}
+<script type="text/javascript" src='{% static 'restangular/dist/restangular.js' %}'></script>
+<script type="text/javascript" src='{% static 'managers/app.js' %}'></script>
+{#<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/dist/css/bootstrap.css' %}" />#}
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'managers/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'angular-bootstrap/ui-bootstrap-csp.css' %}" />
+<script src="https://use.fontawesome.com/2dc2d2d22f.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.js"></script>
+{#<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.css' %}" />#}
+{#<link href='{% static 'managers/font.ttf' %}' rel='stylesheet' type='text/css'>#}
+
+
+
 <!DOCTYPE html>
 <html>
   <head>
     <title>Вход</title>
   </head>
-  <body>
-    <form action="" method="post">
-      {% csrf_token %}
-      <!-- as_p для того, чтобы каждый элемент формы был с новой строки -->
-      {{ form.as_p }}
-      <button type="submit">Войти</button>
-        <a href="/register">Зарегистрироваться</a>
-    </form>
+  <body  style="background-color:#FFF7EC;">
+    <div class="container">
+  <div class="row">
+    <div class="col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4">
+      <div style="background-color:#FFF7EC;" class="thumbnail">
+          <img src="../../static/managers/img/winner.jpg" height="250px" width="250px" align="middle" class="img-responsive"/>
+          <form action="" method="post">
+             {% csrf_token %}
+             <!-- as_p для того, чтобы каждый элемент формы был с новой строки -->
+             {{ form.as_p }}
+             <button class="btn btn-default" type="submit">Войти</button>
+
+         </form>
+          <a href="/register">Зарегистрироваться</a>
+      </div>
+    </div>
+    <div class="col-sm-2 col-lg-4"></div>
+  </div>
+</div>
   </body>
 </html>
+
+

@@ -1249,9 +1249,7 @@
 	    this.$onInit = bind(this.$onInit, this);
 	  }
 
-	  playerInfoCtrl.prototype.$onInit = function() {
-	    return console.log(this.player);
-	  };
+	  playerInfoCtrl.prototype.$onInit = function() {};
 
 	  return playerInfoCtrl;
 
@@ -1434,7 +1432,6 @@
 	  }
 
 	  npcInfoCtrl.prototype.$onInit = function() {
-	    console.log(this.id);
 	    this.npc = this.NpcFactory(this.Restangular);
 	    return this.npc.selectCurrent(this.id);
 	  };
@@ -1803,7 +1800,7 @@
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003C!--p Это главное меню. Отсюда можно начать новую игру и продолжить старую--\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fnewgame\"\u003E Новая игра\u003C\u002Fa\u003E\u003C!--a(href=\"\u002F#\u002Fgame?id=[[ctrl.clientId]]\").btn.btn-default.btn-lg.btn-block  Продолжить Игру--\u003E\u003C!--a(href=\"\u002F#\u002Ftalk\").btn.btn-default.btn-lg.btn-block Тур переговоров--\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Ftree\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Ch4 class=\"text-center\"\u003EИграть за:\u003C\u002Fh4\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.goToGame(player.id)\" ng-repeat=\"player in ctrl.players\"\u003E[[player.name]]\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[player.image_path]]\" height=\"50px\" width=\"50px\" align=\"middle\"\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Новая игра--\u003E\u003C!--li--\u003E\u003C!--    a(href=\"\") Загрузить--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fnewgame\"\u003E Новая игра\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Ftree\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Ch4 class=\"text-center\"\u003EИграть за:\u003C\u002Fh4\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.goToGame(player.id)\" ng-repeat=\"player in ctrl.players\"\u003E[[player.name]]\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[player.image_path]]\" height=\"50px\" width=\"50px\" align=\"middle\"\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
