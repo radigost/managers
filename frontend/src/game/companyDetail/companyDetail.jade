@@ -1,0 +1,18 @@
+.panel-heading(style="background-color:#ffffff;")
+    a(href = "/#/game") Назад
+.panel-body
+    .media
+        .media-left.media-middle
+            img(src="../static/managers/img/building[[ctrl.company.current.id]].png" width=100 height=150)
+        .media-body
+                    h1
+                        a(href="") [[ctrl.company.current.name]]
+
+                    .col-md-6
+                        p Размер : [[ctrl.company.current.size]]
+                        p [[ctrl.company.current.description]]
+                        p История сделок:
+                            i.fa.fa-dollar(aria-hidden='true' style="color:#A14E71;")
+    h5 Сотрудники:
+    .panel.panel-default(ng-repeat="id in ctrl.company.current.npc_set")
+        npc-info(id='id')

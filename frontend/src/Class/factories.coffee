@@ -1,6 +1,7 @@
 require '../Class/player.coffee'
 Npc = require '../Class/npc.coffee'
-#NpcFactory.$inject = ['Npc'];
+
+
 angular.module('app')
 .factory('Person',[
       -> (res)->
@@ -11,6 +12,8 @@ angular.module('app')
 #        person.init(res)
         return person
 ])
+
+
 
 .factory('NpcFactory',[
       'Restangular',

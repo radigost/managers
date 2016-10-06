@@ -1,4 +1,4 @@
-require './player.coffee'
+require '../Class/player.coffee'
 
 class appService
   constructor:(@Restangular,@player,@localStorage)->
@@ -9,7 +9,7 @@ class appService
     @Restangular.one('api/v1/companies/').get().then (res)=>
       @companies = res.results
 
-angular.module('app').service('appService', [
+angular.module('app').service('gameService', [
   'Restangular'
   'Player'
   '$localStorage'

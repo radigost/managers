@@ -1,53 +1,8 @@
-html
-    body
-        .centered
-            h3 [[ctrl.gameName]]
-        .container
-            .row
-                .panel.panel-default.col-lg-4
-                    .panel-body
-                        img(src="../static/managers/img/manager.png" width=100 height=150)
-
-                        .media
-                            .media-left
-
-                            .media-body
-                        //p [[ctrl.next.question]]
-                .panel.panel-default.col-lg-4
-                    .panel-body
-                        p Оставшееся время:
-                            .progress
-                                .progress-bar.progress-bar-info(role='progressbar', aria-valuenow='[[ctrl.time]]', aria-valuemin='0', aria-valuemax='100', style='width: [[ctrl.time]]%;')
-                                    | [[ctrl.time]]
-                        //ol
-                        //    li(ng-repeat='item in ctrl.history') -[[item]]
-                .panel.panel-default.col-lg-4
-                    .panel-body
-                        .media
-                            .media-left.media-middle
-                                img.media-object(src="../static/managers/img/secretar.png" width=100 height=150)
-                            .media-body
-                                ul
-                                    li Имя:[[ctrl.person2.name]]
-                                    li Компания: [[ctrl.person2.company]]
-                                    li Должность: [[ctrl.person2.position]]
-
-            .row
-                .col-lg-6
-                    .panel.panel-default(ng-show="!ctrl.failure")
-                          .panel-header
-                            | Варианты ответа
-                          .panel-body
-                            .list-group
-                              a.list-group-item( ng-repeat='question in ctrl.questionArray', ng-click='ctrl.update(question.id)') [[question.question]]
-                            div(ng-show='ctrl.failure') Проигрышь
-                            div(ng-show='ctrl.success') Выигрышь!
-
-                .panel.panel-default.col-lg-6
-                    p [[ctrl.next.answer]]
-                .panel.panel-default.col-lg-12
-                    .page-header
-                        p История разговора
-                    .panel-body
-                        ol
-                            li(ng-repeat='item in ctrl.history') -[[item.text]]
+.container
+  .row
+    .pull-left
+      a(href='/') Мeню
+      a(href='/logout') Выход
+.centered
+  h2 Игра менеджеры
+ng-outlet  

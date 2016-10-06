@@ -25,7 +25,7 @@ class Person(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
     company = models.CharField(max_length=250)
-    # company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
+    # companyDetail = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     image_path = models.CharField(max_length=150, null=True,default=None)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, default=None,null=True)
     stats = JSONField(default={

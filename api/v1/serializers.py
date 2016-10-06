@@ -11,7 +11,7 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = ('id', 'name','description','size','person_set','npc_set')
 
 class PersonSerializer(serializers.ModelSerializer):
-    # company = serializers.StringRelatedField()
+    # companyDetail = serializers.StringRelatedField()
     position = serializers.StringRelatedField()
     related_companies = CompanySerializer(many=True,read_only=True)
     class Meta:

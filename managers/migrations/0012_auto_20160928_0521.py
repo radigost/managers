@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='person',
-            name='company',
+            name='companyDetail',
             field=models.CharField(max_length=250),
         ),
     ]

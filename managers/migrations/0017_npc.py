@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=30)),
                 ('image_path', models.CharField(default=None, max_length=150, null=True)),
                 ('stats', django.contrib.postgres.fields.jsonb.JSONField(default={'money': 0})),
-                ('company', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='managers.Company')),
+                ('companyDetail', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='managers.Company')),
                 ('position', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.SET_NULL, to='managers.Position')),
             ],
         ),

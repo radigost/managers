@@ -38,19 +38,19 @@ class Npc
       {id:17,text:"А он о вас знает, как вас представить?" ,used:false}
       ]
     @loadedData = [
-      {id:1,name:"Мария",companyId:1,positionName:"Секретарь"}
-      {id:2,name:"Екатерина",companyId:2,positionName:"Главный секретарь"}
-      {id:3,name:"Василиса",companyId:3,positionName:"Помощник директора"}
-      {id:4,name:"Лейла",companyId:4,positionName:"Менеджер"}
-      {id:5,name:"Елена",companyId:5,positionName:"Секретарь"}
-      {id:6,name:"Анна",companyId:6,positionName:"Секретарь"}
-      {id:7,name:"Галина",companyId:7,positionName:"Помощник директора"}
-      {id:8,name:"Ольга",companyId:8,positionName:"Менеджер"}
-      {id:9,name:"Зарина",companyId:9,positionName:"Помощник директора"}
-      {id:10,name:"Гюйра",companyId:10,positionName:"Секретарь"}
-      {id:11,name:"Наталья",companyId:11,positionName:"Помощник директора"}
-      {id:12,name:"Оксана",companyId:12,positionName:"Секретарь"}
-      {id:13,name:"Ксения",companyId:13,positionName:"Менеджер"}
+#      {id:1,name:"Мария",companyId:1,positionName:"Секретарь"}
+#      {id:2,name:"Екатерина",companyId:2,positionName:"Главный секретарь"}
+#      {id:3,name:"Василиса",companyId:3,positionName:"Помощник директора"}
+#      {id:4,name:"Лейла",companyId:4,positionName:"Менеджер"}
+#      {id:5,name:"Елена",companyId:5,positionName:"Секретарь"}
+#      {id:6,name:"Анна",companyId:6,positionName:"Секретарь"}
+#      {id:7,name:"Галина",companyId:7,positionName:"Помощник директора"}
+#      {id:8,name:"Ольга",companyId:8,positionName:"Менеджер"}
+#      {id:9,name:"Зарина",companyId:9,positionName:"Помощник директора"}
+#      {id:10,name:"Гюйра",companyId:10,positionName:"Секретарь"}
+#      {id:11,name:"Наталья",companyId:11,positionName:"Помощник директора"}
+#      {id:12,name:"Оксана",companyId:12,positionName:"Секретарь"}
+#      {id:13,name:"Ксения",companyId:13,positionName:"Менеджер"}
     ]
     @currentNpc={}
 

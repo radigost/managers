@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='company',
+            model_name='companyDetail',
             name='size',
             field=models.IntegerField(default=None, null=True),
         ),

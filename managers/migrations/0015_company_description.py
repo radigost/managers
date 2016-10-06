@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='company',
+            model_name='companyDetail',
             name='description',
             field=models.CharField(default=None, max_length=350, null=True),
         ),

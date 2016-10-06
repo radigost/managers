@@ -1,21 +1,16 @@
-#Npc = require('../Class/npc.coffee')
 require('../Class/player.coffee')
-require('../Class/Company.coffee')
 require('../Class/factories.coffee')
 tpl = require('./talk.jade')
 
 class appCtrl
-  constructor:(@player,@NpcFactory,@company,@Restangular)->
+  constructor:(@player,@NpcFactory,@Restangular)->
     @gameName = "Окно переговоров"
     @time = 100
     @history = []
-#    @npc = new Npc
     @result = {
       end:false
       type:""
     }
-
-
 
   $routerOnActivate:(next)=>
     @player.init()
@@ -98,9 +93,9 @@ class appCtrl
 
 angular.module('app').component('talk',{
   template:tpl()
-  controller:['Player','NpcFactory','Company','Restangular',appCtrl]
+  controller:['Player','NpcFactory','Restangular',appCtrl]
   controllerAs:'ctrl'
-  bundings:
+  bindings:
     $router:'<'
 })
 

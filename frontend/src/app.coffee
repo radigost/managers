@@ -1,4 +1,4 @@
-
+tpl = require './app.jade'
 'use strict'
 angular.module('app', [
   'restangular',
@@ -13,15 +13,13 @@ angular.module('app', [
 
 
 angular.module('app').component('app',{
-  template: '<ng-outlet ></ng-outlet>\n',
+  template:tpl()
   $routeConfig: [
     {path: '/', name: 'Menu', component: 'menu' }
     {path: '/talk', name: 'Talk', component: 'talk' }
     {path: '/tree', name: 'Tree', component: 'tree' }
-    {path: '/game', name: 'Game', component: 'game' }
     {path: '/newgame', name: 'NewGame', component: 'newgame' }
-    {path: '/company', name: 'Company', component: 'company' }
-
+    {path: '/game/...', name: 'Game', component: 'game' }
 
   ]
 })
@@ -36,5 +34,4 @@ require('./tree/tree.coffee');
 require('./game/game.coffee');
 require('./newgame/newgame.coffee');
 require('./menu/menu.coffee');
-require('./company/company.coffee');
 
