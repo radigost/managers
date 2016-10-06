@@ -22,12 +22,9 @@ class appCtrl
     @npcId=next.params.npcId
     @npc = @NpcFactory(@Restangular)
     @npc.selectCurrent(@npcId)
-#    console.log @npc
-#    @company.selectCurrent(@npc.current.id)
     @update 1
 
   update:(questionId)=>
-    console.log @npc.current
     @time -= 30 if questionId>1
     @findAnswerForQuestion(questionId)
     @checkForSuccess()

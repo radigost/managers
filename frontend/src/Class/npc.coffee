@@ -71,7 +71,7 @@ class Npc
   selectCurrent:(id)=>
     @Restangular.one('api/v1/npc/',id).get().then (res)=>
 #      console.log res
-      @current = res
+      _.extend @,res
       return
 
   selectNpc:(id)=>
