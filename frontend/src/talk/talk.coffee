@@ -3,7 +3,7 @@ require('../Class/factories.coffee')
 tpl = require('./talk.jade')
 
 class appCtrl
-  constructor:(@player,@NpcFactory,@Restangular)->
+  constructor:(@player,@NpcFactory,@Restangular,@q)->
     @gameName = "Окно переговоров"
     @time = 100
     @history = []
@@ -15,9 +15,16 @@ class appCtrl
   $routerOnActivate:(next)=>
     @player.init()
     @npcId=next.params.npcId
-    @npc = @NpcFactory(@Restangular)
+    @npc = @NpcFactory(@Restangular,@q)
     @npc.selectCurrent(@npcId)
-    @update 1
+    @q.all([
+      @player.loadNodes()
+      @player.loadTree()
+      @npc.loadNodes()
+      @npc.loadTree()
+    ]).then (res)=>
+        console.log "now can update",@npc,@player
+        @update 1
 
   update:(questionId)=>
     @time -= 30 if questionId>1
@@ -82,8 +89,8 @@ class appCtrl
     inHistory = _.find(@history,{text:@npc.current.text})
     if not inHistory
       @history.push(@npc.current)
-
-    inHistory = _.find(@history,{text:@player.current.text})
+    if @player.current
+      inHistory = _.find(@history,{text:@player.current.text})
     if not inHistory
       @history.push(@player.current)
 
@@ -93,7 +100,7 @@ class appCtrl
 
 angular.module('app').component('talk',{
   template:tpl()
-  controller:['Player','NpcFactory','Restangular',appCtrl]
+  controller:['Player','NpcFactory','Restangular','$q',appCtrl]
   controllerAs:'ctrl'
   bindings:
     $router:'<'

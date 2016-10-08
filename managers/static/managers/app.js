@@ -384,10 +384,11 @@
 	tpl = __webpack_require__(8);
 
 	appCtrl = (function() {
-	  function appCtrl(player, NpcFactory, Restangular) {
+	  function appCtrl(player, NpcFactory, Restangular, q) {
 	    this.player = player;
 	    this.NpcFactory = NpcFactory;
 	    this.Restangular = Restangular;
+	    this.q = q;
 	    this.writeHistory = bind(this.writeHistory, this);
 	    this.isStatus = bind(this.isStatus, this);
 	    this.checkForSuccess = bind(this.checkForSuccess, this);
@@ -409,9 +410,14 @@
 	  appCtrl.prototype.$routerOnActivate = function(next) {
 	    this.player.init();
 	    this.npcId = next.params.npcId;
-	    this.npc = this.NpcFactory(this.Restangular);
+	    this.npc = this.NpcFactory(this.Restangular, this.q);
 	    this.npc.selectCurrent(this.npcId);
-	    return this.update(1);
+	    return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function(_this) {
+	      return function(res) {
+	        console.log("now can update", _this.npc, _this.player);
+	        return _this.update(1);
+	      };
+	    })(this));
 	  };
 
 	  appCtrl.prototype.update = function(questionId) {
@@ -501,9 +507,11 @@
 	    if (!inHistory) {
 	      this.history.push(this.npc.current);
 	    }
-	    inHistory = _.find(this.history, {
-	      text: this.player.current.text
-	    });
+	    if (this.player.current) {
+	      inHistory = _.find(this.history, {
+	        text: this.player.current.text
+	      });
+	    }
 	    if (!inHistory) {
 	      return this.history.push(this.player.current);
 	    }
@@ -515,7 +523,7 @@
 
 	angular.module('app').component('talk', {
 	  template: tpl(),
-	  controller: ['Player', 'NpcFactory', 'Restangular', appCtrl],
+	  controller: ['Player', 'NpcFactory', 'Restangular', '$q', appCtrl],
 	  controllerAs: 'ctrl',
 	  bindings: {
 	    $router: '<'
@@ -531,14 +539,17 @@
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 	Player = (function() {
-	  function Player(Restangular, localStorage) {
+	  function Player(Restangular, localStorage, q) {
 	    this.Restangular = Restangular;
 	    this.localStorage = localStorage;
+	    this.q = q;
 	    this.succeed = bind(this.succeed, this);
 	    this.fail = bind(this.fail, this);
 	    this.choosePlayer = bind(this.choosePlayer, this);
 	    this.findCurrent = bind(this.findCurrent, this);
 	    this.findNode = bind(this.findNode, this);
+	    this.loadTree = bind(this.loadTree, this);
+	    this.loadNodes = bind(this.loadNodes, this);
 	    this.init = bind(this.init, this);
 	    this.type = 'player';
 	    this.name = "";
@@ -546,93 +557,8 @@
 	    this.company = "";
 	    this.money = "";
 	    this.position = "";
-	    this.nodes = [
-	      {
-	        id: 1,
-	        text: "Добрый день!"
-	      }, {
-	        id: 2,
-	        text: "А можно %LPRNAME%?"
-	      }, {
-	        id: 3,
-	        text: "А с кем я разговариваю?"
-	      }, {
-	        id: 4,
-	        text: "Менеджер по продажам %USERNAME%"
-	      }, {
-	        id: 5,
-	        text: "Это %USERNAME% с очень интересным предложением"
-	      }, {
-	        id: 6,
-	        text: "Эмм...я ошиблся номером!"
-	      }, {
-	        id: 7,
-	        text: "Да, хорошо, давайте запишу электронку"
-	      }, {
-	        id: 8,
-	        text: "Я знаю, вы врете, ни на каком он не совещании, вы просто не хотите меня с ним соединять!"
-	      }, {
-	        id: 9,
-	        text: "Видите ли, мы договаривались с ним созвониться после выставки...а когда он может освободиться?"
-	      }, {
-	        id: 10,
-	        text: "Хорошо, я может быть сам наберу чтобы уточнить о прочтении "
-	      }, {
-	        id: 11,
-	        text: "Это %FAKEUSERNAME% , никак не могу до него дозвониться по сотовому. Соедините пожалуйста"
-	      }, {
-	        id: 12,
-	        text: "Скажите, может кто то другой сможет со мной по этому вопросу переговорить?"
-	      }, {
-	        id: 13,
-	        text: "Скажите, А как можно связаться с %LPRNAME%?"
-	      }, {
-	        id: 14,
-	        text: "Нет, у меня к нему технический вопрос"
-	      }, {
-	        id: 15,
-	        text: "Нет, у меня к нему личный вопрос"
-	      }
-	    ];
-	    this.tree = [
-	      {
-	        questionId: 1,
-	        choices: [2, 3]
-	      }, {
-	        questionId: 2,
-	        choices: [12]
-	      }, {
-	        questionId: 3,
-	        choices: [12]
-	      }, {
-	        questionId: 4,
-	        choices: [4, 5, 6, 11]
-	      }, {
-	        questionId: 5,
-	        choices: [13]
-	      }, {
-	        questionId: 6,
-	        choices: [2]
-	      }, {
-	        questionId: 7,
-	        choices: [13]
-	      }, {
-	        questionId: 8,
-	        choices: [7, 8, 9]
-	      }, {
-	        questionId: 9,
-	        choices: [9, 10]
-	      }, {
-	        questionId: 15,
-	        choices: [7]
-	      }, {
-	        questionId: 16,
-	        choices: [5, 14, 15]
-	      }, {
-	        questionId: 17,
-	        choices: [16]
-	      }
-	    ];
+	    this.nodes = [];
+	    this.tree = [];
 	  }
 
 	  Player.prototype.init = function() {
@@ -644,14 +570,38 @@
 	    })(this));
 	  };
 
+	  Player.prototype.loadNodes = function() {
+	    var def;
+	    def = this.q.defer();
+	    this.Restangular.one('api/v1/nodes/player').get().then((function(_this) {
+	      return function(res) {
+	        _this.nodes = res;
+	        return def.resolve();
+	      };
+	    })(this));
+	    return def.promise;
+	  };
+
+	  Player.prototype.loadTree = function() {
+	    var def;
+	    def = this.q.defer();
+	    this.Restangular.one('api/v1/nodes/npc').get().then((function(_this) {
+	      return function(res) {
+	        _this.tree = res;
+	        return def.resolve();
+	      };
+	    })(this));
+	    return def.promise;
+	  };
+
 	  Player.prototype.findNode = function(questionId) {
 	    this.branch = _.find(this.tree, {
-	      questionId: questionId
+	      id: questionId
 	    });
 	    if (this.branch) {
 	      this.questionArray = _.filter(this.nodes, (function(_this) {
 	        return function(element) {
-	          return _.includes(_this.branch.choices, element.id);
+	          return _.includes(_this.branch.choice, element.id);
 	        };
 	      })(this));
 	      _.forEach(this.questionArray, (function(_this) {
@@ -717,7 +667,7 @@
 
 	})();
 
-	angular.module('app').service('Player', ['Restangular', '$localStorage', Player]);
+	angular.module('app').service('Player', ['Restangular', '$localStorage', '$q', Player]);
 
 	module.exports = Player;
 
@@ -745,12 +695,13 @@
 	    };
 	  }
 	]).factory('NpcFactory', [
-	  'Restangular', function() {
-	    return function(Restangular) {
+	  'Restangular', '$q', function() {
+	    return function(Restangular, q) {
 	      var r, s;
 	      this.Restangular = Restangular;
+	      this.q = q;
 	      r = new Npc;
-	      s = r.initNew(this.Restangular);
+	      s = r.initNew(this.Restangular, this.q);
 	      return s;
 	    };
 	  }
@@ -765,171 +716,69 @@
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 	Npc = (function() {
-	  function Npc(Restangular1) {
+	  function Npc(Restangular1, q1) {
 	    this.Restangular = Restangular1;
+	    this.q = q1;
 	    this.succeed = bind(this.succeed, this);
 	    this.fail = bind(this.fail, this);
-	    this.selectNpc = bind(this.selectNpc, this);
 	    this.selectCurrent = bind(this.selectCurrent, this);
 	    this.findCurrent = bind(this.findCurrent, this);
 	    this.findNode = bind(this.findNode, this);
+	    this.loadTree = bind(this.loadTree, this);
+	    this.loadNodes = bind(this.loadNodes, this);
 	    this.initNew = bind(this.initNew, this);
-	    this.init = bind(this.init, this);
 	    this.type = 'npc';
-	    this.tree = [
-	      {
-	        questionId: 1,
-	        choices: [1, 5]
-	      }, {
-	        questionId: 2,
-	        choices: [4]
-	      }, {
-	        questionId: 3,
-	        choices: [6]
-	      }, {
-	        questionId: 4,
-	        choices: [8]
-	      }, {
-	        questionId: 5,
-	        choices: [15]
-	      }, {
-	        questionId: 6,
-	        choices: [11]
-	      }, {
-	        questionId: 7,
-	        choices: [9]
-	      }, {
-	        questionId: 8,
-	        choices: [14]
-	      }, {
-	        questionId: 9,
-	        choices: [12]
-	      }, {
-	        questionId: 10,
-	        choices: [10]
-	      }, {
-	        questionId: 11,
-	        choices: [13]
-	      }, {
-	        questionId: 12,
-	        choices: [16]
-	      }, {
-	        questionId: 13,
-	        choices: [16]
-	      }, {
-	        questionId: 14,
-	        choices: [17]
-	      }, {
-	        questionId: 15,
-	        choices: [12]
-	      }
-	    ];
-	    this.nodes = [
-	      {
-	        id: 1,
-	        text: "Да, здравствуйте, чем можем вам помочь?",
-	        used: false
-	      }, {
-	        id: 2,
-	        text: "Да отошел он, не знаем когда будет...",
-	        used: false
-	      }, {
-	        id: 3,
-	        text: "Да не работают такие у нас...",
-	        used: false
-	      }, {
-	        id: 7,
-	        text: "И вам добрый день!",
-	        used: false
-	      }, {
-	        id: 4,
-	        text: "А кто его спрашивает?",
-	        used: false
-	      }, {
-	        id: 5,
-	        text: "Алло?",
-	        used: false
-	      }, {
-	        id: 6,
-	        text: "Меня зовут PERSONNAME",
-	        used: false
-	      }, {
-	        id: 8,
-	        text: "Вы знаете, он сейчас находится на совещании, но вы можете оставить информацию о вашей компании у нас на электронной почте",
-	        used: false
-	      }, {
-	        id: 9,
-	        text: "%EMAIL%, Можете высысылать на него информацию, и мы с вами свяжемся, если нам будет интересно",
-	        used: false
-	      }, {
-	        id: 10,
-	        text: "Нет не надо нас набирать, мы вас сами наберем, до свидания!",
-	        used: false,
-	        type: "failure"
-	      }, {
-	        id: 11,
-	        text: "Ну тогда всего доброго!",
-	        used: false,
-	        type: "failure"
-	      }, {
-	        id: 12,
-	        text: "Ну знаете, сегодня скорее всего уже не освободится, но можете позвонить завтра в районе обеда, попробую вас с ним соединить",
-	        used: false,
-	        type: "failure"
-	      }, {
-	        id: 13,
-	        text: "Да, конечно. Давайте соединю",
-	        used: false,
-	        type: "success"
-	      }, {
-	        id: 14,
-	        text: "Я извиняюсь, но мне кажется вы не долны сюда больше звонить, всего доброго!",
-	        used: false,
-	        type: "failure"
-	      }, {
-	        id: 15,
-	        text: "Я могу продиктовать вам электронную почту и вы вышлите на нее ваше предложение",
-	        used: false
-	      }, {
-	        id: 16,
-	        text: "А что вам конкретно нужно, вы хотите что то предложить?",
-	        used: false
-	      }, {
-	        id: 17,
-	        text: "А он о вас знает, как вас представить?",
-	        used: false
-	      }
-	    ];
+	    this.tree = [];
+	    this.nodes = [];
 	    this.loadedData = [];
-	    this.currentNpc = {};
 	  }
 
-	  Npc.prototype.init = function(id) {
-	    return this.currentNpc = _.find(this.loadedData, (function(_this) {
-	      return function(element) {
-	        return element.id === _.toInteger(id);
-	      };
-	    })(this));
+	  Npc.prototype.initNew = function(Restangular, q) {
+	    return new Npc(Restangular, q);
 	  };
 
-	  Npc.prototype.initNew = function(Restangular) {
-	    return new Npc(Restangular);
+	  Npc.prototype.loadNodes = function() {
+	    var def;
+	    def = this.q.defer();
+	    this.Restangular.one('api/v1/nodes/npc').get().then((function(_this) {
+	      return function(res) {
+	        _this.nodes = res;
+	        return def.resolve();
+	      };
+	    })(this));
+	    return def.promise;
+	  };
+
+	  Npc.prototype.loadTree = function() {
+	    var def;
+	    def = this.q.defer();
+	    this.Restangular.one('api/v1/nodes/player').get().then((function(_this) {
+	      return function(res) {
+	        _this.tree = res;
+	        return def.resolve();
+	      };
+	    })(this));
+	    return def.promise;
 	  };
 
 	  Npc.prototype.findNode = function(questionId) {
-	    return this.branch = _.find(this.tree, {
-	      questionId: questionId
+	    if (questionId === 1) {
+	      questionId = 3;
+	    }
+	    this.branch = _.find(this.tree, {
+	      id: questionId
 	    });
+	    return console.log(this.branch, questionId);
 	  };
 
 	  Npc.prototype.findCurrent = function() {
 	    var choiceIndex, name;
-	    choiceIndex = this.branch.choices[0];
+	    choiceIndex = this.branch.choice[0];
 	    this.current = _.find(this.nodes, {
 	      id: choiceIndex
 	    });
 	    if (this.current.text.indexOf("PERSONNAME")) {
-	      name = this.currentNpc.name;
+	      name = this.name;
 	      return this.current.text = _.replace(this.current.text, 'PERSONNAME', name);
 	    }
 	  };
@@ -938,14 +787,6 @@
 	    return this.Restangular.one('api/v1/npc/', id).get().then((function(_this) {
 	      return function(res) {
 	        _.extend(_this, res);
-	      };
-	    })(this));
-	  };
-
-	  Npc.prototype.selectNpc = function(id) {
-	    return this.currentNpc = _.find(this.loadedData, (function(_this) {
-	      return function(element) {
-	        return element.id === _.toInteger(id);
 	      };
 	    })(this));
 	  };
@@ -968,7 +809,7 @@
 
 	})();
 
-	angular.module('app').service('Npc', ['Restangular', Npc]);
+	angular.module('app').service('Npc', ['Restangular', '$q', Npc]);
 
 	module.exports = Npc;
 

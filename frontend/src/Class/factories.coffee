@@ -16,9 +16,10 @@ angular.module('app')
 
 
 .factory('NpcFactory',[
-      'Restangular',
-      -> (@Restangular)->
+      'Restangular'
+      '$q'
+      -> (@Restangular,@q)->
         r = new Npc
-        s = r.initNew(@Restangular)
+        s = r.initNew(@Restangular,@q)
         return s
 ])

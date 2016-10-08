@@ -64,7 +64,6 @@ class Node(models.Model):
         ('player', 'player'),
         ('npc', 'npc'),
     )
-
     id = models.AutoField(primary_key=True)
     category = models.CharField(max_length=10,choices=TYPES)
     text  = models.CharField(max_length=250)
@@ -76,6 +75,7 @@ class Node(models.Model):
         default=None,
         blank=True
     )
+    type = models.CharField(max_length=15,default=None,null=True)
     def __unicode__(self):
         return self.text
 
