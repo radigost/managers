@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from managers.models import Person, Company, Npc,Industry
+from managers.models import Person, Company, Npc,Industry,Node
 from django.contrib.auth.models import User, Group
 
 
@@ -22,6 +22,7 @@ class NpcSerializer(serializers.ModelSerializer):
     position = serializers.StringRelatedField()
     class Meta:
         model = Npc
+
 class IndustrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Industry
@@ -39,3 +40,17 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ('url', 'name')
+
+
+class NodeSerializer(serializers.ModelSerializer):
+    # choice = serializers.HyperlinkedRelatedField(many=True,read_only=True, view_name='node')
+    class Meta:
+        model = Node
+        # fields = ('category', 'text')
+
+# class TreeSerializer(serializers.ModelSerializer):
+#     choice =serializers.PrimaryKeyRelatedField(read_only=True)
+#     node = NodeSerializer(many=True)
+#     class Meta:
+#         model = Node
+#         fields = ('choice','category', 'text', 'node')

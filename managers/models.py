@@ -59,12 +59,33 @@ class Industry(models.Model):
     def __unicode__(self):
         return self.name
 
-# class Node(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     category =  JSONField(default={
-#         'category': ['player'],
-#         'type':'null'
-#     })
-#     text  = models.CharField(max_length=250)
-#     def __unicode__(self):
-#         return self.text
+class Node(models.Model):
+    TYPES = (
+        ('player', 'player'),
+        ('npc', 'npc'),
+    )
+
+    id = models.AutoField(primary_key=True)
+    category = models.CharField(max_length=10,choices=TYPES)
+    text  = models.CharField(max_length=250)
+    is_fail = models.NullBooleanField()
+    is_success = models.NullBooleanField()
+    choice = models.ManyToManyField(
+        "self",
+        symmetrical=False,
+        default=None,
+        blank=True
+    )
+    def __unicode__(self):
+        return self.text
+
+# class ChoiceTree(models.Model):
+#     # id = models.AutoField(primary_key=True)
+#     question = models.ForeignKey(
+#         Node,
+#         related_name='question'
+#                                  ),
+#     choice = models.ForeignKey(
+#         Node,
+#         related_name="choices",
+#     )

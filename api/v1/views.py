@@ -2,12 +2,13 @@
 
 from rest_framework import viewsets
 from managers.views import Person,Company,Npc
-from managers.models import Industry
+from managers.models import Industry,Node
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
+from rest_framework.decorators import list_route
 from django.contrib.auth.models import User, Group
-from .serializers import PersonSerializer,CompanySerializer,NpcSerializer,UserSerializer,GroupSerializer,IndustrySerializer
+from .serializers import PersonSerializer,CompanySerializer,NpcSerializer,UserSerializer,GroupSerializer,IndustrySerializer,NodeSerializer
 from django.shortcuts import get_object_or_404
 
 class PersonViewSet(viewsets.ModelViewSet):
@@ -43,6 +44,28 @@ class NpcViewSet(viewsets.ModelViewSet):
 class IndustryViewSet(viewsets.ModelViewSet):
     queryset = Industry.objects.all()
     serializer_class = IndustrySerializer
+
+
+class NodeViewSet(viewsets.ModelViewSet):
+    queryset = Node.objects.all()
+    serializer_class = NodeSerializer
+
+
+    @list_route()
+    def npc(self, request):
+        npc = Node.objects.filter(category='npc')
+        serializer = self.get_serializer(npc, many=True)
+        return Response(serializer.data)
+
+    @list_route()
+    def player(self, request):
+        player = Node.objects.filter(category='player')
+        serializer = self.get_serializer(player, many=True)
+        return Response(serializer.data)
+
+
+
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -57,7 +80,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-
 
 
 class MyView(APIView):
