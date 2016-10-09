@@ -13,7 +13,8 @@ class menuCtrl
 
   goToGame:(playerId)=>
     console.log playerId
-    @localStorage.player.id = playerId
+
+    @localStorage.player = {id : playerId}
     @$router.navigate(['Game'])
 
 
