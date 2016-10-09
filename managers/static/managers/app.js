@@ -1662,7 +1662,9 @@
 
 	  menuCtrl.prototype.goToGame = function(playerId) {
 	    console.log(playerId);
-	    this.localStorage.player.id = playerId;
+	    this.localStorage.player = {
+	      id: playerId
+	    };
 	    return this.$router.navigate(['Game']);
 	  };
 
