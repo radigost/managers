@@ -14,14 +14,16 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
         './node_modules/angular/angular.js',
+        './node_modules/angular-mocks/angular-mocks.js',
         './node_modules/@angular/router/angular1/angular_1_router.js',
         './node_modules/lodash/lodash.js',
         './node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
         './node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
         './node_modules/restangular/src/restangular.js',
-        './node_modules/angular-mocks/angular-mocks.js',
+        './node_modules/ngstorage/ngStorage.js',
+        './node_modules/angular-cookies/angular-cookies.js',
 
-
+        './src/entry.js',
         './src/**/entry.js',
         './tests/entry.js'
         // './src/app/entry.js',
@@ -36,13 +38,7 @@ module.exports = function(config) {
       module: {
          loaders:
              [
-                 // {
-                 //     test: /\.js$/,
-                 //     exclude: /node_modules/,
-                 //     loader: 'babel-loader',
-                 //     query: {
-                 //       presets: ['es2015']
-                 //        }},
+
                  { test: /\.coffee$/, loader: "coffee-loader" },
                  // { test: /\.html$/, loader: "html" },
                  {test: /\.jade/, loader: "pug-loader"},

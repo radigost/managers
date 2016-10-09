@@ -1,24 +1,32 @@
 describe 'TalkTest', ->
   ctrl = undefined
+
   beforeEach(angular.mock.module('app'));
   element = undefined
   scope = undefined
+  httpBackend  = undefined
 
-  beforeEach inject(($rootScope, $compile) ->
+  beforeEach inject(($rootScope, $compile,$httpBackend) ->
     scope = $rootScope.$new()
     element = angular.element('<talk></talk>')
     element = $compile(element)(scope)
     ctrl = element.controller('talk')
     scope.$apply()
+    httpBackend = $httpBackend
     return
   )
-
+  afterEach(->
+    httpBackend.verifyNoOutstandingExpectation()
+    httpBackend.verifyNoOutstandingRequest()
+    return
+  )
 
   describe 'Init', ->
     it 'Variables to be defined in talk component',->
       expect(ctrl).toBeDefined()
       expect(ctrl.player).toBeDefined()
-      expect(ctrl.npc).toBeDefined()
+#      console.log ctrl
+#      expect(ctrl.npc).toBeDefined()
       expect(ctrl.gameName).toBeDefined()
       expect(ctrl.time).toBeDefined()
       expect(ctrl.time).toBe(100)
@@ -36,7 +44,10 @@ describe 'TalkTest', ->
 
     it '$onInit calls update with "1" ' ,->
       spyOn(ctrl,'update')
-      ctrl.$onInit()
+      next =
+        params:
+          id:1
+      ctrl.$routerOnActivate()
       expect(ctrl.update).toHaveBeenCalled()
       expect(ctrl.update.calls.argsFor(0)).toEqual([1])
 
