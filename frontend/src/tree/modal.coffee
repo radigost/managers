@@ -7,18 +7,13 @@ class treeModalCtrl
   cancel:()=>
     @dismiss({$value: 'cancel'})
   save:()=>
-#    console.log @selected
-#    console.log @node
-    @toSave =
-      idFrom:@node.id
-      idTo:@selected.id
     @Restangular.one('/api/v1/nodes/',@node.id).get().then (res)=>
-      console.log res.choice
       res.choice.push @selected.id
       s =  @cookies.getAll()
-      res.customPUT('','','',{'X-CSRFToken':s.csrftoken})
-  selectItem:()=>
-    console.log @selected
+      res.customPUT('','','',{'X-CSRFToken':s.csrftoken}).then =>
+         @close({$value: 'cancel'})
+#  selectItem:()=>
+#    console.log @selected
 
 
 angular.module('app').component 'modalComponent',

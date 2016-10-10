@@ -17,7 +17,6 @@ class gameCtrl
     }
     @specialties = {
       items:[
-#        {id:1,caption:"Холодные звонки",tooltip:""}
         {id:2,caption:"Любимец государства",tooltip:"Хорошо получается работать с гос. сектором"}
         {id:3,caption:"Прошаренный",tooltip:"Знает технологию по которой работает компания"}
         {id:4,caption:"Большой чек",tooltip:"Получает дополнительную возможность успешно продать если чек большой"}
@@ -79,7 +78,6 @@ class gameCtrl
     if @current.stats.personality[r.name] > r.min
       @current.stats.personality[r.name]--
       @points++
-#      r.value--
     return
   toggle:()=>
     @showMenu = !@showMenu
@@ -117,13 +115,11 @@ class gameCtrl
     @current.image_path  = @images[0]
 
   create:()=>
-#    console.log @localStorage.user.id
     s =  @cookies.getAll()
     @current.name = @current.first_name+@current.last_name
     @current.related_companies = [1..10]
     @current.owner = @localStorage.user.id
     @Restangular.one('/api/v1/persons/').post('',@current,'',{'X-CSRFToken':s.csrftoken}).then (res)=>
-#      console.log res
       return
 
 

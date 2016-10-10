@@ -15,7 +15,7 @@
             a [[element.id]]. [[element.text]]
                 span.label.label-primary(ng-if="element.type") [[element.type]]
         li
-            ui-select(ng-model='$ctrl.selected' theme="bootstrap" on-select="$ctrl.selectItem()")
+            ui-select(ng-model='$ctrl.selected'  on-select="")
                 ui-select-match
                     span(ng-bind='$select.selected.text')
                 ui-select-choices(repeat='item in $ctrl.resolve.tree')

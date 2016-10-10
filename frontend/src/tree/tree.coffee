@@ -31,6 +31,8 @@ class treeCtrl
             tree = @player.nodes
           else
             tree = @npc.nodes
+    @modal.result.then =>
+      @$onInit()
 
   makeTree:(person)=>
     if person

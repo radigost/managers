@@ -20,7 +20,8 @@ fdescribe 'TreeModalSpec', ->
 #    httpBackend.whenGET('/api/v1/persons/1').respond({id:1,name:"Васиа"})
 #    httpBackend.whenGET('uib/template/modal/window.html').respond(200,'')
 #    httpBackend.whenGET('/api/v1/npc/').respond([{id:1,name:"Васиа"},{id:2,name:"Lenia"}])
-#    httpBackend.whenGET('/api/v1/nodes/player').respond([{id:3,is_first:true,text:"Привет",choice:[4]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
+    httpBackend.whenGET('/api/v1/nodes/1/').respond({id:1,text:"Привет",choice:[4]})
+    httpBackend.whenPUT('/api/v1/nodes/1/').respond("success")
 #    httpBackend.whenGET('/api/v1/nodes/npc').respond([{id:4,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?"}])
 #    scope.$apply()
 #    httpBackend.flush()
@@ -44,7 +45,10 @@ fdescribe 'TreeModalSpec', ->
           text:"Здоровки, USERNAME!"
         spyOn(ctrl,'save').and.callThrough()
         ctrl.save()
-        expect(ctrl.toSave).toEqual({idFrom:1,idTo:5})
+        httpBackend.expectGET('/api/v1/nodes/1/')
+        httpBackend.expectPUT('/api/v1/nodes/1/')
+        httpBackend.flush()
+#        expect(ctrl.toSave).toEqual({idFrom:1,idTo:5})
 
 
 
