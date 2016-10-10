@@ -11,10 +11,13 @@
         ul(ng-repeat="question in ctrl.tree | HasNoAnswer: ctrl.filterQ")
             li [[question.id]]. [[question.text]]
                 span.label.label-primary(ng-if="question.type") [[question.type]]
-                //button.btn.btn-warning(ng-click="ctrl.openModal()") Редактировать
-                ul(ng-repeat="element in question.answers")
-                    li
+                ul
+                    li(ng-repeat="element in question.answers")
                         a [[element.id]]. [[element.text]]
                             span.label.label-primary(ng-if="element.type") [[element.type]]
+                    li(ng-if="!question.type")
+                        button.btn.btn-primary(ng-click="ctrl.openModal(question)")
+                            i.fa.fa-plus
+
 
 

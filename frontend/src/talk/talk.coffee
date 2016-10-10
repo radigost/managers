@@ -23,12 +23,11 @@ class appCtrl
       @npc.loadNodes()
       @npc.loadTree()
     ]).then (res)=>
-#        console.log "now can update",@npc,@player
-        @update 1
+        @update()
 
   update:(questionId)=>
-#    console.log questionId
     @time -= 30 if questionId>1
+
     @findAnswerForQuestion(questionId)
     @checkForSuccess()
     @writeHistory()
@@ -37,6 +36,9 @@ class appCtrl
     return
 
   findAnswerForQuestion:(questionId)=>
+    if !questionId or questionId == 1
+      startElement = _.find @npc.tree,'is_start'
+      questionId = startElement.id
     if questionId
       @npc.findNode(questionId)
       @player.findCurrent(questionId)

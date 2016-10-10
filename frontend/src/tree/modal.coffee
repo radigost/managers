@@ -1,19 +1,19 @@
-class modalCtrl
-  constructor:(@uibModalInstance)->
-#    console.log @service
-#  $onInit:()=>
-#    @service.init()
+modalTpl = require('./modal.jade')
+class treeModalCtrl
+  constructor:()->
+    @node  = @resolve.node
+
   cancel:()=>
-#    @service.clearSelected()
-    @uibModalInstance.dismiss(@event)
-    return
+    @dismiss({$value: 'cancel'})
   save:()=>
-#    @service.add(@fleetItems).then ()=>
-    @uibModalInstance.close()
-#  hasNoModels:()=>
-#    @service.models.items.length==0
+    @close({$value: 'cancel'})
 
 
+angular.module('app').component 'modalComponent',
+  template: modalTpl()
+  bindings:
+    resolve: '<'
+    close: '&'
+    dismiss: '&'
+  controller:[treeModalCtrl]
 
-modalCtrl.$inject=['$uibModalInstance']
-angular.module('app').controller('modalCtrl',modalCtrl)

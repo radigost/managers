@@ -15,8 +15,8 @@ describe 'TalkTest', ->
     httpBackend = $httpBackend
     httpBackend.whenGET('/api/v1/persons/1').respond({id:1,name:"Васиа"})
     httpBackend.whenGET('/api/v1/npc/').respond([{id:1,name:"Васиа"},{id:2,name:"Lenia"}])
-    httpBackend.whenGET('/api/v1/nodes/player').respond([{id:3,is_first:true,text:"Привет",choice:[4]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
-    httpBackend.whenGET('/api/v1/nodes/npc').respond([{id:4,is_first:true,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?"}])
+    httpBackend.whenGET('/api/v1/nodes/player').respond([{id:3,is_start:true,text:"Привет",choice:[4]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
+    httpBackend.whenGET('/api/v1/nodes/npc').respond([{id:4,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?"}])
 
     return
   )
@@ -48,7 +48,7 @@ describe 'TalkTest', ->
       expect(ctrl.checkForSuccess).toBeDefined()
       expect(ctrl.writeHistory).toBeDefined()
 
-    it '$onInit calls update with "1" ' ,->
+    it '$onInit calls update with "is_start" ' ,->
       spyOn(ctrl,'update')
       next =
         params:
@@ -57,7 +57,7 @@ describe 'TalkTest', ->
       ctrl.$routerOnActivate(next)
       httpBackend.flush()
       expect(ctrl.update).toHaveBeenCalled()
-      expect(ctrl.update.calls.argsFor(0)).toEqual([1])
+      expect(ctrl.update.calls.argsFor(0)).toEqual([])
 
   describe 'Update method', ->
     beforeEach (->
@@ -105,10 +105,11 @@ describe 'TalkTest', ->
       spyOn(ctrl,'fillNextArrayOfQuestions')
       ctrl.update()
       expect(ctrl.fillNextArrayOfQuestions).toHaveBeenCalled()
-    it 'methods in npc and player is not called without quetionId',->
+    it 'methods in npc is called from start whithout quetionId',->
       spyOn(ctrl.npc,'findNode')
       ctrl.findAnswerForQuestion()
-      expect(ctrl.npc.findNode).not.toHaveBeenCalled()
+      expect(ctrl.npc.findNode).toHaveBeenCalled()
+      expect(ctrl.npc.findNode.calls.argsFor(0)).toEqual([3])
     it 'methods in npc and player is called',->
       spyOn(ctrl.npc,'findNode').and.callThrough()
 #      spyOn(ctrl.player,'findCurrent').and.callThrough()

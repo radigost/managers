@@ -1,13 +1,10 @@
 Npc = require('../Class/npc.coffee')
 Player = require('../Class/player.coffee')
 tpl = require('./tree.jade')
-modalTpl = require('./modal.jade')
 require('./modal.coffee')
 
 class treeCtrl
   constructor:(@player,@NpcFactory,@Restangular,@q,@uibModal)->
-#    @npc = new Npc
-#    @player = new Player
     @tree = []
     @filterQ = false
 
@@ -23,11 +20,16 @@ class treeCtrl
 #        console.log "now can update",@npc,@player
         @makeTree(@player)
 
-  openModal:()=>
+  openModal:(question)=>
     @modal = @uibModal.open
-      template:modalTpl()
+#      template:modalTpl()
       size:'md'
-      controller:'modalCtrl'
+      component:'modalComponent'
+#      controller:'treeModalCtrl'
+#      controllerAs:'ctrl'
+      resolve:
+        node:=>
+          question
 
   makeTree:(person)=>
     if person
@@ -41,19 +43,14 @@ class treeCtrl
 
       _.forEach opponent.nodes,(node)=>
         nodesArray = []
-        qNode =_.find(person.tree,{questionId:node.id})
-        if qNode && qNode.choices
+        qNode =_.find(person.tree,{id:node.id})
+        if qNode && qNode.choice
           node.hasSiblings = true
-          _.forEach qNode.choices, (choice)=>
+          _.forEach qNode.choice, (choice)=>
             t = _.find person.nodes,{id:choice}
             nodesArray.push(t)
-
         node.answers = nodesArray
         @tree.push(node)
-
-
-
-
 
 
 

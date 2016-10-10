@@ -414,7 +414,7 @@
 	    this.npc.selectCurrent(this.npcId);
 	    return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function(_this) {
 	      return function(res) {
-	        return _this.update(1);
+	        return _this.update();
 	      };
 	    })(this));
 	  };
@@ -431,6 +431,11 @@
 	  };
 
 	  appCtrl.prototype.findAnswerForQuestion = function(questionId) {
+	    var startElement;
+	    if (!questionId || questionId === 1) {
+	      startElement = _.find(this.npc.tree, 'is_start');
+	      questionId = startElement.id;
+	    }
 	    if (questionId) {
 	      this.npc.findNode(questionId);
 	      this.player.findCurrent(questionId);
@@ -836,9 +841,6 @@
 	  };
 
 	  Npc.prototype.findNode = function(questionId) {
-	    if (questionId === 1) {
-	      questionId = 3;
-	    }
 	    return this.branch = _.find(this.tree, {
 	      id: questionId
 	    });
@@ -900,7 +902,7 @@
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Npc, Player, modalTpl, tpl, treeCtrl,
+	var Npc, Player, tpl, treeCtrl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 	Npc = __webpack_require__(7);
@@ -908,8 +910,6 @@
 	Player = __webpack_require__(5);
 
 	tpl = __webpack_require__(10);
-
-	modalTpl = __webpack_require__(11);
 
 	__webpack_require__(12);
 
@@ -937,11 +937,17 @@
 	    })(this));
 	  };
 
-	  treeCtrl.prototype.openModal = function() {
+	  treeCtrl.prototype.openModal = function(question) {
 	    return this.modal = this.uibModal.open({
-	      template: modalTpl(),
 	      size: 'md',
-	      controller: 'modalCtrl'
+	      component: 'modalComponent',
+	      resolve: {
+	        node: (function(_this) {
+	          return function() {
+	            return question;
+	          };
+	        })(this)
+	      }
 	    });
 	  };
 
@@ -961,11 +967,11 @@
 	          var nodesArray, qNode;
 	          nodesArray = [];
 	          qNode = _.find(person.tree, {
-	            questionId: node.id
+	            id: node.id
 	          });
-	          if (qNode && qNode.choices) {
+	          if (qNode && qNode.choice) {
 	            node.hasSiblings = true;
-	            _.forEach(qNode.choices, function(choice) {
+	            _.forEach(qNode.choice, function(choice) {
 	              var t;
 	              t = _.find(person.nodes, {
 	                id: choice
@@ -1014,7 +1020,7 @@
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003EРедактор диалога\u003C\u002Fh3\u003E\u003Ch5\u003E[[ctrl.treeType]]\u003C\u002Fh5\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.player)\"\u003EСделать дерево для Игрока\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.npc)\"\u003EСделать дерево для NPC\u003C\u002Fbutton\u003E\u003Cinput type=\"checkbox\" ng-model=\"ctrl.filterQ\"\u003E\u003Cul ng-repeat=\"question in ctrl.tree | HasNoAnswer: ctrl.filterQ\"\u003E\u003Cli\u003E[[question.id]]. [[question.text]]\u003Cspan class=\"label label-primary\" ng-if=\"question.type\"\u003E[[question.type]]\u003C\u002Fspan\u003E\u003C!--button.btn.btn-warning(ng-click=\"ctrl.openModal()\") Редактировать--\u003E\u003Cul ng-repeat=\"element in question.answers\"\u003E\u003Cli\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003EРедактор диалога\u003C\u002Fh3\u003E\u003Ch5\u003E[[ctrl.treeType]]\u003C\u002Fh5\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.player)\"\u003EСделать дерево для Игрока\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.npc)\"\u003EСделать дерево для NPC\u003C\u002Fbutton\u003E\u003Cinput type=\"checkbox\" ng-model=\"ctrl.filterQ\"\u003E\u003Cul ng-repeat=\"question in ctrl.tree | HasNoAnswer: ctrl.filterQ\"\u003E\u003Cli\u003E[[question.id]]. [[question.text]]\u003Cspan class=\"label label-primary\" ng-if=\"question.type\"\u003E[[question.type]]\u003C\u002Fspan\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in question.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003Cli ng-if=\"!question.type\"\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"ctrl.openModal(question)\"\u003E\u003Ci class=\"fa fa-plus\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -1023,38 +1029,50 @@
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"modal-header\"\u003E\u003Cbutton class=\"close\" ng-click=\"wizard.cancel()\"\u003E\u003Cspan aria-hidden=\"true\"\u003E×\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cdiv class=\"modal-title\"\u003E\u003Ch4\u003E\u003Cb\u003EИзменение вариантов ответа\u003C\u002Fb\u003E\u003C\u002Fh4\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-body\"\u003E\u003Cheader\u003EЗдесь показываем вопрос, варианты ответа и даем возможность либо выбрать еще один ответ либо добавить новый\u003C\u002Fheader\u003E\u003C!--form.smart-form(name=\"addEntityForm\" )--\u003E\u003C!--    header Выберитие у кого нашли технику--\u003E\u003C!--    fieldset--\u003E\u003C!--        section--\u003E\u003C!--            label.label Компания*--\u003E\u003C!--            label.input--\u003E\u003C!--                ui-select(--\u003E\u003C!--                ng-model='wizard.service.selected.client'--\u003E\u003C!--                theme = 'select2'--\u003E\u003C!--                sortable='true'--\u003E\u003C!--                title='Выберите период...'--\u003E\u003C!--                on-select=\"$ctrl.service.groups.changeGroup($select.selected.id)\"--\u003E\u003C!--                required--\u003E\u003C!--                )--\u003E\u003C!--                    ui-select-match(placeholder='Клиент') [[$select.selected.name]]--\u003E\u003C!--                    ui-select-choices(--\u003E\u003C!--                    repeat='group in wizard.service.clients.items'--\u003E\u003C!--                    refresh=\"wizard.service.refreshCompanies($select.search)\"--\u003E\u003C!--                    )--\u003E\u003C!--                        span(ng-bind=\"group.name\")--\u003E\u003C!--    header Введите данные о технике--\u003E\u003C!--    fieldset--\u003E\u003C!--        section--\u003E\u003C!--            label.label Выберите Тип техники:--\u003E\u003C!--            label.input--\u003E\u003C!--                ui-select(--\u003E\u003C!--                ng-model='wizard.service.selected.group'--\u003E\u003C!--                search-enabled='false'--\u003E\u003C!--                theme = 'select2'--\u003E\u003C!--                sortable='true'--\u003E\u003C!--                title='Выберите период...'--\u003E\u003C!--                on-select=\"wizard.service.refreshProducts()\"--\u003E\u003C!--                )--\u003E\u003C!--                    ui-select-match(placeholder='Товарная группа') [[$select.selected.name]]--\u003E\u003C!--                    ui-select-choices(repeat='group in wizard.service.groups.items')--\u003E\u003C!--                        \u002F\u002Fspan(ng-bind-html=\"$ctrl.makeSpacing(group.spacing)\")--\u003E\u003C!--                        span(ng-bind=\"group.name\")--\u003E\u003C!--        section--\u003E\u003C!--            label.label Выберите Производителя техники:--\u003E\u003C!--            label.input--\u003E\u003C!--                ui-select(--\u003E\u003C!--                ng-model='wizard.service.selected.producer'--\u003E\u003C!--                search-enabled='false'--\u003E\u003C!--                theme = 'select2'--\u003E\u003C!--                sortable='true'--\u003E\u003C!--                title='Выберите период...'--\u003E\u003C!--                on-select=\"wizard.service.refreshProducts()\"--\u003E\u003C!--                )--\u003E\u003C!--                    ui-select-match(placeholder='Производители') [[$select.selected.name]]--\u003E\u003C!--                    ui-select-choices(--\u003E\u003C!--                    repeat='group in wizard.service.producers.items'--\u003E\u003C!--                    )--\u003E\u003C!--                        span(ng-bind=\"group.name\")--\u003E\u003C!--        section--\u003E\u003C!--            label.label Модель*--\u003E\u003C!--            label.label(ng-show=\"wizard.hasNoModels()\") Нет моделей по вашим условиям!--\u003E\u003C!--            label.input--\u003E\u003C!--                ui-select(--\u003E\u003C!--                ng-model='wizard.service.selected.model'--\u003E\u003C!--                theme = 'select2'--\u003E\u003C!--                sortable='true'--\u003E\u003C!--                title='Выберите период...'--\u003E\u003C!--                on-select=\"$ctrl.service.groups.changeGroup($select.selected.id)\"--\u003E\u003C!--                required--\u003E\u003C!--                )--\u003E\u003C!--                    ui-select-match(placeholder='Модели техники') [[$select.selected.name]]--\u003E\u003C!--                    ui-select-choices(--\u003E\u003C!--                    repeat='model in wizard.service.models.items'--\u003E\u003C!--                    refresh=\"wizard.service.refreshProducts($select.search)\"--\u003E\u003C!--                    )--\u003E\u003C!--                        span(ng-bind=\"model.name\")--\u003E\u003C!--        section--\u003E\u003C!--            label.label Серийный номер*--\u003E\u003C!--            label.input--\u003E\u003C!--                input(type=\"text\" ng-model=\"wizard.service.selected.sn\" name=\"sn\" required )--\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-footer\"\u003E\u003Cbutton class=\"btn\" ng-click=\"wizard.cancel()\"\u003EОтменить\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn\" ng-disabled=\"addEntityForm.$invalid \" ng-click=\"wizard.save()\"\u003EСохранить\u003C\u002Fbutton\u003E\u003C!--ng-disabled=\"!wizard.service.canSave\"--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"modal-header\"\u003E\u003Cbutton class=\"close\" ng-click=\"$ctrl.cancel()\"\u003E\u003Cspan aria-hidden=\"true\"\u003E×\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cdiv class=\"modal-title\"\u003E\u003Ch4\u003E\u003Cb\u003EИзменение вариантов ответа\u003C\u002Fb\u003E\u003C\u002Fh4\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-body\"\u003E\u003Cheader\u003EЗдесь показываем вопрос, варианты ответа и даем возможность либо выбрать еще один ответ либо добавить новый\u003C\u002Fheader\u003E\u003Cp\u003Eid - [[$ctrl.node.id]]\u003C\u002Fp\u003E\u003Cp\u003Ecategory - [[$ctrl.node.category]]\u003C\u002Fp\u003E\u003Cli\u003E[[$ctrl.node.id]]. [[$ctrl.node.text]]\u003Cspan class=\"label label-primary\" ng-if=\"$ctrl.node.type\"\u003E[[$ctrl.node.type]]\u003C\u002Fspan\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in $ctrl.node.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003Cli ng-if=\"!$ctrl.node.type\"\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"$ctrl.openModal($ctrl.node)\"\u003E\u003Ci class=\"fa fa-plus\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fli\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-footer\"\u003E\u003Cbutton class=\"btn\" ng-click=\"$ctrl.cancel()\"\u003EОтменить\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn\" ng-disabled=\"addEntityForm.$invalid \" ng-click=\"$ctrl.save()\"\u003EСохранить\u003C\u002Fbutton\u003E\u003C!--ng-disabled=\"!wizard.service.canSave\"--\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
 /* 12 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	var modalCtrl,
+	var modalTpl, treeModalCtrl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	modalCtrl = (function() {
-	  function modalCtrl(uibModalInstance) {
-	    this.uibModalInstance = uibModalInstance;
+	modalTpl = __webpack_require__(11);
+
+	treeModalCtrl = (function() {
+	  function treeModalCtrl() {
 	    this.save = bind(this.save, this);
 	    this.cancel = bind(this.cancel, this);
+	    this.node = this.resolve.node;
 	  }
 
-	  modalCtrl.prototype.cancel = function() {
-	    this.uibModalInstance.dismiss(this.event);
+	  treeModalCtrl.prototype.cancel = function() {
+	    return this.dismiss({
+	      $value: 'cancel'
+	    });
 	  };
 
-	  modalCtrl.prototype.save = function() {
-	    return this.uibModalInstance.close();
+	  treeModalCtrl.prototype.save = function() {
+	    return this.close({
+	      $value: 'cancel'
+	    });
 	  };
 
-	  return modalCtrl;
+	  return treeModalCtrl;
 
 	})();
 
-	modalCtrl.$inject = ['$uibModalInstance'];
-
-	angular.module('app').controller('modalCtrl', modalCtrl);
+	angular.module('app').component('modalComponent', {
+	  template: modalTpl(),
+	  bindings: {
+	    resolve: '<',
+	    close: '&',
+	    dismiss: '&'
+	  },
+	  controller: [treeModalCtrl]
+	});
 
 
 /***/ },

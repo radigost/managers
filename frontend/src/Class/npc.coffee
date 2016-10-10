@@ -75,8 +75,6 @@ class Npc
       def.resolve()
     def.promise
   findNode:(questionId)=>
-    questionId = 3 if questionId == 1
-#    console.log questionId,@tree
     @branch  = _.find(@tree,{id:questionId})
 
   findCurrent:()=>

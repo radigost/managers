@@ -10,7 +10,6 @@ describe 'Npc', ->
     httpBackend.whenGET('/api/v1/nodes/player').respond([{id:3,is_first:true,text:"Привет",choice:[4]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
     scope = $rootScope.$new()
     npc = Npc
-#    httpBackend.flush()
     return
   )
   afterEach(->
