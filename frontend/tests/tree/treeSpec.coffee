@@ -11,11 +11,11 @@ describe 'TreeSpec', ->
     element = $compile(element)(scope)
     ctrl = element.controller('tree')
     httpBackend = $httpBackend
-    httpBackend.whenGET('/api/v1/persons/1').respond({id:1,name:"Васиа"})
+    httpBackend.whenGET('/api/v1/persons/1/').respond({id:1,name:"Васиа"})
     httpBackend.whenGET('uib/template/modal/window.html').respond(200,'')
     httpBackend.whenGET('/api/v1/npc/').respond([{id:1,name:"Васиа"},{id:2,name:"Lenia"}])
-    httpBackend.whenGET('/api/v1/nodes/player').respond([{id:3,is_first:true,text:"Привет",choice:[4]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
-    httpBackend.whenGET('/api/v1/nodes/npc').respond([{id:4,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?"}])
+    httpBackend.whenGET('/api/v1/nodes/player/').respond([{id:3,is_first:true,text:"Привет",choice:[4]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
+    httpBackend.whenGET('/api/v1/nodes/npc/').respond([{id:4,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?"}])
     scope.$apply()
     httpBackend.flush()
     return

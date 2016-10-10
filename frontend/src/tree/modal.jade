@@ -14,6 +14,7 @@
         li(ng-repeat="element in $ctrl.node.answers")
             a [[element.id]]. [[element.text]]
                 span.label.label-primary(ng-if="element.type") [[element.type]]
+            button.btn.btn-danger(ng-click="$ctrl.delete(element.id)") x
         li
             ui-select(ng-model='$ctrl.selected'  on-select="")
                 ui-select-match
@@ -23,7 +24,9 @@
 
         li или
         li
-            button.btn.btn-primary(ng-click="$ctrl.openModal($ctrl.node)")
+            textarea.form-control( rows="3" ng-model="$ctrl.textToSave")
+
+            button.btn.btn-primary(ng-click="$ctrl.create($ctrl.textToSave)")
                 i.fa.fa-plus Добавить новую реплику
 
 

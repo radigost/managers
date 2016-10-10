@@ -8,7 +8,7 @@ describe 'gameSpec', ->
   beforeEach inject(($rootScope, $compile,$httpBackend) ->
     httpBackend = $httpBackend
     httpBackend.whenGET('/api/v1/my/').respond(1)
-    httpBackend.whenGET('/api/v1/persons').respond({id:1,name:"Вася"})
+    httpBackend.whenGET('/api/v1/persons/').respond({id:1,name:"Вася"})
     scope = $rootScope.$new()
     element = angular.element('<game></game>')
     element = $compile(element)(scope)
