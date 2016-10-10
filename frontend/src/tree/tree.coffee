@@ -17,19 +17,20 @@ class treeCtrl
       @npc.loadNodes()
       @npc.loadTree()
     ]).then (res)=>
-#        console.log "now can update",@npc,@player
         @makeTree(@player)
 
   openModal:(question)=>
     @modal = @uibModal.open
-#      template:modalTpl()
       size:'md'
       component:'modalComponent'
-#      controller:'treeModalCtrl'
-#      controllerAs:'ctrl'
       resolve:
         node:=>
           question
+        tree:=>
+          if question.category == 'npc'
+            tree = @player.nodes
+          else
+            tree = @npc.nodes
 
   makeTree:(person)=>
     if person

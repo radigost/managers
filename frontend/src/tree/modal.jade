@@ -3,24 +3,31 @@
         span(aria-hidden='true') ×
     .modal-title
         h4
-            b Изменение вариантов ответа
+            b Добавление вариантов ответа
 .modal-body
-    header Здесь показываем вопрос, варианты ответа и даем возможность либо выбрать еще один ответ либо добавить новый
-    p id - [[$ctrl.node.id]]
-    p category - [[$ctrl.node.category]]
-    li [[$ctrl.node.id]]. [[$ctrl.node.text]]
-        span.label.label-primary(ng-if="$ctrl.node.type") [[$ctrl.node.type]]
-        ul
-            li(ng-repeat="element in $ctrl.node.answers")
-                a [[element.id]]. [[element.text]]
-                    span.label.label-primary(ng-if="element.type") [[element.type]]
-            li(ng-if="!$ctrl.node.type")
-                button.btn.btn-primary(ng-click="$ctrl.openModal($ctrl.node)")
-                    i.fa.fa-plus
+    p
+        small id - [[$ctrl.node.id]]
+    p
+        small category - [[$ctrl.node.category]]
+    p    [[$ctrl.node.text]]
+    ul
+        li(ng-repeat="element in $ctrl.node.answers")
+            a [[element.id]]. [[element.text]]
+                span.label.label-primary(ng-if="element.type") [[element.type]]
+        li
+            ui-select(ng-model='$ctrl.selected' theme="bootstrap" on-select="$ctrl.selectItem()")
+                ui-select-match
+                    span(ng-bind='$select.selected.text')
+                ui-select-choices(repeat='item in $ctrl.resolve.tree')
+                    span(ng-bind='item.text')
+
+        li или
+        li
+            button.btn.btn-primary(ng-click="$ctrl.openModal($ctrl.node)")
+                i.fa.fa-plus Добавить новую реплику
 
 
 
 .modal-footer
     button.btn(ng-click="$ctrl.cancel()") Отменить
     button.btn(ng-disabled="addEntityForm.$invalid " ng-click="$ctrl.save()" ) Сохранить
-    //ng-disabled="!wizard.service.canSave"

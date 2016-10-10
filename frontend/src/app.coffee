@@ -6,11 +6,16 @@ angular.module('app', [
   'ui.bootstrap'
   'ngStorage'
   'ngCookies'
+  'ngSanitize'
+  'ui.select'
+
 ]).config ($interpolateProvider) ->
   $interpolateProvider.startSymbol '[['
   $interpolateProvider.endSymbol ']]'
   return
 
+.config (RestangularProvider)->
+    RestangularProvider.setRequestSuffix("/")
 
 angular.module('app').component('app',{
   template:tpl()

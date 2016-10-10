@@ -22,6 +22,9 @@ module.exports = function(config) {
         './node_modules/restangular/src/restangular.js',
         './node_modules/ngstorage/ngStorage.js',
         './node_modules/angular-cookies/angular-cookies.js',
+        './node_modules/angular-sanitize/angular-sanitize.js',
+        './node_modules/ui-select/dist/select.js',
+
 
         './src/entry.js',
         './src/**/entry.js',
