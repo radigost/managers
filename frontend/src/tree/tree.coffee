@@ -5,14 +5,23 @@ modalTpl = require('./modal.jade')
 require('./modal.coffee')
 
 class treeCtrl
-  constructor:(@uibModal)->
-    @npc = new Npc
-    @player = new Player
+  constructor:(@player,@NpcFactory,@Restangular,@q,@uibModal)->
+#    @npc = new Npc
+#    @player = new Player
     @tree = []
     @filterQ = false
 
   $onInit:()=>
-    @makeTree(@player)
+    @player.init()
+    @npc = @NpcFactory(@Restangular,@q)
+    @q.all([
+      @player.loadNodes()
+      @player.loadTree()
+      @npc.loadNodes()
+      @npc.loadTree()
+    ]).then (res)=>
+        console.log "now can update",@npc,@player
+        @makeTree(@player)
 
   openModal:()=>
     @modal = @uibModal.open
@@ -51,7 +60,7 @@ class treeCtrl
 
 angular.module('app').component('tree',{
   template:tpl()
-  controller:['$uibModal',treeCtrl]
+  controller:['Player','NpcFactory','Restangular','$q','$uibModal',treeCtrl]
   controllerAs:'ctrl'
 })
 

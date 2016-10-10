@@ -13,6 +13,11 @@ describe 'TalkTest', ->
     ctrl = element.controller('talk')
     scope.$apply()
     httpBackend = $httpBackend
+    httpBackend.whenGET('/api/v1/persons/1').respond({id:1,name:"Васиа"})
+    httpBackend.whenGET('/api/v1/npc/').respond([{id:1,name:"Васиа"},{id:2,name:"Lenia"}])
+    httpBackend.whenGET('/api/v1/nodes/player').respond([{id:3,is_first:true,text:"Привет",choice:[4]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
+    httpBackend.whenGET('/api/v1/nodes/npc').respond([{id:4,is_first:true,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?"}])
+
     return
   )
   afterEach(->
@@ -22,6 +27,7 @@ describe 'TalkTest', ->
   )
 
   describe 'Init', ->
+
     it 'Variables to be defined in talk component',->
       expect(ctrl).toBeDefined()
       expect(ctrl.player).toBeDefined()
@@ -33,7 +39,7 @@ describe 'TalkTest', ->
       expect(ctrl.history).toBeDefined()
 
 
-    it 'Methods in component to be defined',->
+    it 'Methods in component to be defined te',->
       expect(ctrl.update).toBeDefined()
       expect(ctrl.findAnswerForQuestion).toBeDefined()
       expect(ctrl.fillNextArrayOfQuestions).toBeDefined()
@@ -47,11 +53,20 @@ describe 'TalkTest', ->
       next =
         params:
           id:1
-      ctrl.$routerOnActivate()
+      ctrl.player.localStorage.player = {id:1}
+      ctrl.$routerOnActivate(next)
+      httpBackend.flush()
       expect(ctrl.update).toHaveBeenCalled()
       expect(ctrl.update.calls.argsFor(0)).toEqual([1])
 
   describe 'Update method', ->
+    beforeEach (->
+      next =
+        params:
+          id:1
+      ctrl.$routerOnActivate(next)
+      httpBackend.flush()
+    )
     it 'can be called',->
       spyOn(ctrl,'update')
       ctrl.update()
@@ -72,9 +87,16 @@ describe 'TalkTest', ->
       expect(ctrl.time).toEqual(100)
     it 'changes time when updating with specified id',->
       expect(ctrl.time).toEqual(100)
-      ctrl.update(5)
+      ctrl.update(2)
       expect(ctrl.time).toEqual(70)
   describe 'Finding questions and answers with npc and player  methods', ->
+    beforeEach (->
+      next =
+        params:
+          id:1
+      ctrl.$routerOnActivate(next)
+      httpBackend.flush()
+    )
     it 'calls for findAnswerForQuestion when updates',->
       spyOn(ctrl,'findAnswerForQuestion')
       ctrl.update()
@@ -89,27 +111,34 @@ describe 'TalkTest', ->
       expect(ctrl.npc.findNode).not.toHaveBeenCalled()
     it 'methods in npc and player is called',->
       spyOn(ctrl.npc,'findNode').and.callThrough()
-      spyOn(ctrl.player,'findCurrent').and.callThrough()
+#      spyOn(ctrl.player,'findCurrent').and.callThrough()
       spyOn(ctrl.npc,'findCurrent').and.callThrough()
-      spyOn(ctrl.player,'findNode').and.callThrough()
-      expect(ctrl.npc.branch.questionId).toEqual(1)
-#      console.log ctrl.npc.answerNode
-      ctrl.update(2)
-#      console.log ctrl.npc.answerNode
-      expect(ctrl.npc.findNode).toHaveBeenCalled()
-      expect(ctrl.npc.findNode.calls.argsFor(0)).toEqual([2])
-      expect(ctrl.npc.branch.questionId).toEqual(2)
+#      spyOn(ctrl.player,'findNode').and.callThrough()
 
-      expect(ctrl.player.findCurrent).toHaveBeenCalled()
-      expect(ctrl.player.findCurrent.calls.argsFor(0)).toEqual([2])
-      expect(ctrl.player.current.text).toEqual("А можно Михаила Сергеевича?")
+      ctrl.update(3)
+      console.log ctrl.npc.branch.id
+      expect(ctrl.npc.branch.id).toEqual(3)
+      expect(ctrl.npc.findNode).toHaveBeenCalled()
+      expect(ctrl.npc.findNode.calls.argsFor(0)).toEqual([3])
+      expect(ctrl.npc.branch.id).toEqual(3)
+
+#      expect(ctrl.player.findCurrent).toHaveBeenCalled()
+#      expect(ctrl.player.findCurrent.calls.argsFor(0)).toEqual([2])
+#      expect(ctrl.player.current.text).toEqual("А можно Михаила Сергеевича?")
 
       expect(ctrl.npc.findCurrent).toHaveBeenCalled()
 
-      expect(ctrl.player.findNode).toHaveBeenCalled()
+#      expect(ctrl.player.findNode).toHaveBeenCalled()
 
 
   describe 'Check of the end', ->
+    beforeEach (->
+      next =
+        params:
+          id:1
+      ctrl.$routerOnActivate(next)
+      httpBackend.flush()
+    )
     it 'in the beginnings is not the end',->
       expect(ctrl.result).toBeDefined()
       expect(ctrl.result.end).toBeFalsy()

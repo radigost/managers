@@ -69,6 +69,7 @@ class Node(models.Model):
     text  = models.CharField(max_length=250)
     is_fail = models.NullBooleanField()
     is_success = models.NullBooleanField()
+    is_start = models.NullBooleanField()
     choice = models.ManyToManyField(
         "self",
         symmetrical=False,

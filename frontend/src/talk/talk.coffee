@@ -27,6 +27,7 @@ class appCtrl
         @update 1
 
   update:(questionId)=>
+    console.log questionId
     @time -= 30 if questionId>1
     @findAnswerForQuestion(questionId)
     @checkForSuccess()

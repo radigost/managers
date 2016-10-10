@@ -1,4 +1,4 @@
-describe 'TreeSpec', ->
+describe 'gameSpec', ->
   ctrl = undefined
   beforeEach(angular.mock.module('app'));
   element = undefined
@@ -14,8 +14,6 @@ describe 'TreeSpec', ->
     element = $compile(element)(scope)
     ctrl = element.controller('game')
     scope.$apply()
-
-
     return
   )
   afterEach(->
@@ -27,12 +25,13 @@ describe 'TreeSpec', ->
       it 'Variables to be defined in talk component',->
         httpBackend.flush()
         expect(ctrl).toBeDefined()
-        expect(ctrl.player).toBeDefined()
-        expect(ctrl.npc).toBeDefined()
-        expect(ctrl.gamestat).toBeDefined()
-        expect(ctrl.gamestat.money).toBeDefined()
+        expect(ctrl.service).toBeDefined()
+#        expect(ctrl.npc).toBeDefined()
+#        expect(ctrl.gamestat).toBeDefined()
+#        expect(ctrl.gamestat.money).toBeDefined()
 
       it 'Methods in component to be defined',->
-        expect(ctrl.$onInit).toBeDefined()
+        httpBackend.flush()
+        expect(ctrl.$routerOnActivate).toBeDefined()
 
 

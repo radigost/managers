@@ -421,6 +421,7 @@
 	  };
 
 	  appCtrl.prototype.update = function(questionId) {
+	    console.log(questionId);
 	    if (questionId > 1) {
 	      this.time -= 30;
 	    }
@@ -729,7 +730,82 @@
 	    this.initNew = bind(this.initNew, this);
 	    this.type = 'npc';
 	    this.tree = [];
-	    this.nodes = [];
+	    this.nodes = [
+	      {
+	        id: 1,
+	        text: "Да, здравствуйте, чем можем вам помочь?",
+	        used: false
+	      }, {
+	        id: 2,
+	        text: "Да отошел он, не знаем когда будет...",
+	        used: false
+	      }, {
+	        id: 3,
+	        text: "Да не работают такие у нас...",
+	        used: false
+	      }, {
+	        id: 7,
+	        text: "И вам добрый день!",
+	        used: false
+	      }, {
+	        id: 4,
+	        text: "А кто его спрашивает?",
+	        used: false
+	      }, {
+	        id: 5,
+	        text: "Алло?",
+	        used: false
+	      }, {
+	        id: 6,
+	        text: "Меня зовут PERSONNAME",
+	        used: false
+	      }, {
+	        id: 8,
+	        text: "Вы знаете, он сейчас находится на совещании, но вы можете оставить информацию о вашей компании у нас на электронной почте",
+	        used: false
+	      }, {
+	        id: 9,
+	        text: "%EMAIL%, Можете высысылать на него информацию, и мы с вами свяжемся, если нам будет интересно",
+	        used: false
+	      }, {
+	        id: 10,
+	        text: "Нет не надо нас набирать, мы вас сами наберем, до свидания!",
+	        used: false,
+	        type: "failure"
+	      }, {
+	        id: 11,
+	        text: "Ну тогда всего доброго!",
+	        used: false,
+	        type: "failure"
+	      }, {
+	        id: 12,
+	        text: "Ну знаете, сегодня скорее всего уже не освободится, но можете позвонить завтра в районе обеда, попробую вас с ним соединить",
+	        used: false,
+	        type: "failure"
+	      }, {
+	        id: 13,
+	        text: "Да, конечно. Давайте соединю",
+	        used: false,
+	        type: "success"
+	      }, {
+	        id: 14,
+	        text: "Я извиняюсь, но мне кажется вы не долны сюда больше звонить, всего доброго!",
+	        used: false,
+	        type: "failure"
+	      }, {
+	        id: 15,
+	        text: "Я могу продиктовать вам электронную почту и вы вышлите на нее ваше предложение",
+	        used: false
+	      }, {
+	        id: 16,
+	        text: "А что вам конкретно нужно, вы хотите что то предложить?",
+	        used: false
+	      }, {
+	        id: 17,
+	        text: "А он о вас знает, как вас представить?",
+	        used: false
+	      }
+	    ];
 	    this.loadedData = [];
 	  }
 
@@ -765,10 +841,10 @@
 	    if (questionId === 1) {
 	      questionId = 3;
 	    }
-	    this.branch = _.find(this.tree, {
+	    console.log(questionId, this.tree);
+	    return this.branch = _.find(this.tree, {
 	      id: questionId
 	    });
-	    return console.log(this.branch, questionId);
 	  };
 
 	  Npc.prototype.findCurrent = function() {
@@ -841,19 +917,28 @@
 	__webpack_require__(12);
 
 	treeCtrl = (function() {
-	  function treeCtrl(uibModal) {
+	  function treeCtrl(player, NpcFactory, Restangular, q, uibModal) {
+	    this.player = player;
+	    this.NpcFactory = NpcFactory;
+	    this.Restangular = Restangular;
+	    this.q = q;
 	    this.uibModal = uibModal;
 	    this.makeTree = bind(this.makeTree, this);
 	    this.openModal = bind(this.openModal, this);
 	    this.$onInit = bind(this.$onInit, this);
-	    this.npc = new Npc;
-	    this.player = new Player;
 	    this.tree = [];
 	    this.filterQ = false;
 	  }
 
 	  treeCtrl.prototype.$onInit = function() {
-	    return this.makeTree(this.player);
+	    this.player.init();
+	    this.npc = this.NpcFactory(this.Restangular, this.q);
+	    return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function(_this) {
+	      return function(res) {
+	        console.log("now can update", _this.npc, _this.player);
+	        return _this.makeTree(_this.player);
+	      };
+	    })(this));
 	  };
 
 	  treeCtrl.prototype.openModal = function() {
@@ -905,7 +990,7 @@
 
 	angular.module('app').component('tree', {
 	  template: tpl(),
-	  controller: ['$uibModal', treeCtrl],
+	  controller: ['Player', 'NpcFactory', 'Restangular', '$q', '$uibModal', treeCtrl],
 	  controllerAs: 'ctrl'
 	});
 
