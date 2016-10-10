@@ -9,7 +9,6 @@ angular.module('app')
           person =  Player()
         else if res.type == 'npc'
           person = new Npc()
-#        person.init(res)
         return person
 ])
 

@@ -23,11 +23,11 @@ class appCtrl
       @npc.loadNodes()
       @npc.loadTree()
     ]).then (res)=>
-        console.log "now can update",@npc,@player
+#        console.log "now can update",@npc,@player
         @update 1
 
   update:(questionId)=>
-    console.log questionId
+#    console.log questionId
     @time -= 30 if questionId>1
     @findAnswerForQuestion(questionId)
     @checkForSuccess()

@@ -20,7 +20,7 @@ class treeCtrl
       @npc.loadNodes()
       @npc.loadTree()
     ]).then (res)=>
-        console.log "now can update",@npc,@player
+#        console.log "now can update",@npc,@player
         @makeTree(@player)
 
   openModal:()=>

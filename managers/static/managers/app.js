@@ -414,14 +414,12 @@
 	    this.npc.selectCurrent(this.npcId);
 	    return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function(_this) {
 	      return function(res) {
-	        console.log("now can update", _this.npc, _this.player);
 	        return _this.update(1);
 	      };
 	    })(this));
 	  };
 
 	  appCtrl.prototype.update = function(questionId) {
-	    console.log(questionId);
 	    if (questionId > 1) {
 	      this.time -= 30;
 	    }
@@ -841,7 +839,6 @@
 	    if (questionId === 1) {
 	      questionId = 3;
 	    }
-	    console.log(questionId, this.tree);
 	    return this.branch = _.find(this.tree, {
 	      id: questionId
 	    });
@@ -935,7 +932,6 @@
 	    this.npc = this.NpcFactory(this.Restangular, this.q);
 	    return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function(_this) {
 	      return function(res) {
-	        console.log("now can update", _this.npc, _this.player);
 	        return _this.makeTree(_this.player);
 	      };
 	    })(this));
@@ -1637,7 +1633,6 @@
 
 	  gameCtrl.prototype.create = function() {
 	    var s;
-	    console.log(this.localStorage.user.id);
 	    s = this.cookies.getAll();
 	    this.current.name = this.current.first_name + this.current.last_name;
 	    this.current.related_companies = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -1645,9 +1640,7 @@
 	    return this.Restangular.one('/api/v1/persons/').post('', this.current, '', {
 	      'X-CSRFToken': s.csrftoken
 	    }).then((function(_this) {
-	      return function(res) {
-	        console.log(res);
-	      };
+	      return function(res) {};
 	    })(this));
 	  };
 
@@ -1746,7 +1739,6 @@
 	  };
 
 	  menuCtrl.prototype.goToGame = function(playerId) {
-	    console.log(playerId);
 	    this.localStorage.player = {
 	      id: playerId
 	    };

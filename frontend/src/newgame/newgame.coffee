@@ -117,13 +117,13 @@ class gameCtrl
     @current.image_path  = @images[0]
 
   create:()=>
-    console.log @localStorage.user.id
+#    console.log @localStorage.user.id
     s =  @cookies.getAll()
     @current.name = @current.first_name+@current.last_name
     @current.related_companies = [1..10]
     @current.owner = @localStorage.user.id
     @Restangular.one('/api/v1/persons/').post('',@current,'',{'X-CSRFToken':s.csrftoken}).then (res)=>
-      console.log res
+#      console.log res
       return
 
 
