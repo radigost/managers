@@ -18,7 +18,13 @@ class treeCtrl
       @npc.loadTree()
     ]).then (res)=>
         @makeTree(@player)
-
+  delete:(id)=>
+#    @Restangular.one('/api/v1/persons/').post('',@current,'',{'X-CSRFToken':s.csrftoken}).then (res)=>
+#    @Restangular.one('/api/v1/nodes/',@node.id).get().then (res)=>
+#      res.choice = _.pull(res.choice,id)
+#      s =  @cookies.getAll()
+#      res.customPUT('','','',{'X-CSRFToken':s.csrftoken}).then =>
+#        @node.answers = _.pullAllBy(@node.answers,[ {'id':id}],'id')
   openModal:(question)=>
     @modal = @uibModal.open
       size:'md'
@@ -69,7 +75,6 @@ angular.module('app').component('tree',{
 angular.module('app').filter 'HasNoAnswer', ->
   (data,filterQ) ->
     out = data
-    console.log data
     if filterQ == true
       out = _.filter(data, (element)=>
         ret = (element.hasSiblings != true) && (element.is_failure!=true) && (element.is_success!=true)

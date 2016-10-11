@@ -15,19 +15,22 @@
             a [[element.id]]. [[element.text]]
                 span.label.label-primary(ng-if="element.type") [[element.type]]
             button.btn.btn-danger(ng-click="$ctrl.delete(element.id)") x
-    uib-tabset(active="active")
-        uib-tab(index="0" heading="Добавить")
-            ui-select(ng-model='$ctrl.selected'  on-select="")
-                ui-select-match
-                    span(ng-bind='$select.selected.text')
-                ui-select-choices(repeat='item in $ctrl.resolve.tree')
-                    span(ng-bind='item.text')
-            button.btn.btn-primary(ng-click="$ctrl.save()")
-                span Добавить
-        uib-tab(index="1" heading="Создать новую")
-            textarea.form-control(rows="3" ng-model="$ctrl.textToSave")
-            button.btn.btn-primary(ng-click="$ctrl.create($ctrl.textToSave)")
-                span Создать
+    div
+        uib-tabset(active="active")
+            uib-tab(index="0" heading="Добавить")
+                form
+                    ui-select(ng-model='$ctrl.selected'  on-select="")
+                        ui-select-match
+                            span(ng-bind='$select.selected.text')
+                        ui-select-choices(repeat='item in $ctrl.resolve.tree')
+                            span(ng-bind='item.text')
+                    button.btn.btn-primary(ng-click="$ctrl.save()")
+                        span Добавить
+            uib-tab(index="1" heading="Создать новую")
+                form
+                    textarea.form-control(rows="3" ng-model="$ctrl.textToSave")
+                    button.btn.btn-primary(ng-click="$ctrl.create($ctrl.textToSave)")
+                        span Создать
 
 
 

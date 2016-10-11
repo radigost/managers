@@ -8,7 +8,7 @@ describe 'TreeModalSpec', ->
   beforeEach inject(($rootScope, $compile,$httpBackend) ->
     scope = $rootScope.$new()
     scope.resolve =
-      node:{id:1,category:'npc'}
+      node:{id:1,category:'npc',answers:[]}
       tree:[{id:0,text:"Один"},{id:1,text:"Два"}]
 
     element = angular.element('<modal-component resolve ="resolve"></modal-component>')
@@ -18,7 +18,7 @@ describe 'TreeModalSpec', ->
 
     httpBackend = $httpBackend
 #    httpBackend.whenGET('/api/v1/persons/1').respond({id:1,name:"Васиа"})
-#    httpBackend.whenGET('uib/template/modal/window.html').respond(200,'')
+    httpBackend.whenGET('uib/template/tabs/tabset.html').respond(200,'<div></div>')
 #    httpBackend.whenGET('/api/v1/npc/').respond([{id:1,name:"Васиа"},{id:2,name:"Lenia"}])
     httpBackend.whenGET('/api/v1/nodes/1/').respond({id:1,category:'npc',text:"Привет",choice:[4,3,2]})
     httpBackend.whenGET('/api/v1/nodes/player/').respond([{id:1},{id:2}])
@@ -26,7 +26,7 @@ describe 'TreeModalSpec', ->
     httpBackend.whenPOST('/api/v1/nodes/').respond("success")
 #    httpBackend.whenGET('/api/v1/nodes/npc').respond([{id:4,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?"}])
 #    scope.$apply()
-#    httpBackend.flush()
+    httpBackend.flush()
     return
   )
   afterEach(->
