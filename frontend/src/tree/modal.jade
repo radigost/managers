@@ -29,6 +29,15 @@
             uib-tab(index="1" heading="Создать новую")
                 form
                     textarea.form-control(rows="3" ng-model="$ctrl.textToSave")
+                    .btn-group(role='group', aria-label='...')
+                        button.btn.btn-danger(type='button')
+                            i.fa.fa-frown-o
+
+                        button.btn.btn-default(type='button')
+                            i.fa.fa-frown-o
+                        button.btn.btn-success(type='button')
+                            i.fa.fa-smile-o
+
                     button.btn.btn-primary(ng-click="$ctrl.create($ctrl.textToSave)")
                         span Создать
 

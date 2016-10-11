@@ -1,4 +1,4 @@
-fdescribe 'TreeSpec', ->
+describe 'TreeSpec', ->
   ctrl = undefined
   beforeEach(angular.mock.module('app'));
   element = undefined
@@ -16,6 +16,8 @@ fdescribe 'TreeSpec', ->
     httpBackend.whenGET('/api/v1/npc/').respond([{id:1,name:"Васиа"},{id:2,name:"Lenia"}])
     httpBackend.whenGET('/api/v1/nodes/player/').respond([{id:3,is_first:true,text:"Привет",choice:[4]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
     httpBackend.whenGET('/api/v1/nodes/npc/').respond([{id:4,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?",choice:[]}])
+    httpBackend.whenGET('/api/v1/nodes/15/').respond({id:15,text:"даров",choice:[2]})
+    httpBackend.whenDELETE('/api/v1/nodes/15/').respond("deleted")
     scope.$apply()
     httpBackend.flush()
     return
@@ -64,10 +66,14 @@ fdescribe 'TreeSpec', ->
     it 'get id as argument',->
         spyOn(ctrl,'delete').and.callThrough()
         ctrl.delete(15)
+        httpBackend.flush()
         expect(ctrl.delete.calls.argsFor(0)).toEqual([15])
     it 'Calls for delete',->
       ctrl.delete(15)
-      httpBackend.expectDELETE('/api/v1/nodes/')
+      httpBackend.expectDELETE('/api/v1/nodes/15/')
+      httpBackend.flush()
+
+
   describe 'Modal', ->
       it 'open modal is defined',->
         expect(ctrl.openModal).toBeDefined()

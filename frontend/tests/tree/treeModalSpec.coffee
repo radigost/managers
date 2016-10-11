@@ -68,10 +68,23 @@ describe 'TreeModalSpec', ->
         ctrl.create("А неплохо было бы выпить...")
         httpBackend.expectPOST('/api/v1/nodes/')
         httpBackend.flush()
-#        httpBackend.expectGET('/api/v1/nodes/player/')
-
-#        httpBackend.expectPUT('/api/v1/nodes/1/',{"id":1,"text":"Привет","choice":[4,3]})
-
+    it 'creates nodes with fail',->
+        spyOn(ctrl,'create').and.callThrough()
+        ctrl.toAdd =
+          text:"А неплохо было бы выпить..."
+          is_fail:true
+          type:'failure'
+        ctrl.create()
+        httpBackend.expectPOST('/api/v1/nodes/',{
+          text:"А неплохо было бы выпить..."
+          is_fail:true
+          type:'failure'
+          is_success:null
+          is_start:null
+          choice:[]
+        })
+        httpBackend.flush()
+    it 'creates nodes with success',->
 
 
 

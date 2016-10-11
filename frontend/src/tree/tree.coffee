@@ -4,7 +4,7 @@ tpl = require('./tree.jade')
 require('./modal.coffee')
 
 class treeCtrl
-  constructor:(@player,@NpcFactory,@Restangular,@q,@uibModal)->
+  constructor:(@player,@NpcFactory,@Restangular,@q,@uibModal,@cookies)->
     @tree = []
     @filterQ = false
 
@@ -19,12 +19,12 @@ class treeCtrl
     ]).then (res)=>
         @makeTree(@player)
   delete:(id)=>
-#    @Restangular.one('/api/v1/persons/').post('',@current,'',{'X-CSRFToken':s.csrftoken}).then (res)=>
-#    @Restangular.one('/api/v1/nodes/',@node.id).get().then (res)=>
-#      res.choice = _.pull(res.choice,id)
-#      s =  @cookies.getAll()
-#      res.customPUT('','','',{'X-CSRFToken':s.csrftoken}).then =>
-#        @node.answers = _.pullAllBy(@node.answers,[ {'id':id}],'id')
+    s =  @cookies.getAll()
+    @Restangular.one('/api/v1/nodes/',id).get().then (res)=>
+      res.remove('',{'X-CSRFToken':s.csrftoken}).then ()=>
+        @$onInit()
+
+
   openModal:(question)=>
     @modal = @uibModal.open
       size:'md'
@@ -66,7 +66,7 @@ class treeCtrl
 
 angular.module('app').component('tree',{
   template:tpl()
-  controller:['Player','NpcFactory','Restangular','$q','$uibModal',treeCtrl]
+  controller:['Player','NpcFactory','Restangular','$q','$uibModal','$cookies',treeCtrl]
   controllerAs:'ctrl'
 })
 

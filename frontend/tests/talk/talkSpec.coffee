@@ -15,7 +15,7 @@ describe 'TalkTest', ->
     httpBackend = $httpBackend
     httpBackend.whenGET('/api/v1/persons/1/').respond({id:1,name:"Васиа"})
     httpBackend.whenGET('/api/v1/npc/').respond([{id:1,name:"Васиа"},{id:2,name:"Lenia"}])
-    httpBackend.whenGET('/api/v1/nodes/player/').respond([{id:3,is_start:true,text:"Привет",choice:[4]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
+    httpBackend.whenGET('/api/v1/nodes/player/').respond([{id:3,is_start:true,text:"Привет",choice:[4,5,6]},{id:2,text:"Кагдила?",choice:[5]},{id:8,text:"Да ваще норм",choice:[5]}])
     httpBackend.whenGET('/api/v1/nodes/npc/').respond([{id:4,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?"}])
 
     return
@@ -60,7 +60,9 @@ describe 'TalkTest', ->
       expect(ctrl.update.calls.argsFor(0)).toEqual([])
 
   describe 'Update method', ->
+
     beforeEach (->
+      ctrl.localStorage = {player : {id:1}}
       next =
         params:
           id:1
@@ -112,9 +114,7 @@ describe 'TalkTest', ->
       expect(ctrl.npc.findNode.calls.argsFor(0)).toEqual([3])
     it 'methods in npc and player is called',->
       spyOn(ctrl.npc,'findNode').and.callThrough()
-#      spyOn(ctrl.player,'findCurrent').and.callThrough()
       spyOn(ctrl.npc,'findCurrent').and.callThrough()
-#      spyOn(ctrl.player,'findNode').and.callThrough()
 
       ctrl.update(3)
       console.log ctrl.npc.branch.id
@@ -123,15 +123,14 @@ describe 'TalkTest', ->
       expect(ctrl.npc.findNode.calls.argsFor(0)).toEqual([3])
       expect(ctrl.npc.branch.id).toEqual(3)
 
-#      expect(ctrl.player.findCurrent).toHaveBeenCalled()
-#      expect(ctrl.player.findCurrent.calls.argsFor(0)).toEqual([2])
-#      expect(ctrl.player.current.text).toEqual("А можно Михаила Сергеевича?")
-
       expect(ctrl.npc.findCurrent).toHaveBeenCalled()
 
-#      expect(ctrl.player.findNode).toHaveBeenCalled()
-
-
+    it 'checks random answer on question',->
+      spyOn(ctrl.npc,'findCurrent').and.callThrough()
+      ctrl.update(3)
+      arr =  ctrl.npc.branch.choice
+      chosen = ctrl.npc.current.id
+      expect(arr).toContain(chosen)
   describe 'Check of the end', ->
     beforeEach (->
       next =

@@ -89,13 +89,16 @@ class appCtrl
 
 
   writeHistory:()=>
-    inHistory = _.find(@history,{text:@npc.current.text})
-    if not inHistory
-      @history.push(@npc.current)
+
+
     if @player.current
       inHistory = _.find(@history,{text:@player.current.text})
     if not inHistory
       @history.push(@player.current)
+
+    inHistory = _.find(@history,{text:@npc.current.text})
+    if not inHistory
+      @history.push(@npc.current)
 
 
 

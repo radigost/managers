@@ -78,7 +78,7 @@ class Npc
     @branch  = _.find(@tree,{id:questionId})
 
   findCurrent:()=>
-    choiceIndex = @branch.choice[0]
+    choiceIndex = _.sample(@branch.choice)
     @current =  _.find(@nodes, id: choiceIndex)
     if @current.text.indexOf("PERSONNAME")
       name = @name
