@@ -65,7 +65,9 @@ describe 'TreeModalSpec', ->
         expect(ctrl.create).toBeDefined()
     it 'creates new node and add it to answers of currentnode',->
         spyOn(ctrl,'create').and.callThrough()
-        ctrl.create("А неплохо было бы выпить...")
+        ctrl.toAdd =
+          text :"А неплохо было бы выпить..."
+        ctrl.create()
         httpBackend.expectPOST('/api/v1/nodes/')
         httpBackend.flush()
     it 'creates nodes with fail',->
@@ -76,6 +78,7 @@ describe 'TreeModalSpec', ->
           type:'failure'
         ctrl.create()
         httpBackend.expectPOST('/api/v1/nodes/',{
+          category:"player"
           text:"А неплохо было бы выпить..."
           is_fail:true
           type:'failure'

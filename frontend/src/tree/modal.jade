@@ -28,14 +28,13 @@
                         span Добавить
             uib-tab(index="1" heading="Создать новую")
                 form
-                    textarea.form-control(rows="3" ng-model="$ctrl.textToSave")
+                    textarea.form-control(rows="3" ng-model="$ctrl.toAdd.text")
                     .btn-group(role='group', aria-label='...')
-                        button.btn.btn-danger(type='button')
+                        button.btn.btn-danger(type='button' ng-click="$ctrl.setFailure()")
                             i.fa.fa-frown-o
-
-                        button.btn.btn-default(type='button')
+                        button.btn.btn-default(type='button' ng-click="$ctrl.setDefault()")
                             i.fa.fa-frown-o
-                        button.btn.btn-success(type='button')
+                        button.btn.btn-success(type='button' ng-click="$ctrl.setSuccess()")
                             i.fa.fa-smile-o
 
                     button.btn.btn-primary(ng-click="$ctrl.create($ctrl.textToSave)")

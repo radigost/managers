@@ -3,17 +3,17 @@ modalTpl = require('./modal.jade')
 require './modal.coffee'
 class menuCtrl
   constructor:(@uibModal,@Restangular,@localStorage)->
+    @canSeeEditor = false
 #    console.log 'menu',@
   $onInit:()=>
     @Restangular.one('api/v1/my/').get().then (res)=>
       @localStorage.user = {id : res.user_id}
+      @canSeeEditor = res.see_editor
     @Restangular.one('api/v1/persons').get().then (res)=>
       @players = res
       return
 
   goToGame:(playerId)=>
-#    console.log playerId
-
     @localStorage.player = {id : playerId}
     @$router.navigate(['Game'])
 

@@ -90,5 +90,10 @@ class MyView(APIView):
 
     def get(self, request, format=None):
         user_id = request.user.id
-        content = {'user_id': user_id}
+        print (request.user.get_all_permissions())
+        content = {
+            'user_id': user_id,
+            'permissions':request.user.get_all_permissions(),
+            'see_editor':request.user.is_superuser
+                   }
         return Response(content)
