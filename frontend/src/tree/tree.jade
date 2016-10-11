@@ -8,16 +8,17 @@
         button.btn.btn-default(ng-click="ctrl.makeTree(ctrl.npc)") Сделать дерево для NPC
         input(type = "checkbox" ng-model="ctrl.filterQ")
 
-        ul(ng-repeat="question in ctrl.tree | HasNoAnswer: ctrl.filterQ")
+        ul(ng-repeat="question in ctrl.tree | HasNoAnswer: ctrl.filterQ | orderBy:'id'")
             li [[question.id]]. [[question.text]]
+                span(ng-if="!question.type")
+                    button.btn.btn-primary(ng-click="ctrl.openModal(question)")
+                        i.fa.fa-pencil
                 span.label.label-primary(ng-if="question.type") [[question.type]]
                 ul
                     li(ng-repeat="element in question.answers")
                         a [[element.id]]. [[element.text]]
                             span.label.label-primary(ng-if="element.type") [[element.type]]
-                    li(ng-if="!question.type")
-                        button.btn.btn-primary(ng-click="ctrl.openModal(question)")
-                            i.fa.fa-plus
+
 
 
 

@@ -986,7 +986,7 @@
 	          qNode = _.find(person.tree, {
 	            id: node.id
 	          });
-	          if (qNode && qNode.choice) {
+	          if (qNode && qNode.choice.length > 0) {
 	            node.hasSiblings = true;
 	            _.forEach(qNode.choice, function(choice) {
 	              var t;
@@ -1017,11 +1017,12 @@
 	  return function(data, filterQ) {
 	    var out;
 	    out = data;
+	    console.log(data);
 	    if (filterQ === true) {
 	      out = _.filter(data, (function(_this) {
 	        return function(element) {
 	          var ret;
-	          ret = (element.hasSiblings !== true) && (element.type !== "failure") && (element.type !== "success");
+	          ret = (element.hasSiblings !== true) && (element.is_failure !== true) && (element.is_success !== true);
 	          return ret;
 	        };
 	      })(this));
@@ -1037,7 +1038,7 @@
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003EРедактор диалога\u003C\u002Fh3\u003E\u003Ch5\u003E[[ctrl.treeType]]\u003C\u002Fh5\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.player)\"\u003EСделать дерево для Игрока\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.npc)\"\u003EСделать дерево для NPC\u003C\u002Fbutton\u003E\u003Cinput type=\"checkbox\" ng-model=\"ctrl.filterQ\"\u003E\u003Cul ng-repeat=\"question in ctrl.tree | HasNoAnswer: ctrl.filterQ\"\u003E\u003Cli\u003E[[question.id]]. [[question.text]]\u003Cspan class=\"label label-primary\" ng-if=\"question.type\"\u003E[[question.type]]\u003C\u002Fspan\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in question.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003Cli ng-if=\"!question.type\"\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"ctrl.openModal(question)\"\u003E\u003Ci class=\"fa fa-plus\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003EРедактор диалога\u003C\u002Fh3\u003E\u003Ch5\u003E[[ctrl.treeType]]\u003C\u002Fh5\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.player)\"\u003EСделать дерево для Игрока\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.npc)\"\u003EСделать дерево для NPC\u003C\u002Fbutton\u003E\u003Cinput type=\"checkbox\" ng-model=\"ctrl.filterQ\"\u003E\u003Cul ng-repeat=\"question in ctrl.tree | HasNoAnswer: ctrl.filterQ | orderBy:'id'\"\u003E\u003Cli\u003E[[question.id]]. [[question.text]]\u003Cspan ng-if=\"!question.type\"\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"ctrl.openModal(question)\"\u003E\u003Ci class=\"fa fa-pencil\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003C\u002Fspan\u003E\u003Cspan class=\"label label-primary\" ng-if=\"question.type\"\u003E[[question.type]]\u003C\u002Fspan\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in question.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -1054,10 +1055,12 @@
 	    this.Restangular = Restangular;
 	    this.cookies = cookies;
 	    this.create = bind(this.create, this);
+	    this.close = bind(this.close, this);
 	    this["delete"] = bind(this["delete"], this);
 	    this.save = bind(this.save, this);
 	    this.cancel = bind(this.cancel, this);
 	    this.node = this.resolve.node;
+	    console.log(this.node);
 	  }
 
 	  treeModalCtrl.prototype.cancel = function() {
@@ -1075,9 +1078,8 @@
 	        return res.customPUT('', '', '', {
 	          'X-CSRFToken': s.csrftoken
 	        }).then(function() {
-	          return _this.close({
-	            $value: 'cancel'
-	          });
+	          _this.node.answers.push(_this.selected);
+	          return console.log(_this.node.answers);
 	        });
 	      };
 	    })(this));
@@ -1092,12 +1094,21 @@
 	        return res.customPUT('', '', '', {
 	          'X-CSRFToken': s.csrftoken
 	        }).then(function() {
-	          return _this.close({
-	            $value: 'cancel'
-	          });
+	          _this.node.answers = _.pullAllBy(_this.node.answers, [
+	            {
+	              'id': id
+	            }
+	          ], 'id');
+	          return console.log(_this.node.answers);
 	        });
 	      };
 	    })(this));
+	  };
+
+	  treeModalCtrl.prototype.close = function() {
+	    return this.close({
+	      $value: 'cancel'
+	    });
 	  };
 
 	  treeModalCtrl.prototype.create = function(text) {
@@ -1149,7 +1160,7 @@
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"modal-header\"\u003E\u003Cbutton class=\"close\" ng-click=\"$ctrl.cancel()\"\u003E\u003Cspan aria-hidden=\"true\"\u003E×\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cdiv class=\"modal-title\"\u003E\u003Ch4\u003E\u003Cb\u003EДобавление вариантов ответа\u003C\u002Fb\u003E\u003C\u002Fh4\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-body\"\u003E\u003Cp\u003E\u003Csmall\u003Eid - [[$ctrl.node.id]]\u003C\u002Fsmall\u003E\u003C\u002Fp\u003E\u003Cp\u003E\u003Csmall\u003Ecategory - [[$ctrl.node.category]]\u003C\u002Fsmall\u003E\u003C\u002Fp\u003E\u003Cp\u003E   [[$ctrl.node.text]]\u003C\u002Fp\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in $ctrl.node.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003Cbutton class=\"btn btn-danger\" ng-click=\"$ctrl.delete(element.id)\"\u003Ex\u003C\u002Fbutton\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Cui-select ng-model=\"$ctrl.selected\" on-select=\"\"\u003E\u003Cui-select-match\u003E\u003Cspan ng-bind=\"$select.selected.text\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fui-select-match\u003E\u003Cui-select-choices repeat=\"item in $ctrl.resolve.tree\"\u003E\u003Cspan ng-bind=\"item.text\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fui-select-choices\u003E\u003C\u002Fui-select\u003E\u003C\u002Fli\u003E\u003Cli\u003Eили\u003C\u002Fli\u003E\u003Cli\u003E\u003Ctextarea class=\"form-control\" rows=\"3\" ng-model=\"$ctrl.textToSave\"\u003E\u003C\u002Ftextarea\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"$ctrl.create($ctrl.textToSave)\"\u003E\u003Ci class=\"fa fa-plus\"\u003EДобавить новую реплику\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-footer\"\u003E\u003Cbutton class=\"btn\" ng-click=\"$ctrl.cancel()\"\u003EОтменить\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn\" ng-disabled=\"addEntityForm.$invalid \" ng-click=\"$ctrl.save()\"\u003EСохранить\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"modal-header\"\u003E\u003Cbutton class=\"close\" ng-click=\"$ctrl.cancel()\"\u003E\u003Cspan aria-hidden=\"true\"\u003E×\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cdiv class=\"modal-title\"\u003E\u003Ch4\u003E\u003Cb\u003EДобавление вариантов ответа\u003C\u002Fb\u003E\u003C\u002Fh4\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-body\"\u003E\u003Cp\u003E\u003Csmall\u003Eid - [[$ctrl.node.id]]\u003C\u002Fsmall\u003E\u003C\u002Fp\u003E\u003Cp\u003E\u003Csmall\u003Ecategory - [[$ctrl.node.category]]\u003C\u002Fsmall\u003E\u003C\u002Fp\u003E\u003Cp\u003E   [[$ctrl.node.text]]\u003C\u002Fp\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in $ctrl.node.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003Cbutton class=\"btn btn-danger\" ng-click=\"$ctrl.delete(element.id)\"\u003Ex\u003C\u002Fbutton\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cuib-tabset active=\"active\"\u003E\u003Cuib-tab index=\"0\" heading=\"Добавить\"\u003E\u003Cui-select ng-model=\"$ctrl.selected\" on-select=\"\"\u003E\u003Cui-select-match\u003E\u003Cspan ng-bind=\"$select.selected.text\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fui-select-match\u003E\u003Cui-select-choices repeat=\"item in $ctrl.resolve.tree\"\u003E\u003Cspan ng-bind=\"item.text\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fui-select-choices\u003E\u003C\u002Fui-select\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"$ctrl.save()\"\u003E\u003Cspan\u003EДобавить\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003C\u002Fuib-tab\u003E\u003Cuib-tab index=\"1\" heading=\"Создать новую\"\u003E\u003Ctextarea class=\"form-control\" rows=\"3\" ng-model=\"$ctrl.textToSave\"\u003E\u003C\u002Ftextarea\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"$ctrl.create($ctrl.textToSave)\"\u003E\u003Cspan\u003EСоздать\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003C\u002Fuib-tab\u003E\u003C\u002Fuib-tabset\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-footer\"\u003E\u003C!--button.btn(ng-click=\"$ctrl.cancel()\") Отменить--\u003E\u003Cbutton class=\"btn\" ng-disabled=\"addEntityForm.$invalid \" ng-click=\"$ctrl.close()\"\u003EЗакрыть\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },

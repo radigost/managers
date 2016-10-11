@@ -15,22 +15,22 @@
             a [[element.id]]. [[element.text]]
                 span.label.label-primary(ng-if="element.type") [[element.type]]
             button.btn.btn-danger(ng-click="$ctrl.delete(element.id)") x
-        li
+    uib-tabset(active="active")
+        uib-tab(index="0" heading="Добавить")
             ui-select(ng-model='$ctrl.selected'  on-select="")
                 ui-select-match
                     span(ng-bind='$select.selected.text')
                 ui-select-choices(repeat='item in $ctrl.resolve.tree')
                     span(ng-bind='item.text')
-
-        li или
-        li
-            textarea.form-control( rows="3" ng-model="$ctrl.textToSave")
-
+            button.btn.btn-primary(ng-click="$ctrl.save()")
+                span Добавить
+        uib-tab(index="1" heading="Создать новую")
+            textarea.form-control(rows="3" ng-model="$ctrl.textToSave")
             button.btn.btn-primary(ng-click="$ctrl.create($ctrl.textToSave)")
-                i.fa.fa-plus Добавить новую реплику
+                span Создать
 
 
 
 .modal-footer
-    button.btn(ng-click="$ctrl.cancel()") Отменить
-    button.btn(ng-disabled="addEntityForm.$invalid " ng-click="$ctrl.save()" ) Сохранить
+    //button.btn(ng-click="$ctrl.cancel()") Отменить
+    button.btn(ng-disabled="addEntityForm.$invalid " ng-click="$ctrl.close()" ) Закрыть

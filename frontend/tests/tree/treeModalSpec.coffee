@@ -1,4 +1,4 @@
-fdescribe 'TreeModalSpec', ->
+describe 'TreeModalSpec', ->
   ctrl = undefined
   beforeEach(angular.mock.module('app'));
   element = undefined
@@ -23,6 +23,7 @@ fdescribe 'TreeModalSpec', ->
     httpBackend.whenGET('/api/v1/nodes/1/').respond({id:1,category:'npc',text:"Привет",choice:[4,3,2]})
     httpBackend.whenGET('/api/v1/nodes/player/').respond([{id:1},{id:2}])
     httpBackend.whenPUT('/api/v1/nodes/1/').respond("success")
+    httpBackend.whenPOST('/api/v1/nodes/').respond("success")
 #    httpBackend.whenGET('/api/v1/nodes/npc').respond([{id:4,text:"даров",choice:[2]},{id:5,text:"Да ничо так,как сам?",choice:[3]},{id:6,text:"Сам как?"}])
 #    scope.$apply()
 #    httpBackend.flush()
@@ -65,11 +66,12 @@ fdescribe 'TreeModalSpec', ->
     it 'creates new node and add it to answers of currentnode',->
         spyOn(ctrl,'create').and.callThrough()
         ctrl.create("А неплохо было бы выпить...")
-
-        httpBackend.expectGET('/api/v1/nodes/player/')
-        httpBackend.expectPOST('/api/v1/nodes/player/')
-#        httpBackend.expectPUT('/api/v1/nodes/1/',{"id":1,"text":"Привет","choice":[4,3]})
+        httpBackend.expectPOST('/api/v1/nodes/')
         httpBackend.flush()
+#        httpBackend.expectGET('/api/v1/nodes/player/')
+
+#        httpBackend.expectPUT('/api/v1/nodes/1/',{"id":1,"text":"Привет","choice":[4,3]})
+
 
 
 

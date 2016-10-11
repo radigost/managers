@@ -47,7 +47,7 @@ class treeCtrl
       _.forEach opponent.nodes,(node)=>
         nodesArray = []
         qNode =_.find(person.tree,{id:node.id})
-        if qNode && qNode.choice
+        if qNode && qNode.choice.length>0
           node.hasSiblings = true
           _.forEach qNode.choice, (choice)=>
             t = _.find person.nodes,{id:choice}
@@ -69,9 +69,10 @@ angular.module('app').component('tree',{
 angular.module('app').filter 'HasNoAnswer', ->
   (data,filterQ) ->
     out = data
+    console.log data
     if filterQ == true
       out = _.filter(data, (element)=>
-        ret = (element.hasSiblings != true) && (element.type !="failure") && (element.type !="success")
+        ret = (element.hasSiblings != true) && (element.is_failure!=true) && (element.is_success!=true)
         return ret
       )
     out
