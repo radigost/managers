@@ -17,7 +17,7 @@ class PersonViewSet(viewsets.ModelViewSet):
     def list(self, request, format=None):
         # owner = request.query_params['owner_id']
         owner = request.user.id
-        queryset = Person.objects.filter(owner_id = owner)
+        queryset = Person.objects.filter(owner_id = owner).filter(is_deleted =  False)
         serializer = PersonSerializer(queryset, many=True)
         return Response(serializer.data)
 

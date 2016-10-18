@@ -32,6 +32,7 @@ class Person(models.Model):
     })
     owner = models.ForeignKey('auth.User', related_name='persons',default=1)
     related_companies = models.ManyToManyField(Company)
+    is_deleted= models.BooleanField(default=False)
 
     def __unicode__(self):
         return '%s, - %s in  %s ' % ( self.name,self.position,self.company)
