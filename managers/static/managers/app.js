@@ -1858,11 +1858,13 @@
 	__webpack_require__(32);
 
 	menuCtrl = (function() {
-	  function menuCtrl(uibModal, Restangular, localStorage) {
+	  function menuCtrl(uibModal, Restangular, localStorage, cookies) {
 	    this.uibModal = uibModal;
 	    this.Restangular = Restangular;
 	    this.localStorage = localStorage;
+	    this.cookies = cookies;
 	    this.help = bind(this.help, this);
+	    this.deletePerson = bind(this.deletePerson, this);
 	    this.goToGame = bind(this.goToGame, this);
 	    this.$onInit = bind(this.$onInit, this);
 	    this.canSeeEditor = false;
@@ -1891,6 +1893,18 @@
 	    return this.$router.navigate(['Game']);
 	  };
 
+	  menuCtrl.prototype.deletePerson = function(id) {
+	    var s;
+	    s = this.cookies.getAll();
+	    return this.Restangular.one('api/v1/persons/' + id).remove('', {
+	      'X-CSRFToken': s.csrftoken
+	    }).then((function(_this) {
+	      return function(res) {
+	        return _this.$onInit();
+	      };
+	    })(this));
+	  };
+
 	  menuCtrl.prototype.help = function() {
 	    return this.modal = this.uibModal.open({
 	      controller: 'modalCtrl',
@@ -1905,7 +1919,7 @@
 
 	angular.module('app').component('menu', {
 	  template: tpl(),
-	  controller: ['$uibModal', 'Restangular', '$localStorage', menuCtrl],
+	  controller: ['$uibModal', 'Restangular', '$localStorage', '$cookies', menuCtrl],
 	  controllerAs: 'ctrl',
 	  bindings: {
 	    $router: '<'
@@ -1919,7 +1933,7 @@
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fnewgame\"\u003E Новая игра\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Ftree\" ng-if=\"ctrl.canSeeEditor\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Ch4 class=\"text-center\"\u003EИграть за:\u003C\u002Fh4\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.goToGame(player.id)\" ng-repeat=\"player in ctrl.players\"\u003E[[player.name]]\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[player.image_path]]\" height=\"50px\" width=\"50px\" align=\"middle\"\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fnewgame\"\u003E Новая игра\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Ftree\" ng-if=\"ctrl.canSeeEditor\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Ch4 class=\"text-center\"\u003EИграть за:\u003C\u002Fh4\u003E\u003Cdiv ng-repeat=\"player in ctrl.players\"\u003E\u003Cbutton class=\"close\" ng-click=\"ctrl.deletePerson(player.id)\"\u003E\u003Ci class=\"fa fa-trash\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.goToGame(player.id)\"\u003E[[player.name]]\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[player.image_path]]\" height=\"50px\" width=\"50px\" align=\"middle\"\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },

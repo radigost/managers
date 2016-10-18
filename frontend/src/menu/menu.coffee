@@ -2,7 +2,7 @@ tpl = require('./menu.jade')
 modalTpl = require('./modal.jade')
 require './modal.coffee'
 class menuCtrl
-  constructor:(@uibModal,@Restangular,@localStorage)->
+  constructor:(@uibModal,@Restangular,@localStorage,@cookies)->
     @canSeeEditor = false
 #    console.log 'menu',@
   $onInit:()=>
@@ -16,7 +16,10 @@ class menuCtrl
   goToGame:(playerId)=>
     @localStorage.player = {id : playerId}
     @$router.navigate(['Game'])
-
+  deletePerson:(id)=>
+    s =  @cookies.getAll()
+    @Restangular.one('api/v1/persons/'+id).remove('',{'X-CSRFToken':s.csrftoken}).then (res)=>
+      @$onInit()
 
   help:()=>
     @modal = @uibModal.open
@@ -26,7 +29,7 @@ class menuCtrl
 
 angular.module('app').component('menu',{
   template:tpl()
-  controller:['$uibModal','Restangular','$localStorage',menuCtrl]
+  controller:['$uibModal','Restangular','$localStorage','$cookies',menuCtrl]
   controllerAs:'ctrl'
   bindings:
     $router:'<'
