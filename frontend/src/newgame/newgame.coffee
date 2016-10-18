@@ -120,6 +120,7 @@ class gameCtrl
     @current.related_companies = [1..10]
     @current.owner = @localStorage.user.id
     @Restangular.one('/api/v1/persons/').post('',@current,'',{'X-CSRFToken':s.csrftoken}).then (res)=>
+      @$router.navigate(['Menu'])
       return
 
 

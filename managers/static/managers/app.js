@@ -1782,7 +1782,9 @@
 	    return this.Restangular.one('/api/v1/persons/').post('', this.current, '', {
 	      'X-CSRFToken': s.csrftoken
 	    }).then((function(_this) {
-	      return function(res) {};
+	      return function(res) {
+	        _this.$router.navigate(['Menu']);
+	      };
 	    })(this));
 	  };
 
