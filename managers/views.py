@@ -52,7 +52,6 @@ class RegisterFormView(FormView):
 class LoginFormView(FormView):
     form_class = AuthenticationForm
 
-    # Аналогично регистрации, только используем шаблон аутентификации.
     template_name = "managers/login.html"
 
     # В случае успеха перенаправим на главную.

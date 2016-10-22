@@ -75,16 +75,15 @@
   <head>
     <title>Регистрация</title>
   </head>
-  <body  style="background-color:#FFF7EC;">
+  <body  style="background: url('../../static/managers/img/background.jpg') no-repeat center center fixed; font-family: 'Roboto', 'Lucida Grande', 'DejaVu Sans', 'Bitstream Vera Sans', Verdana, Arial, sans-serif;">
     <div class="container">
   <div class="row">
-    <div class="col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4">
-      <div style="background-color:#FFF7EC;" class="thumbnail">
-          <img src="../../static/managers/img/winner.jpg" height="250px" width="250px" align="middle" class="img-responsive"/>
-          <form action="" method="post">
+    <div class="col-sm-10 col-lg-8 col-sm-offset-1 col-lg-offset-2">
+      <div  class="thumbnail" style="width:50em;">
+          <form action="" method="post" class="centered">
              {% csrf_token %}
              <!-- as_p для того, чтобы каждый элемент формы был с новой строки -->
-             {{ form.as_p }}
+             {{ form.as_p}}
              <button class="btn btn-default" type="submit">Регистрация</button>
 
          </form>

@@ -59,20 +59,20 @@
   <head>
     <title>Вход</title>
   </head>
-  <body  style="background-color:#FFF7EC;">
+  <body  style="background: url('../../static/managers/img/background.jpg') no-repeat center center fixed;">
     <div class="container">
   <div class="row">
     <div class="col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4">
-      <div style="background-color:#FFF7EC;" class="thumbnail">
-          <img src="../../static/managers/img/winner.jpg" height="250px" width="250px" align="middle" class="img-responsive"/>
-          <form action="" method="post">
+      <div  class="thumbnail" style="opacity: 0.8;margin-top: 50px; width:20em;">
+{#          <img src="../../static/managers/img/winner.jpg" height="250px" width="250px" align="middle" class="img-responsive"/>#}
+          <form action="" method="post" class="centered" style="margin-top: 20px;">
              {% csrf_token %}
              <!-- as_p для того, чтобы каждый элемент формы был с новой строки -->
              {{ form.as_p }}
-             <button class="btn btn-default" type="submit">Войти</button>
-
+            <a href="/register">Зарегистрироваться</a>
+          <button class="btn btn-default " type="submit">Войти</button>
          </form>
-          <a href="/register">Зарегистрироваться</a>
+
       </div>
     </div>
     <div class="col-sm-2 col-lg-4"></div>
