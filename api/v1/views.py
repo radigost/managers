@@ -22,7 +22,6 @@ class PersonViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        print str(pk)
         queryset = Person.objects.all()
         person = get_object_or_404(queryset, pk=pk)
         serializer = PersonSerializer(person)

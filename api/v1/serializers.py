@@ -12,16 +12,19 @@ class CompanySerializer(serializers.ModelSerializer):
 
 class PersonSerializer(serializers.ModelSerializer):
     # companyDetail = serializers.StringRelatedField()
+
     position = serializers.StringRelatedField()
     related_companies = CompanySerializer(many=True,read_only=True)
     class Meta:
         model = Person
+        fields = '__all__'
 
 class NpcSerializer(serializers.ModelSerializer):
     company = serializers.StringRelatedField()
     position = serializers.StringRelatedField()
     class Meta:
         model = Npc
+        fields = '__all__'
 
 class IndustrySerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,6 +49,7 @@ class NodeSerializer(serializers.ModelSerializer):
     # choice = serializers.HyperlinkedRelatedField(many=True,read_only=True, view_name='node')
     class Meta:
         model = Node
+        fields = '__all__'
         # fields = ('category', 'text')
 
 # class TreeSerializer(serializers.ModelSerializer):
