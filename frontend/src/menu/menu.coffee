@@ -4,7 +4,7 @@ require './modal.coffee'
 class menuCtrl
   constructor:(@uibModal,@Restangular,@localStorage,@cookies)->
     @canSeeEditor = false
-#    console.log 'menu',@
+
   $onInit:()=>
     @Restangular.one('api/v1/my/').get().then (res)=>
       @localStorage.user = {id : res.user_id}
@@ -34,4 +34,6 @@ angular.module('app').component('menu',{
   bindings:
     $router:'<'
 })
+.value('$routerRootComponent', 'app')
+
 

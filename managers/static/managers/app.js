@@ -57,6 +57,16 @@
 	  return RestangularProvider.setRequestSuffix("/");
 	});
 
+	__webpack_require__(4);
+
+	__webpack_require__(9);
+
+	__webpack_require__(13);
+
+	__webpack_require__(26);
+
+	__webpack_require__(29);
+
 	angular.module('app').component('app', {
 	  template: tpl(),
 	  $routeConfig: [
@@ -86,16 +96,6 @@
 	  return $locationProvider.html5Mode(false);
 	}).value('$routerRootComponent', 'app');
 
-	__webpack_require__(4);
-
-	__webpack_require__(9);
-
-	__webpack_require__(13);
-
-	__webpack_require__(26);
-
-	__webpack_require__(29);
-
 
 /***/ },
 /* 1 */
@@ -103,7 +103,7 @@
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"pull-left\"\u003E\u003Ca href=\"\u002F\"\u003EМeню\u003C\u002Fa\u003E\u003Ca href=\"\u002Flogout\"\u003EВыход\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"centered\"\u003E\u003Ch2\u003EИгра менеджеры\u003C\u002Fh2\u003E\u003C\u002Fdiv\u003E\u003Cng-outlet\u003E \u003C\u002Fng-outlet\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"pull-left\"\u003E\u003Ca href=\"\u002F\"\u003EМeню\u003C\u002Fa\u003E\u003Ca href=\"\u002Flogout\"\u003EВыход\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"centered\"\u003E\u003Ch2\u003EИгра менеджеры\u003C\u002Fh2\u003E\u003C\u002Fdiv\u003E\u003Cng-outlet\u003E\u003C\u002Fng-outlet\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -1779,11 +1779,13 @@
 	    this.current.name = this.current.first_name + this.current.last_name;
 	    this.current.related_companies = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 	    this.current.owner = this.localStorage.user.id;
-	    return this.Restangular.one('/api/v1/persons/').post('', this.current, '', {
-	      'X-CSRFToken': s.csrftoken
-	    }).then((function(_this) {
+	    return this.Restangular.one('api/v1/persons').get().then((function(_this) {
 	      return function(res) {
-	        _this.$router.navigate(['Menu']);
+	        return res.post('', _this.current, '', {
+	          'X-CSRFToken': s.csrftoken
+	        }).then(function(res) {
+	          _this.$router.navigate(['Menu']);
+	        });
 	      };
 	    })(this));
 	  };
@@ -1924,7 +1926,7 @@
 	  bindings: {
 	    $router: '<'
 	  }
-	});
+	}).value('$routerRootComponent', 'app');
 
 
 /***/ },
@@ -1933,7 +1935,7 @@
 
 	var pug = __webpack_require__(2);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fnewgame\"\u003E Новая игра\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Ftree\" ng-if=\"ctrl.canSeeEditor\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Ch4 class=\"text-center\"\u003EИграть за:\u003C\u002Fh4\u003E\u003Cdiv ng-repeat=\"player in ctrl.players\"\u003E\u003Cbutton class=\"close\" ng-click=\"ctrl.deletePerson(player.id)\"\u003E\u003Ci class=\"fa fa-trash\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.goToGame(player.id)\"\u003E[[player.name]]\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[player.image_path]]\" height=\"50px\" width=\"50px\" align=\"middle\"\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-sm-8 col-lg-4 col-sm-offset-2 col-lg-offset-4\"\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fwinner.jpg\" height=\"250px\" width=\"250px\" align=\"middle\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-link=\"['NewGame']\"\u003E Новая игра\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-link=\"['Tree']\" ng-if=\"ctrl.canSeeEditor\"\u003EРедактор диалогов\u003C\u002Fa\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.help()\"\u003EПомощь\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"thumbnail\" style=\"background-color:#FFF7EC\"\u003E\u003Ch4 class=\"text-center\"\u003EИграть за:\u003C\u002Fh4\u003E\u003Cdiv ng-repeat=\"player in ctrl.players\"\u003E\u003Cbutton class=\"close\" ng-click=\"ctrl.deletePerson(player.id)\"\u003E\u003Ci class=\"fa fa-trash\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" ng-click=\"ctrl.goToGame(player.id)\"\u003E[[player.name]]\u003Cimg class=\"img-responsive\" src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[player.image_path]]\" height=\"50px\" width=\"50px\" align=\"middle\"\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-sm-2 col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },

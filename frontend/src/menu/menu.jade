@@ -3,8 +3,8 @@
         .col-sm-8.col-lg-4.col-sm-offset-2.col-lg-offset-4
                 .thumbnail(style="background-color:#FFF7EC;")
                     img(src="../../static/managers/img/winner.jpg" height="250px" width="250px" align="middle").img-responsive
-                    a(href="/#/newgame").btn.btn-default.btn-lg.btn-block  Новая игра
-                    a(href="/#/tree" ng-if="ctrl.canSeeEditor").btn.btn-default.btn-lg.btn-block Редактор диалогов
+                    a(ng-link="['NewGame']").btn.btn-default.btn-lg.btn-block  Новая игра
+                    a(ng-link="['Tree']" ng-if="ctrl.canSeeEditor").btn.btn-default.btn-lg.btn-block Редактор диалогов
                     a(ng-click="ctrl.help()").btn.btn-default.btn-lg.btn-block Помощь
                 .thumbnail(style="background-color:#FFF7EC;")
                     h4.text-center Играть за:

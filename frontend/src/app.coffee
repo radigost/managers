@@ -9,13 +9,25 @@ angular.module('app', [
   'ngSanitize'
   'ui.select'
 
-]).config ($interpolateProvider) ->
+])
+.config ($interpolateProvider) ->
   $interpolateProvider.startSymbol '[['
   $interpolateProvider.endSymbol ']]'
   return
 
-.config (RestangularProvider)->
+
+.config( (RestangularProvider)->
     RestangularProvider.setRequestSuffix("/")
+)
+
+
+
+require('./talk/talk.coffee');
+require('./tree/tree.coffee');
+require('./game/game.coffee');
+require('./newgame/newgame.coffee');
+require('./menu/menu.coffee');
+
 
 angular.module('app').component('app',{
   template:tpl()
@@ -34,9 +46,4 @@ angular.module('app').component('app',{
 .value('$routerRootComponent', 'app')
 #.value('$clientId','3')
 
-require('./talk/talk.coffee');
-require('./tree/tree.coffee');
-require('./game/game.coffee');
-require('./newgame/newgame.coffee');
-require('./menu/menu.coffee');
 
