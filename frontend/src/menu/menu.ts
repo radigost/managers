@@ -6,14 +6,11 @@ import {IModalService} from "angular-ui-bootstrap";
 import {storage} from "angular";
 import {cookies} from "angular";
 import IComponentOptions = angular.IComponentOptions;
-// import {IStorageService} from "angular";
 
 
 var menuTpl = require('./menu.jade');
 var  modalTpl = require('./modal.jade');
-require('./modal.js');
-
-
+require('./modal.ts');
 
 class MenuComponent implements IComponentOptions{
   bindings:any={
@@ -45,12 +42,8 @@ class MenuCtrl  {
   }
 
   $onInit():void {
-    // console.log(this);
     this.Restangular.one('api/v1/my/').get().then( (res)=> {
-        // console.log(res,this);
-        this.localStorage.user = {
-          id: res.user_id
-        };
+        this.localStorage.user = {id: res.user_id};
         this.canSeeEditor = res.see_editor;
         return;
     });
@@ -61,21 +54,15 @@ class MenuCtrl  {
   }
 
   goToGame(playerId) {
-    this.localStorage.player = {
-      id: playerId
-    };
+    this.localStorage.player = {id: playerId};
     this.$router.navigate(['Game']);
   }
 
   deletePerson(id) {
-    var s;
-    s = this.cookies.getAll();
+    var s =  this.cookies.getAll();
     return this.Restangular.one('api/v1/persons/' + id).remove('', {
       'X-CSRFToken': s.csrftoken
-    }).then( (res)=> {
-        return this.$onInit();
-      }
-    );
+    }).then( (res)=> { return this.$onInit();});
   }
 
   help() {
@@ -85,7 +72,6 @@ class MenuCtrl  {
       template: modalTpl()
     });
   }
-
 
 }
 
