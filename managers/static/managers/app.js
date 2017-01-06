@@ -33371,6 +33371,7 @@
 
 	"use strict";
 	var angular = __webpack_require__(1);
+	// import {IStorageService} from "angular";
 	var menuTpl = __webpack_require__(7);
 	var modalTpl = __webpack_require__(8);
 	__webpack_require__(9);
@@ -33385,7 +33386,6 @@
 	    }
 	    return MenuComponent;
 	}());
-	angular.module('app').component('menu', new MenuComponent()).value('$routerRootComponent', 'app');
 	var MenuCtrl = (function () {
 	    function MenuCtrl(uibModal, Restangular, localStorage, cookies) {
 	        this.uibModal = uibModal;
@@ -33393,36 +33393,37 @@
 	        this.localStorage = localStorage;
 	        this.cookies = cookies;
 	        this.canSeeEditor = false;
-	        console.log("asdfas");
 	    }
 	    MenuCtrl.prototype.$onInit = function () {
+	        var _this = this;
+	        // console.log(this);
 	        this.Restangular.one('api/v1/my/').get().then(function (res) {
-	            this.localStorage.user = {
+	            // console.log(res,this);
+	            _this.localStorage.user = {
 	                id: res.user_id
 	            };
-	            this.canSeeEditor = res.see_editor;
+	            _this.canSeeEditor = res.see_editor;
 	            return;
 	        });
 	        this.Restangular.one('api/v1/persons').get().then(function (res) {
-	            this.players = res;
+	            _this.players = res;
 	        });
 	    };
 	    MenuCtrl.prototype.goToGame = function (playerId) {
-	        // this.localStorage.player = {
-	        //   id: playerId
-	        // };
+	        this.localStorage.player = {
+	            id: playerId
+	        };
 	        this.$router.navigate(['Game']);
 	    };
 	    MenuCtrl.prototype.deletePerson = function (id) {
+	        var _this = this;
 	        var s;
 	        s = this.cookies.getAll();
 	        return this.Restangular.one('api/v1/persons/' + id).remove('', {
 	            'X-CSRFToken': s.csrftoken
-	        }).then((function (_this) {
-	            return function (res) {
-	                return _this.$onInit();
-	            };
-	        })(this));
+	        }).then(function (res) {
+	            return _this.$onInit();
+	        });
 	    };
 	    MenuCtrl.prototype.help = function () {
 	        return this.modal = this.uibModal.open({
@@ -33434,6 +33435,7 @@
 	    return MenuCtrl;
 	}());
 	MenuCtrl.$inject = ['$uibModal', 'Restangular', '$localStorage', '$cookies'];
+	angular.module('app').component('menu', new MenuComponent()).value('$routerRootComponent', 'app');
 
 
 /***/ },
