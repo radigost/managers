@@ -22,6 +22,12 @@
   },
   "dependencies": {
     "@angular/router": "^0.2.0",
+    "@types/angular": "^1.5.23",
+    "@types/angular-cookies": "^1.4.3",
+    "@types/angular-route": "^1.3.3",
+    "@types/angular-ui-bootstrap": "^0.13.38",
+    "@types/ngstorage": "^0.3.33",
+    "@types/restangular": "^1.5.34",
     "angular": "^1.5.8",
     "angular-mocks": "^1.5.8",
     "angular-ui-bootstrap": "^2.1.3",
@@ -33,6 +39,7 @@
     "pug-loader": "^2.2.1",
     "restangular": "^1.5.2",
     "source-map-support": "^0.4.2",
+    "ts-loader": "^1.3.3",
     "webpack": "^1.13.2"
   }
 }
