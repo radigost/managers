@@ -63,5 +63,5 @@ require('./tree/tree.js');
 
 require('./game/game.ts');
 
-require('./newgame/newgame.js');
+require('./newgame/newgame.ts');
 

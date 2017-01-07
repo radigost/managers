@@ -8,22 +8,20 @@ import {Company} from "../../Class/Company";
 var companyDetailTpl = require('./companyDetail.jade');
 
 require('../../Components/npcInfo/npcInfo.js');
+require('../../Class/Company.ts');
 
 require('../gameService.ts');
 
 class CompanyDetailCtrl {
-  static $inject= ['gameService', 'Company'];
-  private gameName: string;
+  static $inject= ['gameService','Company'];
+  public gameName: string;
   $router;
    constructor(
        public service :GameService,
        public company:Company
    ) {
-    // this.service = service;
-    // this.company = company;
-    // this.goToTalk = bind(this.goToTalk, this);
-    // this.$routerOnActivate = bind(this.$routerOnActivate, this);
     this.gameName = "Экран информации о компании";
+    console.log(this);
   }
 
   $routerOnActivate(next) {

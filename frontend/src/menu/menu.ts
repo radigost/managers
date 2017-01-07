@@ -36,8 +36,8 @@ class MenuCtrl  {
       private uibModal: IModalService,
       private Restangular: restangular.IService,
       private localStorage: IMyStorageService,
-      private cookies: cookies.ICookiesService)
-  {
+      private cookies: cookies.ICookiesService
+  ) {
     this.canSeeEditor = false;
   }
 
