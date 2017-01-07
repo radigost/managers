@@ -3,7 +3,7 @@
     .media
         .media-left.media-middle
             img(src="../../static/managers/img/[[ctrl.player.image_path]]" width=100 height=150)
-            button.btn.btn-success(ng-click="ctrl.goToProfile()" style="background-color:#40423F;") Профиль
+            button.btn.btn-success(ng-link="['Profile']" style="background-color:#40423F;") Профиль
         .media-body
             ul
                 li [[ctrl.player.name]]

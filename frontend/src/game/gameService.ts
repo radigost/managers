@@ -19,7 +19,6 @@ export class GameService {
   }
 
   init() {
-    console.log(this);
     this.player.init();
     return this.Restangular.one('api/v1/companies/').get().then((res) => {
       return this.companies = res.results;

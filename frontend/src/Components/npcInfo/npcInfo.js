@@ -16,7 +16,6 @@ npcInfoCtrl = (function() {
   }
 
   npcInfoCtrl.prototype.$onInit = function() {
-    console.log(this.$router);
     this.npc = this.NpcFactory(this.Restangular);
     return this.npc.selectCurrent(this.id);
   };
