@@ -4,7 +4,7 @@
 var Company, gameCtrl, tpl,
   bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-Company = require('../Class/Company.js');
+Company = require('../Class/Company.ts');
 
 tpl = require('./newgame.jade');
 

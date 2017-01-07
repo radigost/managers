@@ -7,7 +7,7 @@
                     img(src="../static/managers/img/building[[lead.id]].png" width=100 height=150)
                 .media-body
                     h1
-                        a(href="" ng-click="ctrl.goToCompany(lead.id)" style=";") [[lead.name]]
+                        a(ng-link="['CompanyDetail',{companyId:lead.id}]" ) [[lead.name]]
                     .row
                         .col-md-6
                             p Размер компании: [[lead.size]]

@@ -2,8 +2,6 @@
  * Created by user on 05.01.17.
  */
 import * as angular from "angular";
-
-
 import {GameService} from "./gameService";
 var gameTpl = require('./game.jade');
 
@@ -11,9 +9,9 @@ require('../Components/playerInfo/playerInfo.js');
 
 require('./gameService.ts');
 
-require('./companyList/companyList.js');
+require('./companyList/companyList.ts');
 
-require('./companyDetail/companyDetail.js');
+require('./companyDetail/companyDetail.ts');
 
 require('./profile/profile.js');
 
