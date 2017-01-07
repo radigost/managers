@@ -1,5 +1,5 @@
 .panel-heading(style="background-color:#ffffff;")
-    a(href = "/#/game") Назад
+    a(ng-link="['CompanyList']") Назад
 .panel-body
     .media
         .media-left.media-middle
@@ -15,4 +15,4 @@
                             i.fa.fa-dollar(aria-hidden='true' style="color:#A14E71;")
     h5 Сотрудники:
     .panel.panel-default(ng-repeat="id in ctrl.company.current.npc_set")
-        npc-info(id='id')
+        npc-info(id='id' $router="ctrl.$router")

@@ -16,7 +16,7 @@ playerInfoCtrl = (function() {
   playerInfoCtrl.prototype.$onInit = function() {};
 
   playerInfoCtrl.prototype.goToProfile = function() {
-    return this.router.navigate(['Profile']);
+    return this.$router.navigate(['Profile']);
   };
 
   return playerInfoCtrl;
@@ -29,7 +29,7 @@ angular.module('app').component('playerInfo', {
   controllerAs: 'ctrl',
   bindings: {
     player: '<',
-    router: '<'
+    $router: '<'
   }
 });
 

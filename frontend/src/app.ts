@@ -57,11 +57,11 @@ angular
 
 require('./menu/menu.ts');
 
-require('./talk/talk.js');
+require('./talk/talk.ts');
 
 require('./tree/tree.js');
 
-require('./game/game.js');
+require('./game/game.ts');
 
 require('./newgame/newgame.js');
 

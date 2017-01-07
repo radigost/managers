@@ -1,10 +1,12 @@
+import * as angular from "angular";
+import * as _ from "lodash";
 /**
  * Created by user on 05.01.17.
  */
 var appCtrl, tpl,
   bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-require('../Class/player.js');
+require('../Class/player.ts');
 
 require('../Class/factories.js');
 

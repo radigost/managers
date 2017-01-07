@@ -4,7 +4,7 @@
 var companyListCtrl, tpl,
   bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-require('../gameService.js');
+require('../gameService.ts');
 
 tpl = require('./companyList.jade');
 

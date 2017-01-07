@@ -1,0 +1,31 @@
+import * as angular from "angular";
+import * as restangular from "restangular";
+import {storage} from "angular";
+import {Player} from "../Class/player";
+/**
+ * Created by user on 05.01.17.
+ */
+// require('../Class/player.ts');
+
+export class GameService {
+  static $inject = ['Restangular', '$localStorage', 'Player'];
+  public inited;
+  public companies;
+
+  constructor(private Restangular: restangular.IService,
+              private localStorage: storage.IStorageService,
+              public player: Player) {
+    this.inited = false;
+  }
+
+  init() {
+    console.log(this);
+    this.player.init();
+    return this.Restangular.one('api/v1/companies/').get().then((res) => {
+      return this.companies = res.results;
+    });
+  }
+}
+
+angular.module('app').service('gameService', GameService);
+

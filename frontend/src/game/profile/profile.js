@@ -6,7 +6,7 @@ var profileCtrl, tpl,
 
 tpl = require('./profile.jade');
 
-require('../gameService.js');
+require('../gameService.ts');
 
 profileCtrl = (function() {
   function profileCtrl(service, Restangular) {

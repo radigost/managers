@@ -16,10 +16,15 @@ npcInfoCtrl = (function() {
   }
 
   npcInfoCtrl.prototype.$onInit = function() {
+    console.log(this.$router);
     this.npc = this.NpcFactory(this.Restangular);
     return this.npc.selectCurrent(this.id);
   };
+  // npcInfoCtrl.prototype.goToTalk = function() {
+  //   this.$router.navigate(['Takl',{npcId:this.npc.id}]);
+  // }
 
+  // ng-link="['Talk', {npcId: ctrl.npc.id}]"
   return npcInfoCtrl;
 
 })();
@@ -29,6 +34,7 @@ angular.module('app').component('npcInfo', {
   controller: ['Restangular', 'NpcFactory', npcInfoCtrl],
   controllerAs: 'ctrl',
   bindings: {
+    $router:'<',
     id: '<'
   }
 });

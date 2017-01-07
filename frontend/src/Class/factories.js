@@ -3,7 +3,7 @@
  */
 var Npc;
 
-require('../Class/player.js');
+require('../Class/player.ts');
 
 Npc = require('../Class/npc.js');
 

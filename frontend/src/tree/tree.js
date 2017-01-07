@@ -7,7 +7,7 @@ var Npc, Player, tpl, treeCtrl,
 
 Npc = require('../Class/npc.js');
 
-Player = require('../Class/player.js');
+Player = require('../Class/player.ts');
 
 tpl = require('./tree.jade');
 

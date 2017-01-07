@@ -2,7 +2,7 @@
     .col-md-6
         .media-left.media-middle
             img(src="../static/managers/img/[[ctrl.npc.image_path]]" width=75 height=100)
-            a.btn.btn-success(href="/#/talk?npcId=[[ctrl.npc.id]]") Позвонить
+            a.btn.btn-success(ng-link="['/Talk', {npcId: ctrl.npc.id}]") Позвонить
         .media-body
             p [[ctrl.npc.name]]
 
