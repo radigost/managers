@@ -6,8 +6,9 @@ import IService = restangular.IService;
 import * as _ from "lodash";
 import IQService = angular.IQService;
 import {Player} from "../Class/player";
+import {Npc} from "../Class/npc";
 
-
+require('../Class/npc.ts');
 /**
  * Created by user on 05.01.17.
  */
@@ -22,7 +23,7 @@ var treeTpl = require('./tree.jade');
 require('./modal.ts');
 
 class TreeCtrl {
-  static $inject =['Player', 'NpcFactory', 'Restangular', '$q', '$uibModal', '$cookies'];
+  static $inject =['Player', 'Npc', 'Restangular', '$q', '$uibModal', '$cookies'];
   private tree: Array<any>;
   private filterQ: boolean;
   private npc: any;
@@ -30,7 +31,7 @@ class TreeCtrl {
   private treeType: string;
   constructor(
       public player:Player,
-      private NpcFactory,
+      private Npc:Npc,
       private Restangular: restangular.IService,
       private q:IQService,
       private uibModal: IModalService,
@@ -43,7 +44,7 @@ class TreeCtrl {
 
   $onInit () {
     this.player.init();
-    this.npc = this.NpcFactory(this.Restangular, this.q);
+    this.npc = this.Npc.initNew(this.Restangular, this.q);
     return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function(_this) {
       return function(res) {
         return _this.makeTree(_this.player);

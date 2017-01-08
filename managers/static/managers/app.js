@@ -90,9 +90,9 @@
 	    .value('$routerRootComponent', 'app');
 	__webpack_require__(6);
 	__webpack_require__(10);
-	__webpack_require__(17);
-	__webpack_require__(21);
-	__webpack_require__(35);
+	__webpack_require__(15);
+	__webpack_require__(19);
+	__webpack_require__(33);
 
 
 /***/ },
@@ -33475,25 +33475,16 @@
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var appCtrl, tpl, bind = function (fn, me) { return function () { return fn.apply(me, arguments); }; };
 	__webpack_require__(13);
-	__webpack_require__(14);
-	tpl = __webpack_require__(16);
-	appCtrl = (function () {
-	    function appCtrl(player, NpcFactory, Restangular, q) {
+	__webpack_require__(35);
+	// require('../Class/factories.js');
+	var talkTpl = __webpack_require__(14);
+	var TalkCtrl = (function () {
+	    function TalkCtrl(player, Npc, Restangular, q) {
 	        this.player = player;
-	        this.NpcFactory = NpcFactory;
+	        this.Npc = Npc;
 	        this.Restangular = Restangular;
 	        this.q = q;
-	        this.writeHistory = bind(this.writeHistory, this);
-	        this.isStatus = bind(this.isStatus, this);
-	        this.checkForSuccess = bind(this.checkForSuccess, this);
-	        this.notTheEnd = bind(this.notTheEnd, this);
-	        this.checkColor = bind(this.checkColor, this);
-	        this.fillNextArrayOfQuestions = bind(this.fillNextArrayOfQuestions, this);
-	        this.findAnswerForQuestion = bind(this.findAnswerForQuestion, this);
-	        this.update = bind(this.update, this);
-	        this.$routerOnActivate = bind(this.$routerOnActivate, this);
 	        this.gameName = "Окно переговоров";
 	        this.time = 100;
 	        this.history = [];
@@ -33502,18 +33493,21 @@
 	            type: ""
 	        };
 	    }
-	    appCtrl.prototype.$routerOnActivate = function (next) {
+	    TalkCtrl.prototype.$routerOnActivate = function (next) {
+	        var _this = this;
 	        this.player.init();
 	        this.npcId = next.params.npcId;
-	        this.npc = this.NpcFactory(this.Restangular, this.q);
+	        this.npc = this.Npc.initNew(this.Restangular, this.q);
 	        this.npc.selectCurrent(this.npcId);
-	        return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function (_this) {
-	            return function (res) {
-	                return _this.update();
-	            };
-	        })(this));
+	        return this.q.all([
+	            this.player.loadNodes(),
+	            this.player.loadTree(),
+	            this.npc.loadNodes(),
+	            this.npc.loadTree()
+	        ])
+	            .then(function (res) { _this.update(); });
 	    };
-	    appCtrl.prototype.update = function (questionId) {
+	    TalkCtrl.prototype.update = function (questionId) {
 	        if (questionId > 1) {
 	            this.time -= 30;
 	        }
@@ -33523,7 +33517,7 @@
 	        this.fillNextArrayOfQuestions();
 	        this.writeHistory();
 	    };
-	    appCtrl.prototype.findAnswerForQuestion = function (questionId) {
+	    TalkCtrl.prototype.findAnswerForQuestion = function (questionId) {
 	        var startElement;
 	        if (!questionId || questionId === 1) {
 	            startElement = _.find(this.npc.tree, 'is_start');
@@ -33535,7 +33529,7 @@
 	            return this.npc.findCurrent();
 	        }
 	    };
-	    appCtrl.prototype.fillNextArrayOfQuestions = function () {
+	    TalkCtrl.prototype.fillNextArrayOfQuestions = function () {
 	        if (this.isStatus('failure')) {
 	            this.npc.fail();
 	            this.player.fail();
@@ -33548,7 +33542,7 @@
 	        }
 	        return this.player.findNode(this.npc.current.id);
 	    };
-	    appCtrl.prototype.checkColor = function () {
+	    TalkCtrl.prototype.checkColor = function () {
 	        var f;
 	        f = "";
 	        if (this.isStatus('failure')) {
@@ -33559,7 +33553,7 @@
 	        }
 	        return f;
 	    };
-	    appCtrl.prototype.notTheEnd = function () {
+	    TalkCtrl.prototype.notTheEnd = function () {
 	        var r;
 	        r = true;
 	        if (this.isStatus('failure') || this.isStatus('success')) {
@@ -33567,7 +33561,7 @@
 	        }
 	        return r;
 	    };
-	    appCtrl.prototype.checkForSuccess = function () {
+	    TalkCtrl.prototype.checkForSuccess = function () {
 	        if (!this.npc.branch) {
 	            this.result.end = true;
 	            this.result.type = "failure";
@@ -33583,7 +33577,7 @@
 	            }
 	        }
 	    };
-	    appCtrl.prototype.isStatus = function (name) {
+	    TalkCtrl.prototype.isStatus = function (name) {
 	        var itIs;
 	        itIs = false;
 	        if (this.result.type === name) {
@@ -33591,7 +33585,7 @@
 	        }
 	        return itIs;
 	    };
-	    appCtrl.prototype.writeHistory = function () {
+	    TalkCtrl.prototype.writeHistory = function () {
 	        var inHistory;
 	        if (this.player.current) {
 	            inHistory = _.find(this.history, {
@@ -33608,16 +33602,22 @@
 	            return this.history.push(this.npc.current);
 	        }
 	    };
-	    return appCtrl;
-	})();
-	angular.module('app').component('talk', {
-	    template: tpl(),
-	    controller: ['Player', 'NpcFactory', 'Restangular', '$q', appCtrl],
-	    controllerAs: 'ctrl',
-	    bindings: {
-	        $router: '<'
+	    return TalkCtrl;
+	}());
+	TalkCtrl.$inject = ['Player', 'Npc', 'Restangular', '$q'];
+	;
+	var TalkComponent = (function () {
+	    function TalkComponent() {
+	        this.bindings = {
+	            $router: '<'
+	        };
+	        this.template = talkTpl();
+	        this.controller = TalkCtrl;
+	        this.controllerAs = 'ctrl';
 	    }
-	});
+	    return TalkComponent;
+	}());
+	angular.module('app').component('talk', new TalkComponent);
 	// ---
 	// generated by coffee-script 1.9.2 
 
@@ -50853,236 +50853,10 @@
 	exports.Player = Player;
 	;
 	angular.module('app').service('Player', ['Restangular', '$localStorage', '$q', Player]);
-	// module.exports = Player;
-	// ---
-	// generated by coffee-script 1.9.2 
 
 
 /***/ },
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Created by user on 05.01.17.
-	 */
-	var Npc;
-
-	__webpack_require__(13);
-
-	Npc = __webpack_require__(15);
-
-	angular.module('app').factory('Person', [
-	  function() {
-	    return function(res) {
-	      var person;
-	      if (res.type === 'player') {
-	        person = Player();
-	      } else if (res.type === 'npc') {
-	        person = new Npc();
-	      }
-	      return person;
-	    };
-	  }
-	]).factory('NpcFactory', [
-	  'Restangular', '$q', function() {
-	    return function(Restangular, q) {
-	      var r, s;
-	      this.Restangular = Restangular;
-	      this.q = q;
-	      r = new Npc;
-	      s = r.initNew(this.Restangular, this.q);
-	      return s;
-	    };
-	  }
-	]);
-
-	// ---
-	// generated by coffee-script 1.9.2
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	/**
-	 * Created by user on 05.01.17.
-	 */
-	var Npc,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-
-	Npc = (function() {
-	  function Npc(Restangular1, q1) {
-	    this.Restangular = Restangular1;
-	    this.q = q1;
-	    this.succeed = bind(this.succeed, this);
-	    this.fail = bind(this.fail, this);
-	    this.selectCurrent = bind(this.selectCurrent, this);
-	    this.findCurrent = bind(this.findCurrent, this);
-	    this.findNode = bind(this.findNode, this);
-	    this.loadTree = bind(this.loadTree, this);
-	    this.loadNodes = bind(this.loadNodes, this);
-	    this.initNew = bind(this.initNew, this);
-	    this.type = 'npc';
-	    this.tree = [];
-	    this.nodes = [
-	      {
-	        id: 1,
-	        text: "Да, здравствуйте, чем можем вам помочь?",
-	        used: false
-	      }, {
-	        id: 2,
-	        text: "Да отошел он, не знаем когда будет...",
-	        used: false
-	      }, {
-	        id: 3,
-	        text: "Да не работают такие у нас...",
-	        used: false
-	      }, {
-	        id: 7,
-	        text: "И вам добрый день!",
-	        used: false
-	      }, {
-	        id: 4,
-	        text: "А кто его спрашивает?",
-	        used: false
-	      }, {
-	        id: 5,
-	        text: "Алло?",
-	        used: false
-	      }, {
-	        id: 6,
-	        text: "Меня зовут PERSONNAME",
-	        used: false
-	      }, {
-	        id: 8,
-	        text: "Вы знаете, он сейчас находится на совещании, но вы можете оставить информацию о вашей компании у нас на электронной почте",
-	        used: false
-	      }, {
-	        id: 9,
-	        text: "%EMAIL%, Можете высысылать на него информацию, и мы с вами свяжемся, если нам будет интересно",
-	        used: false
-	      }, {
-	        id: 10,
-	        text: "Нет не надо нас набирать, мы вас сами наберем, до свидания!",
-	        used: false,
-	        type: "failure"
-	      }, {
-	        id: 11,
-	        text: "Ну тогда всего доброго!",
-	        used: false,
-	        type: "failure"
-	      }, {
-	        id: 12,
-	        text: "Ну знаете, сегодня скорее всего уже не освободится, но можете позвонить завтра в районе обеда, попробую вас с ним соединить",
-	        used: false,
-	        type: "failure"
-	      }, {
-	        id: 13,
-	        text: "Да, конечно. Давайте соединю",
-	        used: false,
-	        type: "success"
-	      }, {
-	        id: 14,
-	        text: "Я извиняюсь, но мне кажется вы не долны сюда больше звонить, всего доброго!",
-	        used: false,
-	        type: "failure"
-	      }, {
-	        id: 15,
-	        text: "Я могу продиктовать вам электронную почту и вы вышлите на нее ваше предложение",
-	        used: false
-	      }, {
-	        id: 16,
-	        text: "А что вам конкретно нужно, вы хотите что то предложить?",
-	        used: false
-	      }, {
-	        id: 17,
-	        text: "А он о вас знает, как вас представить?",
-	        used: false
-	      }
-	    ];
-	    this.loadedData = [];
-	  }
-
-	  Npc.prototype.initNew = function(Restangular, q) {
-	    return new Npc(Restangular, q);
-	  };
-
-	  Npc.prototype.loadNodes = function() {
-	    var def;
-	    def = this.q.defer();
-	    this.Restangular.one('api/v1/nodes/npc').get().then((function(_this) {
-	      return function(res) {
-	        _this.nodes = res;
-	        return def.resolve();
-	      };
-	    })(this));
-	    return def.promise;
-	  };
-
-	  Npc.prototype.loadTree = function() {
-	    var def;
-	    def = this.q.defer();
-	    this.Restangular.one('api/v1/nodes/player').get().then((function(_this) {
-	      return function(res) {
-	        _this.tree = res;
-	        return def.resolve();
-	      };
-	    })(this));
-	    return def.promise;
-	  };
-
-	  Npc.prototype.findNode = function(questionId) {
-	    return this.branch = _.find(this.tree, {
-	      id: questionId
-	    });
-	  };
-
-	  Npc.prototype.findCurrent = function() {
-	    var choiceIndex, name;
-	    choiceIndex = _.sample(this.branch.choice);
-	    this.current = _.find(this.nodes, {
-	      id: choiceIndex
-	    });
-	    if (this.current.text.indexOf("PERSONNAME")) {
-	      name = this.name;
-	      return this.current.text = _.replace(this.current.text, 'PERSONNAME', name);
-	    }
-	  };
-
-	  Npc.prototype.selectCurrent = function(id) {
-	    return this.Restangular.one('api/v1/npc/', id).get().then((function(_this) {
-	      return function(res) {
-	        _.extend(_this, res);
-	      };
-	    })(this));
-	  };
-
-	  Npc.prototype.fail = function() {
-	    return this.current = {
-	      id: null,
-	      text: "Извините, Всего доброго! (звук кладущейся трубки)"
-	    };
-	  };
-
-	  Npc.prototype.succeed = function() {
-	    return this.current = {
-	      id: null,
-	      text: "Давайте соединю"
-	    };
-	  };
-
-	  return Npc;
-
-	})();
-
-	angular.module('app').service('Npc', ['Restangular', '$q', Npc]);
-
-	module.exports = Npc;
-
-	// ---
-	// generated by coffee-script 1.9.2
-
-/***/ },
-/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51091,24 +50865,25 @@
 	module.exports = template;
 
 /***/ },
-/* 17 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var angular = __webpack_require__(1);
 	var _ = __webpack_require__(11);
+	__webpack_require__(35);
 	/**
 	 * Created by user on 05.01.17.
 	 */
 	// Npc = require('../Class/npc.js');
 	//
 	// Player = require('../Class/player.ts');
-	var treeTpl = __webpack_require__(18);
-	__webpack_require__(19);
+	var treeTpl = __webpack_require__(16);
+	__webpack_require__(17);
 	var TreeCtrl = (function () {
-	    function TreeCtrl(player, NpcFactory, Restangular, q, uibModal, cookies) {
+	    function TreeCtrl(player, Npc, Restangular, q, uibModal, cookies) {
 	        this.player = player;
-	        this.NpcFactory = NpcFactory;
+	        this.Npc = Npc;
 	        this.Restangular = Restangular;
 	        this.q = q;
 	        this.uibModal = uibModal;
@@ -51118,7 +50893,7 @@
 	    }
 	    TreeCtrl.prototype.$onInit = function () {
 	        this.player.init();
-	        this.npc = this.NpcFactory(this.Restangular, this.q);
+	        this.npc = this.Npc.initNew(this.Restangular, this.q);
 	        return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function (_this) {
 	            return function (res) {
 	                return _this.makeTree(_this.player);
@@ -51200,7 +50975,7 @@
 	    ;
 	    return TreeCtrl;
 	}());
-	TreeCtrl.$inject = ['Player', 'NpcFactory', 'Restangular', '$q', '$uibModal', '$cookies'];
+	TreeCtrl.$inject = ['Player', 'Npc', 'Restangular', '$q', '$uibModal', '$cookies'];
 	var TreeComponent = (function () {
 	    function TreeComponent() {
 	        this.bindings = {
@@ -51232,7 +51007,7 @@
 
 
 /***/ },
-/* 18 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51241,7 +51016,7 @@
 	module.exports = template;
 
 /***/ },
-/* 19 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51250,7 +51025,7 @@
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var treeModalTpl = __webpack_require__(20);
+	var treeModalTpl = __webpack_require__(18);
 	var TreeModalCtrl = (function () {
 	    function TreeModalCtrl(Restangular, cookies) {
 	        this.Restangular = Restangular;
@@ -51364,7 +51139,7 @@
 
 
 /***/ },
-/* 20 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51373,7 +51148,7 @@
 	module.exports = template;
 
 /***/ },
-/* 21 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51381,12 +51156,12 @@
 	 * Created by user on 05.01.17.
 	 */
 	var angular = __webpack_require__(1);
-	var gameTpl = __webpack_require__(22);
+	var gameTpl = __webpack_require__(20);
+	__webpack_require__(21);
 	__webpack_require__(23);
-	__webpack_require__(25);
+	__webpack_require__(24);
 	__webpack_require__(26);
-	__webpack_require__(28);
-	__webpack_require__(33);
+	__webpack_require__(31);
 	var GameComponent = (function () {
 	    function GameComponent() {
 	        this.bindings = {
@@ -51430,7 +51205,7 @@
 
 
 /***/ },
-/* 22 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51439,7 +51214,7 @@
 	module.exports = template;
 
 /***/ },
-/* 23 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -51448,7 +51223,7 @@
 	var playerInfoCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	tpl = __webpack_require__(24);
+	tpl = __webpack_require__(22);
 
 	playerInfoCtrl = (function() {
 	  function playerInfoCtrl(Restangular) {
@@ -51481,7 +51256,7 @@
 	// generated by coffee-script 1.9.2
 
 /***/ },
-/* 24 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51490,7 +51265,7 @@
 	module.exports = template;
 
 /***/ },
-/* 25 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51521,12 +51296,12 @@
 
 
 /***/ },
-/* 26 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var angular = __webpack_require__(1);
-	var CompanyListTpl = __webpack_require__(27);
+	var CompanyListTpl = __webpack_require__(25);
 	var CompanyListCtrl = (function () {
 	    function CompanyListCtrl(service) {
 	        this.service = service;
@@ -51548,7 +51323,7 @@
 
 
 /***/ },
-/* 27 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51557,7 +51332,7 @@
 	module.exports = template;
 
 /***/ },
-/* 28 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51565,10 +51340,10 @@
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var companyDetailTpl = __webpack_require__(29);
+	var companyDetailTpl = __webpack_require__(27);
+	__webpack_require__(28);
 	__webpack_require__(30);
-	__webpack_require__(32);
-	__webpack_require__(25);
+	__webpack_require__(23);
 	var CompanyDetailCtrl = (function () {
 	    function CompanyDetailCtrl(service, company) {
 	        this.service = service;
@@ -51605,7 +51380,7 @@
 
 
 /***/ },
-/* 29 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51614,54 +51389,47 @@
 	module.exports = template;
 
 /***/ },
-/* 30 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	var angular = __webpack_require__(1);
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var npcInfoCtrl, tpl,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+	var NpcInfoTpl = __webpack_require__(29);
+	__webpack_require__(35);
+	var NpcInfoCtrl = (function () {
+	    function NpcInfoCtrl(Restangular, Npc, q) {
+	        this.Restangular = Restangular;
+	        this.Npc = Npc;
+	        this.q = q;
+	    }
+	    NpcInfoCtrl.prototype.$onInit = function () {
+	        this.npc = this.Npc.initNew(this.Restangular, this.q);
+	        return this.npc.selectCurrent(this.id);
+	    };
+	    return NpcInfoCtrl;
+	}());
+	NpcInfoCtrl.$inject = ['Restangular', 'Npc', '$q'];
+	;
+	var NpcInfoComponent = (function () {
+	    function NpcInfoComponent() {
+	        this.bindings = {
+	            $router: '<',
+	            id: '<'
+	        };
+	        this.template = NpcInfoTpl();
+	        this.controller = NpcInfoCtrl;
+	        this.controllerAs = 'ctrl';
+	    }
+	    return NpcInfoComponent;
+	}());
+	angular.module('app').component('npcInfo', new NpcInfoComponent);
 
-	__webpack_require__(14);
-
-	tpl = __webpack_require__(31);
-
-	npcInfoCtrl = (function() {
-	  function npcInfoCtrl(Restangular, NpcFactory) {
-	    this.Restangular = Restangular;
-	    this.NpcFactory = NpcFactory;
-	    this.$onInit = bind(this.$onInit, this);
-	  }
-
-	  npcInfoCtrl.prototype.$onInit = function() {
-	    this.npc = this.NpcFactory(this.Restangular);
-	    return this.npc.selectCurrent(this.id);
-	  };
-	  // npcInfoCtrl.prototype.goToTalk = function() {
-	  //   this.$router.navigate(['Takl',{npcId:this.npc.id}]);
-	  // }
-
-	  // ng-link="['Talk', {npcId: ctrl.npc.id}]"
-	  return npcInfoCtrl;
-
-	})();
-
-	angular.module('app').component('npcInfo', {
-	  template: tpl(),
-	  controller: ['Restangular', 'NpcFactory', npcInfoCtrl],
-	  controllerAs: 'ctrl',
-	  bindings: {
-	    $router:'<',
-	    id: '<'
-	  }
-	});
-
-	// ---
-	// generated by coffee-script 1.9.2
 
 /***/ },
-/* 31 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51670,7 +51438,7 @@
 	module.exports = template;
 
 /***/ },
-/* 32 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51698,7 +51466,7 @@
 
 
 /***/ },
-/* 33 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -51707,9 +51475,9 @@
 	var profileCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	tpl = __webpack_require__(34);
+	tpl = __webpack_require__(32);
 
-	__webpack_require__(25);
+	__webpack_require__(23);
 
 	profileCtrl = (function() {
 	  function profileCtrl(service, Restangular) {
@@ -51737,7 +51505,7 @@
 	// generated by coffee-script 1.9.2
 
 /***/ },
-/* 34 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51746,13 +51514,13 @@
 	module.exports = template;
 
 /***/ },
-/* 35 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var angular = __webpack_require__(1);
 	var _ = __webpack_require__(11);
-	var newGameTpl = __webpack_require__(36);
+	var newGameTpl = __webpack_require__(34);
 	var NewGameCtrl = (function () {
 	    function NewGameCtrl(localStorage, Restangular, cookies) {
 	        this.localStorage = localStorage;
@@ -51989,13 +51757,170 @@
 
 
 /***/ },
-/* 36 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
 
 	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-12\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"form-horizontal\"\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EИмя\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.first_name\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EФамилия\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.last_name\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EНазвание компании\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.company\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Ch4\u003EОсталось очков - [[ctrl.points]]\u003C\u002Fh4\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ctable\u003E\u003Ctr ng-repeat=\"element in ctrl.stats.items\"\u003E\u003Ctd\u003E[[element.caption]]\u003C\u002Ftd\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.minus(element.id)\"\u003E-\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\"\u003E[[ctrl.current.stats.personality[element.name] ]]\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.plus(element.id)\"\u003E+\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003C\u002Ftable\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ctable\u003E\u003Ctr\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EСпециализация\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Cli ng-repeat=\"sp in ctrl.specialties.items\"\u003E\u003Ca ng-click=\"ctrl.chooseSpecialty(sp.id)\" href=\"\" tooltip-placement=\"right\" uib-tooltip=\"[[sp.tooltip]]\"\u003E[[sp.caption]]\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003Ctd\u003E[[ctrl.current.specialties[0].caption]]\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003Ctr\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EСектор работы компании\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Cli ng-repeat=\"element in ctrl.indusrty.items\"\u003E\u003Ca ng-click=\"ctrl.chooseIndustry(element.id)\" href=\"\" tooltip-placement=\"right\" uib-tooltip=\"[[element.tooltip]]\"\u003E[[element.caption]]\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003Ctd\u003E[[ctrl.current.industry.caption]]\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003C\u002Ftable\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-3\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ch4\u003E[[ctrl.current.first_name]] [[ctrl.current.last_name]]\u003C\u002Fh4\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.current.image_path]]\" width=\"100\" height=\"150\"\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EВыбрать Аватар\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Ca href=\"\" ng-repeat=\"element in ctrl.images\" style=\"background-color:#F8FBF4\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[element]]\" ng-click=\"ctrl.chooseAvatar(element)\" width=\"50\" height=\"75\"\u003E\u003C\u002Fa\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003Cp\u003E\u003Cul\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Деньги\"\u003E$: [[ctrl.current.money]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Влияет на возможность аргументировать возражения по продукту, нормально разговаривать с техническими директорами\"\u003EЗнание продукта: [[ctrl.current.knowProduct]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько нужно делать мин звонков в день\"\u003Emin Звонков: [[ctrl.current.minCalls]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько максимум можно сделать звонков\"\u003Emax Звонков:[[ctrl.current.maxCalls]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"row\" style=\"height:250px\"\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4 btn btn-default btn-lg\"\u003E\u003Ca ng-click=\"ctrl.create()\"\u003E\u003Cspan\u003EСоздать Персонажа\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var angular = __webpack_require__(1);
+	var _ = __webpack_require__(11);
+	/**
+	 * Created by user on 05.01.17.
+	 */
+	var Npc = (function () {
+	    function Npc(Restangular, q) {
+	        this.Restangular = Restangular;
+	        this.q = q;
+	        this.type = 'npc';
+	        this.tree = [];
+	        this.nodes = [
+	            {
+	                id: 1,
+	                text: "Да, здравствуйте, чем можем вам помочь?",
+	                used: false
+	            }, {
+	                id: 2,
+	                text: "Да отошел он, не знаем когда будет...",
+	                used: false
+	            }, {
+	                id: 3,
+	                text: "Да не работают такие у нас...",
+	                used: false
+	            }, {
+	                id: 7,
+	                text: "И вам добрый день!",
+	                used: false
+	            }, {
+	                id: 4,
+	                text: "А кто его спрашивает?",
+	                used: false
+	            }, {
+	                id: 5,
+	                text: "Алло?",
+	                used: false
+	            }, {
+	                id: 6,
+	                text: "Меня зовут PERSONNAME",
+	                used: false
+	            }, {
+	                id: 8,
+	                text: "Вы знаете, он сейчас находится на совещании, но вы можете оставить информацию о вашей компании у нас на электронной почте",
+	                used: false
+	            }, {
+	                id: 9,
+	                text: "%EMAIL%, Можете высысылать на него информацию, и мы с вами свяжемся, если нам будет интересно",
+	                used: false
+	            }, {
+	                id: 10,
+	                text: "Нет не надо нас набирать, мы вас сами наберем, до свидания!",
+	                used: false,
+	                type: "failure"
+	            }, {
+	                id: 11,
+	                text: "Ну тогда всего доброго!",
+	                used: false,
+	                type: "failure"
+	            }, {
+	                id: 12,
+	                text: "Ну знаете, сегодня скорее всего уже не освободится, но можете позвонить завтра в районе обеда, попробую вас с ним соединить",
+	                used: false,
+	                type: "failure"
+	            }, {
+	                id: 13,
+	                text: "Да, конечно. Давайте соединю",
+	                used: false,
+	                type: "success"
+	            }, {
+	                id: 14,
+	                text: "Я извиняюсь, но мне кажется вы не долны сюда больше звонить, всего доброго!",
+	                used: false,
+	                type: "failure"
+	            }, {
+	                id: 15,
+	                text: "Я могу продиктовать вам электронную почту и вы вышлите на нее ваше предложение",
+	                used: false
+	            }, {
+	                id: 16,
+	                text: "А что вам конкретно нужно, вы хотите что то предложить?",
+	                used: false
+	            }, {
+	                id: 17,
+	                text: "А он о вас знает, как вас представить?",
+	                used: false
+	            }
+	        ];
+	        this.loadedData = [];
+	    }
+	    Npc.prototype.initNew = function (Restangular, q) {
+	        return new Npc(Restangular, q);
+	    };
+	    Npc.prototype.loadNodes = function () {
+	        var _this = this;
+	        var def = this.q.defer();
+	        this.Restangular.one('api/v1/nodes/npc').get().then(function (res) {
+	            _this.nodes = res;
+	            def.resolve();
+	        });
+	        return def.promise;
+	    };
+	    Npc.prototype.loadTree = function () {
+	        var _this = this;
+	        var def = this.q.defer();
+	        this.Restangular.one('api/v1/nodes/player').get().then(function (res) {
+	            _this.tree = res;
+	            def.resolve();
+	        });
+	        return def.promise;
+	    };
+	    Npc.prototype.findNode = function (questionId) {
+	        return this.branch = _.find(this.tree, {
+	            id: questionId
+	        });
+	    };
+	    Npc.prototype.findCurrent = function () {
+	        var choiceIndex, name;
+	        choiceIndex = _.sample(this.branch.choice);
+	        this.current = _.find(this.nodes, {
+	            id: choiceIndex
+	        });
+	        if (this.current && this.current.text.indexOf("PERSONNAME")) {
+	            name = this.name;
+	            return this.current.text = _.replace(this.current.text, 'PERSONNAME', name);
+	        }
+	    };
+	    Npc.prototype.selectCurrent = function (id) {
+	        var _this = this;
+	        return this.Restangular.one('api/v1/npc/', id).get().then(function (res) {
+	            _.extend(_this, res);
+	        });
+	    };
+	    Npc.prototype.fail = function () {
+	        return this.current = {
+	            id: null,
+	            text: "Извините, Всего доброго! (звук кладущейся трубки)"
+	        };
+	    };
+	    Npc.prototype.succeed = function () {
+	        return this.current = {
+	            id: null,
+	            text: "Давайте соединю"
+	        };
+	    };
+	    return Npc;
+	}());
+	Npc.$injext = ['Restangular', '$q'];
+	exports.Npc = Npc;
+	;
+	angular.module('app').service('Npc', ['Restangular', '$q', Npc]);
+
 
 /***/ }
 /******/ ]);

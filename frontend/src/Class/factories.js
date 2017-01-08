@@ -5,7 +5,7 @@ var Npc;
 
 require('../Class/player.ts');
 
-Npc = require('../Class/npc.js');
+Npc = require('../Class/npc.ts');
 
 angular.module('app').factory('Person', [
   function() {
@@ -22,11 +22,11 @@ angular.module('app').factory('Person', [
 ]).factory('NpcFactory', [
   'Restangular', '$q', function() {
     return function(Restangular, q) {
-      var r, s;
       this.Restangular = Restangular;
       this.q = q;
-      r = new Npc;
-      s = r.initNew(this.Restangular, this.q);
+
+      var npc = new Npc;
+      var s = npc.initNew(this.Restangular, this.q);
       return s;
     };
   }

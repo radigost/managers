@@ -7,7 +7,7 @@ import {Company} from "../../Class/Company";
 
 var companyDetailTpl = require('./companyDetail.jade');
 
-require('../../Components/npcInfo/npcInfo.js');
+require('../../Components/npcInfo/npcInfo.ts');
 require('../../Class/Company.ts');
 
 require('../gameService.ts');

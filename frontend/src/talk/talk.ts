@@ -1,54 +1,60 @@
 import * as angular from "angular";
 import * as _ from "lodash";
+import {Player} from "../Class/player";
+import IService = restangular.IService;
+import * as restangular from "restangular";
+import IQService = angular.IQService;
+import {Npc} from "../Class/npc";
 /**
  * Created by user on 05.01.17.
  */
-var appCtrl, tpl,
-  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
 
 require('../Class/player.ts');
+require('../Class/npc.ts');
 
-require('../Class/factories.js');
+// require('../Class/factories.js');
 
-tpl = require('./talk.jade');
+var talkTpl = require('./talk.jade');
 
-appCtrl = (function() {
-  function appCtrl(player, NpcFactory, Restangular, q) {
-    this.player = player;
-    this.NpcFactory = NpcFactory;
-    this.Restangular = Restangular;
-    this.q = q;
-    this.writeHistory = bind(this.writeHistory, this);
-    this.isStatus = bind(this.isStatus, this);
-    this.checkForSuccess = bind(this.checkForSuccess, this);
-    this.notTheEnd = bind(this.notTheEnd, this);
-    this.checkColor = bind(this.checkColor, this);
-    this.fillNextArrayOfQuestions = bind(this.fillNextArrayOfQuestions, this);
-    this.findAnswerForQuestion = bind(this.findAnswerForQuestion, this);
-    this.update = bind(this.update, this);
-    this.$routerOnActivate = bind(this.$routerOnActivate, this);
-    this.gameName = "Окно переговоров";
-    this.time = 100;
-    this.history = [];
-    this.result = {
-      end: false,
-      type: ""
+class TalkCtrl {
+  static $inject = ['Player', 'Npc', 'Restangular', '$q'];
+  private gameName: string;
+  private time: number;
+  private history: Array<any>;
+  private result: {end: boolean; type: string};
+  private npcId: any;
+  private npc: any;
+  constructor(
+      public player :Player,
+      public Npc:Npc,
+      private Restangular:IService,
+      private q:IQService
+  ) {
+
+      this.gameName = "Окно переговоров";
+      this.time = 100;
+      this.history = [];
+      this.result = {
+        end: false,
+        type: ""
     };
   }
 
-  appCtrl.prototype.$routerOnActivate = function(next) {
+  $routerOnActivate(next) {
     this.player.init();
     this.npcId = next.params.npcId;
-    this.npc = this.NpcFactory(this.Restangular, this.q);
+    this.npc = this.Npc.initNew(this.Restangular,this.q);
     this.npc.selectCurrent(this.npcId);
-    return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function(_this) {
-      return function(res) {
-        return _this.update();
-      };
-    })(this));
-  };
+    return this.q.all([
+        this.player.loadNodes(),
+        this.player.loadTree(),
+        this.npc.loadNodes(),
+        this.npc.loadTree()])
+        .then((res)=> { this.update(); });
+  }
 
-  appCtrl.prototype.update = function(questionId) {
+  update(questionId?) {
     if (questionId > 1) {
       this.time -= 30;
     }
@@ -57,9 +63,9 @@ appCtrl = (function() {
     this.writeHistory();
     this.fillNextArrayOfQuestions();
     this.writeHistory();
-  };
+  }
 
-  appCtrl.prototype.findAnswerForQuestion = function(questionId) {
+  findAnswerForQuestion(questionId) {
     var startElement;
     if (!questionId || questionId === 1) {
       startElement = _.find(this.npc.tree, 'is_start');
@@ -70,9 +76,9 @@ appCtrl = (function() {
       this.player.findCurrent(questionId);
       return this.npc.findCurrent();
     }
-  };
+  }
 
-  appCtrl.prototype.fillNextArrayOfQuestions = function() {
+  fillNextArrayOfQuestions() {
     if (this.isStatus('failure')) {
       this.npc.fail();
       this.player.fail();
@@ -83,9 +89,9 @@ appCtrl = (function() {
       this.time = 0;
     }
     return this.player.findNode(this.npc.current.id);
-  };
+  }
 
-  appCtrl.prototype.checkColor = function() {
+  checkColor() {
     var f;
     f = "";
     if (this.isStatus('failure')) {
@@ -95,18 +101,18 @@ appCtrl = (function() {
       f = "success";
     }
     return f;
-  };
+  }
 
-  appCtrl.prototype.notTheEnd = function() {
+  notTheEnd() {
     var r;
     r = true;
     if (this.isStatus('failure') || this.isStatus('success')) {
       r = false;
     }
     return r;
-  };
+  }
 
-  appCtrl.prototype.checkForSuccess = function() {
+  checkForSuccess() {
     if (!this.npc.branch) {
       this.result.end = true;
       this.result.type = "failure";
@@ -121,18 +127,18 @@ appCtrl = (function() {
         return this.result.type = "success";
       }
     }
-  };
+  }
 
-  appCtrl.prototype.isStatus = function(name) {
+  isStatus(name) {
     var itIs;
     itIs = false;
     if (this.result.type === name) {
       itIs = true;
     }
     return itIs;
-  };
+  }
 
-  appCtrl.prototype.writeHistory = function() {
+  writeHistory() {
     var inHistory;
     if (this.player.current) {
       inHistory = _.find(this.history, {
@@ -148,20 +154,24 @@ appCtrl = (function() {
     if (!inHistory) {
       return this.history.push(this.npc.current);
     }
-  };
-
-  return appCtrl;
-
-})();
-
-angular.module('app').component('talk', {
-  template: tpl(),
-  controller: ['Player', 'NpcFactory', 'Restangular', '$q', appCtrl],
-  controllerAs: 'ctrl',
-  bindings: {
-    $router: '<'
   }
-});
+
+
+};
+
+
+
+
+class TalkComponent implements IComponentOptions{
+  bindings:any={
+    $router:'<'
+  };
+  template:string =  talkTpl();
+  controller =  TalkCtrl;
+  controllerAs:string =  'ctrl';
+
+}
+angular.module('app').component('talk', new TalkComponent);
 
 // ---
 // generated by coffee-script 1.9.2
