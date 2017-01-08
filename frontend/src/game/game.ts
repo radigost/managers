@@ -5,7 +5,7 @@ import * as angular from "angular";
 import {GameService} from "./gameService";
 var gameTpl = require('./game.jade');
 
-require('../Components/playerInfo/playerInfo.js');
+require('../Components/playerInfo/playerInfo.ts');
 
 require('./gameService.ts');
 
@@ -13,7 +13,7 @@ require('./companyList/companyList.ts');
 
 require('./companyDetail/companyDetail.ts');
 
-require('./profile/profile.js');
+require('./profile/profile.ts');
 
 class GameComponent implements IComponentOptions{
   bindings:any={

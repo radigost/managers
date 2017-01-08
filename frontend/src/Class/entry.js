@@ -4,4 +4,3 @@
 require('./player.coffee');
 require('./npc.coffee');
 require('./Company.coffee');
-require('./factories.coffee');

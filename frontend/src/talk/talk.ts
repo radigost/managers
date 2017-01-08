@@ -13,7 +13,6 @@ import {Npc} from "../Class/npc";
 require('../Class/player.ts');
 require('../Class/npc.ts');
 
-// require('../Class/factories.js');
 
 var talkTpl = require('./talk.jade');
 

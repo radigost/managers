@@ -90,9 +90,9 @@
 	    .value('$routerRootComponent', 'app');
 	__webpack_require__(6);
 	__webpack_require__(10);
-	__webpack_require__(15);
-	__webpack_require__(19);
-	__webpack_require__(33);
+	__webpack_require__(16);
+	__webpack_require__(20);
+	__webpack_require__(32);
 
 
 /***/ },
@@ -33476,9 +33476,8 @@
 	 * Created by user on 05.01.17.
 	 */
 	__webpack_require__(13);
-	__webpack_require__(35);
-	// require('../Class/factories.js');
-	var talkTpl = __webpack_require__(14);
+	__webpack_require__(14);
+	var talkTpl = __webpack_require__(15);
 	var TalkCtrl = (function () {
 	    function TalkCtrl(player, Npc, Restangular, q) {
 	        this.player = player;
@@ -50859,27 +50858,184 @@
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	var angular = __webpack_require__(1);
+	var _ = __webpack_require__(11);
+	/**
+	 * Created by user on 05.01.17.
+	 */
+	var Npc = (function () {
+	    function Npc(Restangular, q) {
+	        this.Restangular = Restangular;
+	        this.q = q;
+	        this.type = 'npc';
+	        this.tree = [];
+	        this.nodes = [
+	            {
+	                id: 1,
+	                text: "Да, здравствуйте, чем можем вам помочь?",
+	                used: false
+	            }, {
+	                id: 2,
+	                text: "Да отошел он, не знаем когда будет...",
+	                used: false
+	            }, {
+	                id: 3,
+	                text: "Да не работают такие у нас...",
+	                used: false
+	            }, {
+	                id: 7,
+	                text: "И вам добрый день!",
+	                used: false
+	            }, {
+	                id: 4,
+	                text: "А кто его спрашивает?",
+	                used: false
+	            }, {
+	                id: 5,
+	                text: "Алло?",
+	                used: false
+	            }, {
+	                id: 6,
+	                text: "Меня зовут PERSONNAME",
+	                used: false
+	            }, {
+	                id: 8,
+	                text: "Вы знаете, он сейчас находится на совещании, но вы можете оставить информацию о вашей компании у нас на электронной почте",
+	                used: false
+	            }, {
+	                id: 9,
+	                text: "%EMAIL%, Можете высысылать на него информацию, и мы с вами свяжемся, если нам будет интересно",
+	                used: false
+	            }, {
+	                id: 10,
+	                text: "Нет не надо нас набирать, мы вас сами наберем, до свидания!",
+	                used: false,
+	                type: "failure"
+	            }, {
+	                id: 11,
+	                text: "Ну тогда всего доброго!",
+	                used: false,
+	                type: "failure"
+	            }, {
+	                id: 12,
+	                text: "Ну знаете, сегодня скорее всего уже не освободится, но можете позвонить завтра в районе обеда, попробую вас с ним соединить",
+	                used: false,
+	                type: "failure"
+	            }, {
+	                id: 13,
+	                text: "Да, конечно. Давайте соединю",
+	                used: false,
+	                type: "success"
+	            }, {
+	                id: 14,
+	                text: "Я извиняюсь, но мне кажется вы не долны сюда больше звонить, всего доброго!",
+	                used: false,
+	                type: "failure"
+	            }, {
+	                id: 15,
+	                text: "Я могу продиктовать вам электронную почту и вы вышлите на нее ваше предложение",
+	                used: false
+	            }, {
+	                id: 16,
+	                text: "А что вам конкретно нужно, вы хотите что то предложить?",
+	                used: false
+	            }, {
+	                id: 17,
+	                text: "А он о вас знает, как вас представить?",
+	                used: false
+	            }
+	        ];
+	        this.loadedData = [];
+	    }
+	    Npc.prototype.initNew = function (Restangular, q) {
+	        return new Npc(Restangular, q);
+	    };
+	    Npc.prototype.loadNodes = function () {
+	        var _this = this;
+	        var def = this.q.defer();
+	        this.Restangular.one('api/v1/nodes/npc').get().then(function (res) {
+	            _this.nodes = res;
+	            def.resolve();
+	        });
+	        return def.promise;
+	    };
+	    Npc.prototype.loadTree = function () {
+	        var _this = this;
+	        var def = this.q.defer();
+	        this.Restangular.one('api/v1/nodes/player').get().then(function (res) {
+	            _this.tree = res;
+	            def.resolve();
+	        });
+	        return def.promise;
+	    };
+	    Npc.prototype.findNode = function (questionId) {
+	        return this.branch = _.find(this.tree, {
+	            id: questionId
+	        });
+	    };
+	    Npc.prototype.findCurrent = function () {
+	        var choiceIndex, name;
+	        choiceIndex = _.sample(this.branch.choice);
+	        this.current = _.find(this.nodes, {
+	            id: choiceIndex
+	        });
+	        if (this.current && this.current.text.indexOf("PERSONNAME")) {
+	            name = this.name;
+	            return this.current.text = _.replace(this.current.text, 'PERSONNAME', name);
+	        }
+	    };
+	    Npc.prototype.selectCurrent = function (id) {
+	        var _this = this;
+	        return this.Restangular.one('api/v1/npc/', id).get().then(function (res) {
+	            _.extend(_this, res);
+	        });
+	    };
+	    Npc.prototype.fail = function () {
+	        return this.current = {
+	            id: null,
+	            text: "Извините, Всего доброго! (звук кладущейся трубки)"
+	        };
+	    };
+	    Npc.prototype.succeed = function () {
+	        return this.current = {
+	            id: null,
+	            text: "Давайте соединю"
+	        };
+	    };
+	    return Npc;
+	}());
+	Npc.$injext = ['Restangular', '$q'];
+	exports.Npc = Npc;
+	;
+	angular.module('app').service('Npc', ['Restangular', '$q', Npc]);
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var pug = __webpack_require__(4);
 
 	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003C!--img(src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002Fmanager.png\" width=100 height=150)--\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg ng-src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.player.image_path]]\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\"[[ctrl.player.company]]\"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Ca class=\"btn btn-default btn-lg btn-block\" href=\"\u002F#\u002Fgame\"\u003EЗакончить разговор\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C!--p [[ctrl.next.question]]--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\" ng-class=\"ctrl.checkColor()\"\u003E\u003Cp\u003EОставшееся время\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.time]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: [[ctrl.time]]%\"\u003E\u003C!--| [[ctrl.time]]--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fp\u003E\u003C!--ol--\u003E\u003C!--    li(ng-repeat='item in ctrl.history') -[[item]]--\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg class=\"media-object\" src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.npc.image_path]]\" width=\"100\" height=\"150\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.npc.name]]\u003C\u002Fli\u003E\u003Cli\u003E\"[[ctrl.npc.company]]\"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.npc.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\" ng-show=\"!ctrl.notTheEnd()\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cp\u003E[[ctrl.player.current.text]]\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" ng-show=\"ctrl.notTheEnd()\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-header\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ch5\u003E\u003Cb\u003EВыберите варианты ответа\u003C\u002Fb\u003E\u003C\u002Fh5\u003E\u003Cdiv class=\"list-group\"\u003E\u003Ca class=\"list-group-item\" href=\"\" ng-repeat=\"element in ctrl.player.questionArray\" ng-click=\"ctrl.update(element.id)\" style=\"background-color:#F8FBF4\"\u003E-&nbsp;[[element.text]]\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cp\u003E[[ctrl.npc.current.text]]\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-12\"\u003E\u003Cdiv class=\"panel panel-default\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Cp\u003EИстория разговора\u003C\u002Fp\u003E\u003Col\u003E\u003Cli ng-repeat=\"item in ctrl.history\"\u003E-[[item.text]]\u003C\u002Fli\u003E\u003C\u002Fol\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var angular = __webpack_require__(1);
 	var _ = __webpack_require__(11);
-	__webpack_require__(35);
+	__webpack_require__(14);
 	/**
 	 * Created by user on 05.01.17.
 	 */
 	// Npc = require('../Class/npc.js');
 	//
 	// Player = require('../Class/player.ts');
-	var treeTpl = __webpack_require__(16);
-	__webpack_require__(17);
+	var treeTpl = __webpack_require__(17);
+	__webpack_require__(18);
 	var TreeCtrl = (function () {
 	    function TreeCtrl(player, Npc, Restangular, q, uibModal, cookies) {
 	        this.player = player;
@@ -51007,7 +51163,7 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51016,7 +51172,7 @@
 	module.exports = template;
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51025,7 +51181,7 @@
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var treeModalTpl = __webpack_require__(18);
+	var treeModalTpl = __webpack_require__(19);
 	var TreeModalCtrl = (function () {
 	    function TreeModalCtrl(Restangular, cookies) {
 	        this.Restangular = Restangular;
@@ -51139,7 +51295,7 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51148,7 +51304,7 @@
 	module.exports = template;
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51156,12 +51312,12 @@
 	 * Created by user on 05.01.17.
 	 */
 	var angular = __webpack_require__(1);
-	var gameTpl = __webpack_require__(20);
-	__webpack_require__(21);
+	var gameTpl = __webpack_require__(21);
+	__webpack_require__(34);
+	__webpack_require__(22);
 	__webpack_require__(23);
-	__webpack_require__(24);
-	__webpack_require__(26);
-	__webpack_require__(31);
+	__webpack_require__(25);
+	__webpack_require__(30);
 	var GameComponent = (function () {
 	    function GameComponent() {
 	        this.bindings = {
@@ -51205,7 +51361,7 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51214,58 +51370,7 @@
 	module.exports = template;
 
 /***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Created by user on 05.01.17.
-	 */
-	var playerInfoCtrl, tpl,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-
-	tpl = __webpack_require__(22);
-
-	playerInfoCtrl = (function() {
-	  function playerInfoCtrl(Restangular) {
-	    this.Restangular = Restangular;
-	    this.goToProfile = bind(this.goToProfile, this);
-	    this.$onInit = bind(this.$onInit, this);
-	  }
-
-	  playerInfoCtrl.prototype.$onInit = function() {};
-
-	  playerInfoCtrl.prototype.goToProfile = function() {
-	    return this.$router.navigate(['Profile']);
-	  };
-
-	  return playerInfoCtrl;
-
-	})();
-
-	angular.module('app').component('playerInfo', {
-	  template: tpl(),
-	  controller: ['Restangular', playerInfoCtrl],
-	  controllerAs: 'ctrl',
-	  bindings: {
-	    player: '<',
-	    $router: '<'
-	  }
-	});
-
-	// ---
-	// generated by coffee-script 1.9.2
-
-/***/ },
 /* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var pug = __webpack_require__(4);
-
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.player.image_path]]\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\" ng-link=\"['Profile']\" style=\"background-color:#40423F\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.player.stats.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EЗвонки сегодня\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.calls_done]]\" aria-valuemin=\"0\" aria-valuemax=\"[[ctrl.player.stats.calls_min]]\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.calls_done]]\u002F[[ctrl.player.stats.calls_min]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EОпыт\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.exp]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.exp]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
-	module.exports = template;
-
-/***/ },
-/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51296,12 +51401,12 @@
 
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var angular = __webpack_require__(1);
-	var CompanyListTpl = __webpack_require__(25);
+	var CompanyListTpl = __webpack_require__(24);
 	var CompanyListCtrl = (function () {
 	    function CompanyListCtrl(service) {
 	        this.service = service;
@@ -51323,7 +51428,7 @@
 
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51332,7 +51437,7 @@
 	module.exports = template;
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51340,10 +51445,10 @@
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var companyDetailTpl = __webpack_require__(27);
-	__webpack_require__(28);
-	__webpack_require__(30);
-	__webpack_require__(23);
+	var companyDetailTpl = __webpack_require__(26);
+	__webpack_require__(27);
+	__webpack_require__(29);
+	__webpack_require__(22);
 	var CompanyDetailCtrl = (function () {
 	    function CompanyDetailCtrl(service, company) {
 	        this.service = service;
@@ -51380,7 +51485,7 @@
 
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51389,7 +51494,7 @@
 	module.exports = template;
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51397,8 +51502,8 @@
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var NpcInfoTpl = __webpack_require__(29);
-	__webpack_require__(35);
+	var NpcInfoTpl = __webpack_require__(28);
+	__webpack_require__(14);
 	var NpcInfoCtrl = (function () {
 	    function NpcInfoCtrl(Restangular, Npc, q) {
 	        this.Restangular = Restangular;
@@ -51429,7 +51534,7 @@
 
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51438,7 +51543,7 @@
 	module.exports = template;
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51466,46 +51571,41 @@
 
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	var angular = __webpack_require__(1);
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var profileCtrl, tpl,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+	var profileTpl = __webpack_require__(31);
+	__webpack_require__(22);
+	var ProfileCtrl = (function () {
+	    function ProfileCtrl(service, Restangular) {
+	        this.service = service;
+	        this.Restangular = Restangular;
+	    }
+	    return ProfileCtrl;
+	}());
+	ProfileCtrl.$inject = ['gameService', 'Restangular'];
+	;
+	var ProfileComponent = (function () {
+	    function ProfileComponent() {
+	        this.bindings = {
+	            $router: '<'
+	        };
+	        this.template = profileTpl();
+	        this.controller = ProfileCtrl;
+	        this.controllerAs = 'ctrl';
+	    }
+	    return ProfileComponent;
+	}());
+	angular.module('app').component('profile', new ProfileComponent);
 
-	tpl = __webpack_require__(32);
-
-	__webpack_require__(23);
-
-	profileCtrl = (function() {
-	  function profileCtrl(service, Restangular) {
-	    this.service = service;
-	    this.Restangular = Restangular;
-	    this.$onInit = bind(this.$onInit, this);
-	  }
-
-	  profileCtrl.prototype.$onInit = function() {};
-
-	  return profileCtrl;
-
-	})();
-
-	angular.module('app').component('profile', {
-	  template: tpl(),
-	  controller: ['gameService', 'Restangular', profileCtrl],
-	  controllerAs: 'ctrl',
-	  bindings: {
-	    $router: '<'
-	  }
-	})
-
-	// ---
-	// generated by coffee-script 1.9.2
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51514,13 +51614,13 @@
 	module.exports = template;
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var angular = __webpack_require__(1);
 	var _ = __webpack_require__(11);
-	var newGameTpl = __webpack_require__(34);
+	var newGameTpl = __webpack_require__(33);
 	var NewGameCtrl = (function () {
 	    function NewGameCtrl(localStorage, Restangular, cookies) {
 	        this.localStorage = localStorage;
@@ -51757,7 +51857,7 @@
 
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51766,161 +51866,46 @@
 	module.exports = template;
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var angular = __webpack_require__(1);
-	var _ = __webpack_require__(11);
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var Npc = (function () {
-	    function Npc(Restangular, q) {
+	var PlayerInfoTpl = __webpack_require__(35);
+	var PlayerInfoCtrl = (function () {
+	    function PlayerInfoCtrl(Restangular) {
 	        this.Restangular = Restangular;
-	        this.q = q;
-	        this.type = 'npc';
-	        this.tree = [];
-	        this.nodes = [
-	            {
-	                id: 1,
-	                text: "Да, здравствуйте, чем можем вам помочь?",
-	                used: false
-	            }, {
-	                id: 2,
-	                text: "Да отошел он, не знаем когда будет...",
-	                used: false
-	            }, {
-	                id: 3,
-	                text: "Да не работают такие у нас...",
-	                used: false
-	            }, {
-	                id: 7,
-	                text: "И вам добрый день!",
-	                used: false
-	            }, {
-	                id: 4,
-	                text: "А кто его спрашивает?",
-	                used: false
-	            }, {
-	                id: 5,
-	                text: "Алло?",
-	                used: false
-	            }, {
-	                id: 6,
-	                text: "Меня зовут PERSONNAME",
-	                used: false
-	            }, {
-	                id: 8,
-	                text: "Вы знаете, он сейчас находится на совещании, но вы можете оставить информацию о вашей компании у нас на электронной почте",
-	                used: false
-	            }, {
-	                id: 9,
-	                text: "%EMAIL%, Можете высысылать на него информацию, и мы с вами свяжемся, если нам будет интересно",
-	                used: false
-	            }, {
-	                id: 10,
-	                text: "Нет не надо нас набирать, мы вас сами наберем, до свидания!",
-	                used: false,
-	                type: "failure"
-	            }, {
-	                id: 11,
-	                text: "Ну тогда всего доброго!",
-	                used: false,
-	                type: "failure"
-	            }, {
-	                id: 12,
-	                text: "Ну знаете, сегодня скорее всего уже не освободится, но можете позвонить завтра в районе обеда, попробую вас с ним соединить",
-	                used: false,
-	                type: "failure"
-	            }, {
-	                id: 13,
-	                text: "Да, конечно. Давайте соединю",
-	                used: false,
-	                type: "success"
-	            }, {
-	                id: 14,
-	                text: "Я извиняюсь, но мне кажется вы не долны сюда больше звонить, всего доброго!",
-	                used: false,
-	                type: "failure"
-	            }, {
-	                id: 15,
-	                text: "Я могу продиктовать вам электронную почту и вы вышлите на нее ваше предложение",
-	                used: false
-	            }, {
-	                id: 16,
-	                text: "А что вам конкретно нужно, вы хотите что то предложить?",
-	                used: false
-	            }, {
-	                id: 17,
-	                text: "А он о вас знает, как вас представить?",
-	                used: false
-	            }
-	        ];
-	        this.loadedData = [];
 	    }
-	    Npc.prototype.initNew = function (Restangular, q) {
-	        return new Npc(Restangular, q);
-	    };
-	    Npc.prototype.loadNodes = function () {
-	        var _this = this;
-	        var def = this.q.defer();
-	        this.Restangular.one('api/v1/nodes/npc').get().then(function (res) {
-	            _this.nodes = res;
-	            def.resolve();
-	        });
-	        return def.promise;
-	    };
-	    Npc.prototype.loadTree = function () {
-	        var _this = this;
-	        var def = this.q.defer();
-	        this.Restangular.one('api/v1/nodes/player').get().then(function (res) {
-	            _this.tree = res;
-	            def.resolve();
-	        });
-	        return def.promise;
-	    };
-	    Npc.prototype.findNode = function (questionId) {
-	        return this.branch = _.find(this.tree, {
-	            id: questionId
-	        });
-	    };
-	    Npc.prototype.findCurrent = function () {
-	        var choiceIndex, name;
-	        choiceIndex = _.sample(this.branch.choice);
-	        this.current = _.find(this.nodes, {
-	            id: choiceIndex
-	        });
-	        if (this.current && this.current.text.indexOf("PERSONNAME")) {
-	            name = this.name;
-	            return this.current.text = _.replace(this.current.text, 'PERSONNAME', name);
-	        }
-	    };
-	    Npc.prototype.selectCurrent = function (id) {
-	        var _this = this;
-	        return this.Restangular.one('api/v1/npc/', id).get().then(function (res) {
-	            _.extend(_this, res);
-	        });
-	    };
-	    Npc.prototype.fail = function () {
-	        return this.current = {
-	            id: null,
-	            text: "Извините, Всего доброго! (звук кладущейся трубки)"
-	        };
-	    };
-	    Npc.prototype.succeed = function () {
-	        return this.current = {
-	            id: null,
-	            text: "Давайте соединю"
-	        };
-	    };
-	    return Npc;
+	    return PlayerInfoCtrl;
 	}());
-	Npc.$injext = ['Restangular', '$q'];
-	exports.Npc = Npc;
+	PlayerInfoCtrl.$inject = ['Restangular'];
 	;
-	angular.module('app').service('Npc', ['Restangular', '$q', Npc]);
+	var PlayerInfoComponent = (function () {
+	    function PlayerInfoComponent() {
+	        this.bindings = {
+	            player: '<',
+	            $router: '<'
+	        };
+	        this.template = PlayerInfoTpl();
+	        this.controller = PlayerInfoCtrl;
+	        this.controllerAs = 'ctrl';
+	    }
+	    return PlayerInfoComponent;
+	}());
+	angular.module('app').component('playerInfo', new PlayerInfoComponent);
 
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pug = __webpack_require__(4);
+
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"panel-body\"\u003E\u003Cdiv class=\"media\"\u003E\u003Cdiv class=\"media-left media-middle\"\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.player.image_path]]\" width=\"100\" height=\"150\"\u003E\u003Cbutton class=\"btn btn-success\" ng-link=\"['Profile']\" style=\"background-color:#40423F\"\u003EПрофиль\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"media-body\"\u003E\u003Cul\u003E\u003Cli\u003E[[ctrl.player.name]]\u003C\u002Fli\u003E\u003Cli\u003E\" [[ctrl.player.company]] \"\u003C\u002Fli\u003E\u003Cli\u003E[[ctrl.player.position]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cul\u003E\u003Cli\u003E $ [[ctrl.player.stats.money]]\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-phone\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EЗвонки сегодня\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.calls_done]]\" aria-valuemin=\"0\" aria-valuemax=\"[[ctrl.player.stats.calls_min]]\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.calls_done]]\u002F[[ctrl.player.stats.calls_min]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003Cli\u003E\u003Ci class=\"fa fa-angle-double-up\" aria-hidden=\"true\"\u003E&nbsp;\u003C\u002Fi\u003E\u003Cspan\u003EОпыт\u003C\u002Fspan\u003E\u003Cdiv class=\"progress\"\u003E\u003Cdiv class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"[[ctrl.player.stats.exp]]\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"\u003E\u003Cspan\u003E[[ctrl.player.stats.exp]]\u003C\u002Fspan\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	module.exports = template;
 
 /***/ }
 /******/ ]);
