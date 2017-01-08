@@ -3,6 +3,7 @@ import * as restangular from "restangular";
 import {cookies} from "angular";
 import {IModalServiceInstance} from "angular-ui-bootstrap";
 import * as _ from "lodash";
+import IComponentOptions = angular.IComponentOptions;
 /**
  * Created by user on 05.01.17.
  */

@@ -7,6 +7,7 @@ import * as _ from "lodash";
 import IQService = angular.IQService;
 import {Player} from "../Class/player";
 import {Npc} from "../Class/npc";
+import IComponentOptions = angular.IComponentOptions;
 
 require('../Class/npc.ts');
 /**

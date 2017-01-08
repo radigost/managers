@@ -38,7 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'managers',
-    'djangobower',
     'rest_framework',
 )
 
@@ -80,9 +79,6 @@ WSGI_APPLICATION = 'm_main.wsgi.application'
 
 with open('db.json', 'r') as f:
     DATABASES = json.load(f)
-
-
-
 
 
 
@@ -129,25 +125,33 @@ STATIC_URL = '/static/'
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'djangobower.finders.BowerFinder',
+    'npm.finders.NpmFinder'
 ]
-
-
-
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(PROJECT_ROOT, 'staticfiles'),
+# )
 
-BOWER_COMPONENTS_ROOT = BASE_DIR
-BOWER_INSTALLED_APPS = (
-    'angular',
-    'bootstrap',
-    'lodash',
-    'restangular',
-    'angular-bootstrap',
-)
 
+# BOWER_COMPONENTS_ROOT = BASE_DIR
+# BOWER_INSTALLED_APPS = (
+#     'angular',
+#     'bootstrap',
+#     'lodash',
+#     'restangular',
+#     'angular-bootstrap',
+# )
+
+
+# django-npm settings
+NPM_ROOT_PATH = BASE_DIR
+NPM_STATIC_FILES_PREFIX='js/lib'
+
+# this is to expose only excplicitly written files on prod
+# NPM_FILE_PATTERNS = {
+#     'react': ['react.js'],
+#     'express': ['lib/*.js', 'index.js']
+# }
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/

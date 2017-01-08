@@ -1,9 +1,10 @@
 import {GameService} from "../gameService";
 import * as angular from "angular";
+import IComponentOptions = angular.IComponentOptions;
 
 
 
-var CompanyListTpl = require('./companyList.jade');
+var CompanyListTpl = require('./companyList.pug');
 
 class CompanyListCtrl {
   $router;

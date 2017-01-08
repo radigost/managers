@@ -65,3 +65,26 @@ require('./game/game.ts');
 
 require('./newgame/newgame.ts');
 
+// import { UpgradeAdapter } from '@angular/upgrade';
+//
+// var adapter = new UpgradeAdapter();
+// var app = angular
+//     .module('app',
+//     [
+//       'restangular',
+//       'ngComponentRouter',
+//       'ui.bootstrap',
+//       'ngStorage',
+//       'ngCookies',
+//       'ngSanitize',
+//       'ui.select'
+//     ])
+//     .config(function($interpolateProvider) {
+//       $interpolateProvider.startSymbol('[[');
+//       $interpolateProvider.endSymbol(']]');
+//     })
+//     .config(function(RestangularProvider) {
+//       return RestangularProvider.setRequestSuffix("/");
+//     });
+//
+// adapter.bootstrap(document.body, ['app']);

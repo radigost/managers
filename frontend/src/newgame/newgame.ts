@@ -4,6 +4,7 @@ import IService = restangular.IService;
 import {cookies} from "angular";
 import * as restangular from "restangular";
 import * as _ from "lodash";
+import IComponentOptions = angular.IComponentOptions;
 
 var newGameTpl= require('./newgame.jade');
 interface  IMyStorageService extends storage.IStorageService {

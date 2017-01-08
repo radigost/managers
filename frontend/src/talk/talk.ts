@@ -5,6 +5,7 @@ import IService = restangular.IService;
 import * as restangular from "restangular";
 import IQService = angular.IQService;
 import {Npc} from "../Class/npc";
+import IComponentOptions = angular.IComponentOptions;
 /**
  * Created by user on 05.01.17.
  */
@@ -14,7 +15,7 @@ require('../Class/player.ts');
 require('../Class/npc.ts');
 
 
-var talkTpl = require('./talk.jade');
+var talkTpl = require('./talk.pug');
 
 class TalkCtrl {
   static $inject = ['Player', 'Npc', 'Restangular', '$q'];
@@ -157,8 +158,6 @@ class TalkCtrl {
 
 
 };
-
-
 
 
 class TalkComponent implements IComponentOptions{

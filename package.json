@@ -1,21 +1,53 @@
 {
   "name": "managers",
   "version": "1.0.0",
-  "description": "",
+  "description": "Это игра \"Менеджеры\". Создана для того, чтобы в игровой форме обучить продажам на примерах из жизни. Игра моделирует работу менеджера по активным продажам, в обязанности которого входит обзвон \"холодных\" клиентов, встреча с ними, выявление потребностей, а также последующая продажа. На данный момент есть возможность пройти один диалог - проход секретаря и выход на ЛПР Игра состоит из несколких разделов. Первый - основной экран, где можно посмотреть доступные для прозвона компании",
+  "main": "index.js",
+  "dependencies": {
+    "@angular/common": "~2.4.1",
+    "@angular/compiler": "~2.4.1",
+    "@angular/core": "~2.4.1",
+    "@angular/forms": "~2.4.1",
+    "@angular/http": "~2.4.1",
+    "@angular/platform-browser": "~2.4.1",
+    "@angular/platform-browser-dynamic": "~2.4.1",
+    "@angular/platform-server": "~2.4.1",
+    "@angular/router": "^0.2.0",
+    "@angular/upgrade": "^2.4.2",
+    "@angularclass/conventions-loader": "^1.0.2",
+    "@angularclass/hmr": "~1.2.2",
+    "@angularclass/hmr-loader": "~3.0.2",
+    "angular": "^1.6.1",
+    "angular-cookies": "^1.6.1",
+    "angular-sanitize": "^1.6.1",
+    "angular-ui-bootstrap": "^2.4.0",
+    "bootstrap": "^3.3.7",
+    "core-js": "^2.4.1",
+    "font-awesome": "^4.7.0",
+    "http-server": "^0.9.0",
+    "ie-shim": "^0.1.0",
+    "jasmine-core": "^2.5.2",
+    "jquery": "^3.1.1",
+    "lodash": "^4.17.4",
+    "ng-storage": "^0.3.2",
+    "reflect-metadata": "^0.1.9",
+    "restangular": "^1.6.1",
+    "rxjs": "~5.0.2",
+    "ui-select": "^0.19.6",
+    "zone.js": "~0.7.4"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "nickolay polyakov",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radigost/managers.git"
+  },
+  "author": "Nickolay Polyakov",
   "license": "ISC",
-"dependencies": {
-    "bower": "1.7.x"
-},
-"scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install angular",
-    "postinstall": "./node_modules/bower/bin/bower install lodash",
-    "postinstall": "./node_modules/bower/bin/bower install jquery",
-    "postinstall": "./node_modules/bower/bin/bower install bootstrap",
-    "postinstall": "./node_modules/bower/bin/bower install restangular",
-    "postinstall": "./node_modules/bower/bin/bower install angular-bootstrap"
-}
+  "bugs": {
+    "url": "https://github.com/radigost/managers/issues"
+  },
+  "homepage": "https://github.com/radigost/managers#readme"
 }

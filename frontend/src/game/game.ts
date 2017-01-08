@@ -3,7 +3,8 @@
  */
 import * as angular from "angular";
 import {GameService} from "./gameService";
-var gameTpl = require('./game.jade');
+import IComponentOptions = angular.IComponentOptions;
+var gameTpl = require('./game.pug');
 
 require('../Components/playerInfo/playerInfo.ts');
 

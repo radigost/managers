@@ -69,7 +69,11 @@
                                     | Выбрать Аватар
                                     span.caret
                                 ul.dropdown-menu
-                                    a(href="" ng-repeat="element in ctrl.images")(style="background-color:#F8FBF4;")
+                                    a(
+                                    href=""
+                                    ng-repeat="element in ctrl.images"
+                                    style="background-color:#F8FBF4;"
+                                    )
                                         img(src="../static/managers/img/[[element]]"  ng-click="ctrl.chooseAvatar(element)" width=50 height=75)
                             p
                                 ul

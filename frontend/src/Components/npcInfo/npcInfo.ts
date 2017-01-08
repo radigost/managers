@@ -3,12 +3,13 @@ import {Npc} from "../../Class/npc";
 import IService = restangular.IService;
 import * as restangular from "restangular";
 import IQService = angular.IQService;
+import IComponentOptions = angular.IComponentOptions;
 /**
  * Created by user on 05.01.17.
  */
 
 
-var NpcInfoTpl = require('./npcInfo.jade');
+var NpcInfoTpl = require('./npcInfo.pug');
 require('../../Class/npc.ts');
 
 class NpcInfoCtrl{

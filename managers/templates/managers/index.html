@@ -1,67 +1,60 @@
 {% load static %}
-
-<script type="text/javascript" src='{% static 'angular/angular.js' %}'></script>
-<script src="https://unpkg.com/@angular/router@0.2.0/angular1/angular_1_router.js"></script>
-
-{#<script src="https://npmcdn.com/@angular/router@0.2.0/angular1/angular_1_router.js"></script>#}
-{#<script type="text/javascript" src='{% static 'angular/angular_1_router.js' %}'></script>#}
-<script type="text/javascript" src='{% static 'angular-bootstrap/ui-bootstrap.js' %}'></script>
-<script type="text/javascript" src='{% static 'angular-bootstrap/ui-bootstrap-tpls.js' %}'></script>
-<script type="text/javascript" src='{% static 'lodash/dist/lodash.js' %}'></script>
-<script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
-{#<script type="text/javascript" src='{% static 'jquery/dist/jquery.js' %}'></script>#}
-{#<script type="text/javascript" src='{% static 'bootstrap/js/bootstrap.js' %}'></script>#}
-<script type="text/javascript" src='{% static 'restangular/dist/restangular.js' %}'></script>
-<script type="text/javascript" src='{% static 'managers/app.js' %}'></script>
-{#<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/dist/css/bootstrap.css' %}" />#}
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src='{% static 'js/lib/jquery/dist/jquery.min.js' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/lodash/lodash.min.js' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/angular/angular.min.js' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/angular-sanitize/angular-sanitize.min.js' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/@angular/router/angular1/angular_1_router.js' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/ng-storage/ngStorage.min.js' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/angular-cookies/angular-cookies.min.js' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/ui-select/dist/select.min.js' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/ui-select/dist/select.min.css' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/bootstrap/dist/js/bootstrap.min.js' %}'></script>
+<link rel="stylesheet" type="text/css" href="{% static 'js/lib/bootstrap/dist/css/bootstrap.min.css' %}" />
+<script type="text/javascript" src='{% static 'js/lib/angular-ui-bootstrap/dist/ui-bootstrap.js' %}'></script>
+<script type="text/javascript" src='{% static 'js/lib/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js' %}'></script>
+<link rel="stylesheet" type="text/css" href="{% static 'js/lib/angular-ui-bootstrap/dist/ui-bootstrap-csp.css' %}" />
+<script type="text/javascript" src='{% static 'js/lib/restangular/dist/restangular.min.js' %}'></script>
+<link rel="stylesheet" href='{% static 'js/lib/font-awesome/css/font-awesome.min.css' %}'>
 <link rel="stylesheet" type="text/css" href="{% static 'managers/style.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'angular-bootstrap/ui-bootstrap-csp.css' %}" />
-<script src="https://use.fontawesome.com/2dc2d2d22f.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.js"></script>
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.19.4/select.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.19.4/select.min.css" />
+<script type="text/javascript" src='{% static 'managers/app.js' %}'></script>
 
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function (d, w, c) {
-        (w[c] = w[c] || []).push(function() {
-            try {
-                w.yaCounter40152945 = new Ya.Metrika({
-                    id:40152945,
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true,
-                    webvisor:true,
-                    trackHash:true
-                });
-            } catch(e) { }
-        });
-
-        var n = d.getElementsByTagName("script")[0],
-            s = d.createElement("script"),
-            f = function () { n.parentNode.insertBefore(s, n); };
-        s.type = "text/javascript";
-        s.async = true;
-        s.src = "https://mc.yandex.ru/metrika/watch.js";
-
-        if (w.opera == "[object Opera]") {
-            d.addEventListener("DOMContentLoaded", f, false);
-        } else { f(); }
-    })(document, window, "yandex_metrika_callbacks");
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/40152945" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+{##}
+{#<!-- Yandex.Metrika counter -->#}
+{#<script type="text/javascript">#}
+{#    (function (d, w, c) {#}
+{#        (w[c] = w[c] || []).push(function() {#}
+{#            try {#}
+{#                w.yaCounter40152945 = new Ya.Metrika({#}
+{#                    id:40152945,#}
+{#                    clickmap:true,#}
+{#                    trackLinks:true,#}
+{#                    accurateTrackBounce:true,#}
+{#                    webvisor:true,#}
+{#                    trackHash:true#}
+{#                });#}
+{#            } catch(e) { }#}
+{#        });#}
+{##}
+{#        var n = d.getElementsByTagName("script")[0],#}
+{#            s = d.createElement("script"),#}
+{#            f = function () { n.parentNode.insertBefore(s, n); };#}
+{#        s.type = "text/javascript";#}
+{#        s.async = true;#}
+{#        s.src = "https://mc.yandex.ru/metrika/watch.js";#}
+{##}
+{#        if (w.opera == "[object Opera]") {#}
+{#            d.addEventListener("DOMContentLoaded", f, false);#}
+{#        } else { f(); }#}
+{#    })(document, window, "yandex_metrika_callbacks");#}
+{#</script>#}
+{#<noscript><div><img src="https://mc.yandex.ru/watch/40152945" style="position:absolute; left:-9999px;" alt="" /></div></noscript>#}
 <!-- /Yandex.Metrika counter -->
 
-{#<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.css' %}" />#}
+{#<link rel="stylesheet" type="text/css" hyesref="{% static 'font-awesome/css/font-awesome.css' %}" />#}
 {#<link href='{% static 'managers/font.ttf' %}' rel='stylesheet' type='text/css'>#}
 
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>Менеджеры</title>
@@ -69,21 +62,17 @@
       type="image/png"
       href="/static/managers/img/dollar.png">
 </head>
-<body  style="background-color:#FFF7EC;">
-
-
+<body  style="background-color:#FFF7EC;" ng-app="app">
     <app></app>
-
-
 </body>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-83970967-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
+{#<script>#}
+{#  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){#}
+{#  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),#}
+{#  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)#}
+{#  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');#}
+{##}
+{#  ga('create', 'UA-83970967-1', 'auto');#}
+{#  ga('send', 'pageview');#}
+{##}
+{#</script>#}
 </html>

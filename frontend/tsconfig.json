@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "module": "commonjs"
+    "module": "commonjs",
+    "sourceMap": true
+
   },
   "include": [
-
     "node_modules/@types/angular/index.d.ts",
     "node_modules/@types/ngstorage/index.d.ts",
     "node_modules/@types/lodash/index.d.ts",
@@ -11,16 +12,10 @@
     "node_modules/@types/angular-ui-bootstrap/index.d.ts",
     "node_modules/@types/angular-cookies/index.d.ts",
     "require.d.ts",
-    "src/decorators.ts",
-//    "src/app.ts"
     "src/**/*"
     ],
     "exclude": [
         "node_modules",
         "tests"
     ]
-//  "files": [
-//    "app.ts",
-//    "typings/tsd.d.ts"
-//  ]
 }

@@ -47,7 +47,10 @@
             .panel.panel-default(ng-show="!ctrl.notTheEnd()")
                 .panel-body
                     p [[ctrl.player.current.text]]
-            .panel.panel-default(ng-show="ctrl.notTheEnd()")(style="background-color:#C4D9D4;")
+            .panel.panel-default(
+                ng-show="ctrl.notTheEnd()"
+                style="background-color:#C4D9D4;"
+                )
                   .panel-header
 
                   .panel-body
@@ -55,7 +58,13 @@
                        b Выберите варианты ответа
 
                     .list-group
-                      a(href="").list-group-item( ng-repeat='element in ctrl.player.questionArray', ng-click='ctrl.update(element.id)' style="background-color:#F8FBF4;") -&nbsp;[[element.text]]
+                      a(
+                        href=""
+                      ).list-group-item(
+                          ng-repeat='element in ctrl.player.questionArray'
+                          ng-click='ctrl.update(element.id)'
+                          style="background-color:#F8FBF4;"
+                          ) -&nbsp;[[element.text]]
         .col-lg-6
             .panel.panel-default(style="background-color:#C4D9D4;")
                 .panel-body

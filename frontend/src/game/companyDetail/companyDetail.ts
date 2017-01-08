@@ -1,11 +1,12 @@
 import * as angular from "angular";
 import {GameService} from "../gameService";
 import {Company} from "../../Class/Company";
+import IComponentOptions = angular.IComponentOptions;
 /**
  * Created by user on 05.01.17.
  */
 
-var companyDetailTpl = require('./companyDetail.jade');
+var companyDetailTpl = require('./companyDetail.pug');
 
 require('../../Components/npcInfo/npcInfo.ts');
 require('../../Class/Company.ts');
