@@ -13,7 +13,7 @@
                 span(ng-if="!question.type")
                     button.btn.btn-primary(ng-click="ctrl.openModal(question)")
                         i.fa.fa-pencil
-                    button.btn.btn-danger(ng-click="ctrl.delete(question.id)")
+                    button.btn.btn-danger(ng-click="ctrl.deleteLeave(question.id)")
                         i.fa.fa-trash
                 span.label.label-primary(ng-if="question.type") [[question.type]]
                 ul

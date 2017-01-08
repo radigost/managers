@@ -59,7 +59,7 @@ require('./menu/menu.ts');
 
 require('./talk/talk.ts');
 
-require('./tree/tree.js');
+require('./tree/tree.ts');
 
 require('./game/game.ts');
 

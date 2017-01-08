@@ -77,7 +77,7 @@ class Node(models.Model):
         default=None,
         blank=True
     )
-    type = models.CharField(max_length=15,default=None,null=True)
+    type = models.CharField(max_length=15, default='', null=True,blank=True)
     def __unicode__(self):
         return self.text
 

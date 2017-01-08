@@ -14,7 +14,7 @@
         li(ng-repeat="element in $ctrl.node.answers")
             a [[element.id]]. [[element.text]]
                 span.label.label-primary(ng-if="element.type") [[element.type]]
-            button.btn.btn-danger(ng-click="$ctrl.delete(element.id)") x
+            button.btn.btn-danger(ng-click="$ctrl.deleteNode(element.id)") x
     div
         uib-tabset(active="active")
             uib-tab(index="0" heading="Добавить")

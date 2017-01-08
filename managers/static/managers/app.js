@@ -92,7 +92,7 @@
 	__webpack_require__(10);
 	__webpack_require__(17);
 	__webpack_require__(21);
-	__webpack_require__(34);
+	__webpack_require__(35);
 
 
 /***/ },
@@ -51094,154 +51094,141 @@
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	var angular = __webpack_require__(1);
+	var _ = __webpack_require__(11);
 	/**
 	 * Created by user on 05.01.17.
 	 */
-
-	var Npc, Player, tpl, treeCtrl,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-
-	Npc = __webpack_require__(15);
-
-	Player = __webpack_require__(13);
-
-	tpl = __webpack_require__(18);
-
+	// Npc = require('../Class/npc.js');
+	//
+	// Player = require('../Class/player.ts');
+	var treeTpl = __webpack_require__(18);
 	__webpack_require__(19);
-
-	treeCtrl = (function() {
-	  function treeCtrl(player, NpcFactory, Restangular, q, uibModal, cookies) {
-	    this.player = player;
-	    this.NpcFactory = NpcFactory;
-	    this.Restangular = Restangular;
-	    this.q = q;
-	    this.uibModal = uibModal;
-	    this.cookies = cookies;
-	    this.makeTree = bind(this.makeTree, this);
-	    this.openModal = bind(this.openModal, this);
-	    this["delete"] = bind(this["delete"], this);
-	    this.$onInit = bind(this.$onInit, this);
-	    this.tree = [];
-	    this.filterQ = false;
-	  }
-
-	  treeCtrl.prototype.$onInit = function() {
-	    this.player.init();
-	    this.npc = this.NpcFactory(this.Restangular, this.q);
-	    return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function(_this) {
-	      return function(res) {
-	        return _this.makeTree(_this.player);
-	      };
-	    })(this));
-	  };
-
-	  treeCtrl.prototype["delete"] = function(id) {
-	    var s;
-	    s = this.cookies.getAll();
-	    return this.Restangular.one('/api/v1/nodes/', id).get().then((function(_this) {
-	      return function(res) {
-	        return res.remove('', {
-	          'X-CSRFToken': s.csrftoken
-	        }).then(function() {
-	          return _this.$onInit();
-	        });
-	      };
-	    })(this));
-	  };
-
-	  treeCtrl.prototype.openModal = function(question) {
-	    this.modal = this.uibModal.open({
-	      size: 'md',
-	      component: 'modalComponent',
-	      resolve: {
-	        node: (function(_this) {
-	          return function() {
-	            return question;
-	          };
-	        })(this),
-	        tree: (function(_this) {
-	          return function() {
-	            var tree;
-	            if (question.category === 'npc') {
-	              return tree = _this.player.nodes;
-	            } else {
-	              return tree = _this.npc.nodes;
-	            }
-	          };
-	        })(this)
-	      }
-	    });
-	    return this.modal.result.then((function(_this) {
-	      return function() {
-	        return _this.$onInit();
-	      };
-	    })(this));
-	  };
-
-	  treeCtrl.prototype.makeTree = function(person) {
-	    var opponent;
-	    if (person) {
-	      if (person.type === 'player') {
-	        this.treeType = "Редактор ответов для Игрока";
-	        opponent = this.npc;
-	      } else if (person.type === 'npc') {
-	        this.treeType = "Редактор ответов для NPC";
-	        opponent = this.player;
-	      }
-	      this.tree = [];
-	      return _.forEach(opponent.nodes, (function(_this) {
-	        return function(node) {
-	          var nodesArray, qNode;
-	          nodesArray = [];
-	          qNode = _.find(person.tree, {
-	            id: node.id
-	          });
-	          if (qNode && qNode.choice.length > 0) {
-	            node.hasSiblings = true;
-	            _.forEach(qNode.choice, function(choice) {
-	              var t;
-	              t = _.find(person.nodes, {
-	                id: choice
-	              });
-	              return nodesArray.push(t);
+	var TreeCtrl = (function () {
+	    function TreeCtrl(player, NpcFactory, Restangular, q, uibModal, cookies) {
+	        this.player = player;
+	        this.NpcFactory = NpcFactory;
+	        this.Restangular = Restangular;
+	        this.q = q;
+	        this.uibModal = uibModal;
+	        this.cookies = cookies;
+	        this.tree = [];
+	        this.filterQ = false;
+	    }
+	    TreeCtrl.prototype.$onInit = function () {
+	        this.player.init();
+	        this.npc = this.NpcFactory(this.Restangular, this.q);
+	        return this.q.all([this.player.loadNodes(), this.player.loadTree(), this.npc.loadNodes(), this.npc.loadTree()]).then((function (_this) {
+	            return function (res) {
+	                return _this.makeTree(_this.player);
+	            };
+	        })(this));
+	    };
+	    TreeCtrl.prototype.deleteLeave = function (id) {
+	        var _this = this;
+	        var s = this.cookies.getAll();
+	        return this.Restangular.one('api/v1/nodes/', id).get().then(function (res) {
+	            return res.remove('', {
+	                'X-CSRFToken': s.csrftoken
+	            }).then(function () {
+	                return _this.$onInit();
 	            });
-	          }
-	          node.answers = nodesArray;
-	          return _this.tree.push(node);
+	        });
+	    };
+	    TreeCtrl.prototype.openModal = function (question) {
+	        var _this = this;
+	        this.modal = this.uibModal.open({
+	            size: 'md',
+	            component: 'modalComponent',
+	            resolve: {
+	                node: function () {
+	                    console.log(question);
+	                    return question;
+	                },
+	                tree: function () {
+	                    var tree;
+	                    if (question.category === 'npc') {
+	                        return tree = _this.player.nodes;
+	                    }
+	                    else {
+	                        return tree = _this.npc.nodes;
+	                    }
+	                    ;
+	                }
+	            }
+	        });
+	        return this.modal.result.then(function () {
+	            return _this.$onInit();
+	        });
+	    };
+	    TreeCtrl.prototype.makeTree = function (person) {
+	        var opponent;
+	        if (person) {
+	            if (person.type === 'player') {
+	                this.treeType = "Редактор ответов для Игрока";
+	                opponent = this.npc;
+	            }
+	            else if (person.type === 'npc') {
+	                this.treeType = "Редактор ответов для NPC";
+	                opponent = this.player;
+	            }
+	            this.tree = [];
+	            return _.forEach(opponent.nodes, (function (_this) {
+	                return function (node) {
+	                    var nodesArray, qNode;
+	                    nodesArray = [];
+	                    qNode = _.find(person.tree, {
+	                        id: node.id
+	                    });
+	                    if (qNode && qNode.choice.length > 0) {
+	                        node.hasSiblings = true;
+	                        _.forEach(qNode.choice, function (choice) {
+	                            var t;
+	                            t = _.find(person.nodes, {
+	                                id: choice
+	                            });
+	                            return nodesArray.push(t);
+	                        });
+	                    }
+	                    node.answers = nodesArray;
+	                    return _this.tree.push(node);
+	                };
+	            })(this));
+	        }
+	    };
+	    ;
+	    return TreeCtrl;
+	}());
+	TreeCtrl.$inject = ['Player', 'NpcFactory', 'Restangular', '$q', '$uibModal', '$cookies'];
+	var TreeComponent = (function () {
+	    function TreeComponent() {
+	        this.bindings = {
+	            $router: '<'
 	        };
-	      })(this));
+	        this.template = treeTpl();
+	        this.controller = TreeCtrl;
+	        this.controllerAs = 'ctrl';
 	    }
-	  };
-
-	  return treeCtrl;
-
-	})();
-
-	angular.module('app').component('tree', {
-	  template: tpl(),
-	  controller: ['Player', 'NpcFactory', 'Restangular', '$q', '$uibModal', '$cookies', treeCtrl],
-	  controllerAs: 'ctrl'
+	    return TreeComponent;
+	}());
+	angular.module('app').component('tree', new TreeComponent);
+	angular.module('app').filter('HasNoAnswer', function () {
+	    return function (data, filterQ) {
+	        var out;
+	        out = data;
+	        if (filterQ === true) {
+	            out = _.filter(data, (function (_this) {
+	                return function (element) {
+	                    var ret;
+	                    ret = (element.hasSiblings !== true) && (element.is_failure !== true) && (element.is_success !== true);
+	                    return ret;
+	                };
+	            })(this));
+	        }
+	        return out;
+	    };
 	});
-
-	angular.module('app').filter('HasNoAnswer', function() {
-	  return function(data, filterQ) {
-	    var out;
-	    out = data;
-	    if (filterQ === true) {
-	      out = _.filter(data, (function(_this) {
-	        return function(element) {
-	          var ret;
-	          ret = (element.hasSiblings !== true) && (element.is_failure !== true) && (element.is_success !== true);
-	          return ret;
-	        };
-	      })(this));
-	    }
-	    return out;
-	  };
-	});
-
-	// ---
-	// generated by coffee-script 1.9.2
 
 
 /***/ },
@@ -51250,147 +51237,131 @@
 
 	var pug = __webpack_require__(4);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003EРедактор диалога\u003C\u002Fh3\u003E\u003Ch5\u003E[[ctrl.treeType]]\u003C\u002Fh5\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.player)\"\u003EСделать дерево для Игрока\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.npc)\"\u003EСделать дерево для NPC\u003C\u002Fbutton\u003E\u003Cinput type=\"checkbox\" ng-model=\"ctrl.filterQ\"\u003E\u003Cul ng-repeat=\"question in ctrl.tree | HasNoAnswer: ctrl.filterQ | orderBy:'id'\"\u003E\u003Cli\u003E[[question.id]]. [[question.text]]\u003Cspan ng-if=\"!question.type\"\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"ctrl.openModal(question)\"\u003E\u003Ci class=\"fa fa-pencil\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-danger\" ng-click=\"ctrl.delete(question.id)\"\u003E\u003Ci class=\"fa fa-trash\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003C\u002Fspan\u003E\u003Cspan class=\"label label-primary\" ng-if=\"question.type\"\u003E[[question.type]]\u003C\u002Fspan\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in question.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003EРедактор диалога\u003C\u002Fh3\u003E\u003Ch5\u003E[[ctrl.treeType]]\u003C\u002Fh5\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.player)\"\u003EСделать дерево для Игрока\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.makeTree(ctrl.npc)\"\u003EСделать дерево для NPC\u003C\u002Fbutton\u003E\u003Cinput type=\"checkbox\" ng-model=\"ctrl.filterQ\"\u003E\u003Cul ng-repeat=\"question in ctrl.tree | HasNoAnswer: ctrl.filterQ | orderBy:'id'\"\u003E\u003Cli\u003E[[question.id]]. [[question.text]]\u003Cspan ng-if=\"!question.type\"\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"ctrl.openModal(question)\"\u003E\u003Ci class=\"fa fa-pencil\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-danger\" ng-click=\"ctrl.deleteLeave(question.id)\"\u003E\u003Ci class=\"fa fa-trash\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003C\u002Fspan\u003E\u003Cspan class=\"label label-primary\" ng-if=\"question.type\"\u003E[[question.type]]\u003C\u002Fspan\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in question.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	var angular = __webpack_require__(1);
+	var _ = __webpack_require__(11);
 	/**
 	 * Created by user on 05.01.17.
 	 */
-	var modalTpl, treeModalCtrl,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-
-	modalTpl = __webpack_require__(20);
-
-	treeModalCtrl = (function() {
-	  function treeModalCtrl(Restangular, cookies) {
-	    this.Restangular = Restangular;
-	    this.cookies = cookies;
-	    this.setDefault = bind(this.setDefault, this);
-	    this.setSuccess = bind(this.setSuccess, this);
-	    this.setFailure = bind(this.setFailure, this);
-	    this.create = bind(this.create, this);
-	    this.close = bind(this.close, this);
-	    this["delete"] = bind(this["delete"], this);
-	    this.save = bind(this.save, this);
-	    this.cancel = bind(this.cancel, this);
-	    this.node = this.resolve.node;
-	    this.toAdd = {
-	      text: ""
-	    };
-	  }
-
-	  treeModalCtrl.prototype.cancel = function() {
-	    return this.dismiss({
-	      $value: 'cancel'
-	    });
-	  };
-
-	  treeModalCtrl.prototype.save = function() {
-	    return this.Restangular.one('/api/v1/nodes/', this.node.id).get().then((function(_this) {
-	      return function(res) {
-	        var s;
-	        res.choice.push(_this.selected.id);
-	        s = _this.cookies.getAll();
-	        return res.customPUT('', '', '', {
-	          'X-CSRFToken': s.csrftoken
-	        }).then(function() {
-	          return _this.node.answers.push(_this.selected);
-	        });
-	      };
-	    })(this));
-	  };
-
-	  treeModalCtrl.prototype["delete"] = function(id) {
-	    return this.Restangular.one('/api/v1/nodes/', this.node.id).get().then((function(_this) {
-	      return function(res) {
-	        var s;
-	        res.choice = _.pull(res.choice, id);
-	        s = _this.cookies.getAll();
-	        return res.customPUT('', '', '', {
-	          'X-CSRFToken': s.csrftoken
-	        }).then(function() {
-	          return _this.node.answers = _.pullAllBy(_this.node.answers, [
-	            {
-	              'id': id
-	            }
-	          ], 'id');
-	        });
-	      };
-	    })(this));
-	  };
-
-	  treeModalCtrl.prototype.close = function() {
-	    return this.close({
-	      $value: 'cancel'
-	    });
-	  };
-
-	  treeModalCtrl.prototype.create = function(text) {
-	    var obj, s, type;
-	    if (this.node.category === 'npc') {
-	      type = 'player';
-	    } else {
-	      type = 'npc';
+	var treeModalTpl = __webpack_require__(20);
+	var TreeModalCtrl = (function () {
+	    function TreeModalCtrl(Restangular, cookies) {
+	        this.Restangular = Restangular;
+	        this.cookies = cookies;
+	        this.setDefault = function () {
+	            this.toAdd.is_fail = null;
+	            this.toAdd.is_success = null;
+	            return this.toAdd.type = '';
+	        };
 	    }
-	    console.log(this.toAdd);
-	    obj = {
-	      "category": type,
-	      "text": this.toAdd.text,
-	      "is_fail": null || this.toAdd.is_fail,
-	      "is_success": null,
-	      "is_start": null,
-	      "type": null || this.toAdd.type,
-	      "choice": []
+	    TreeModalCtrl.prototype.$onInit = function () {
+	        this.node = this.resolve.node;
+	        this.toAdd = {
+	            text: ""
+	        };
 	    };
-	    s = this.cookies.getAll();
-	    return this.Restangular.one('/api/v1/nodes/').post('', obj, '', {
-	      'X-CSRFToken': s.csrftoken
-	    }).then((function(_this) {
-	      return function(res) {
-	        _this.selected = res;
-	        return _this.save();
-	      };
-	    })(this));
-	  };
+	    TreeModalCtrl.prototype.cancel = function () {
+	        return this.dismiss({
+	            $value: 'cancel'
+	        });
+	    };
+	    TreeModalCtrl.prototype.save = function () {
+	        var _this = this;
+	        this.Restangular.one('api/v1/nodes/', this.node.id).get().then(function (res) {
+	            res.choice.push(_this.selected.id);
+	            var s = _this.cookies.getAll();
+	            return res.customPUT('', '', '', {
+	                'X-CSRFToken': s.csrftoken
+	            }).then(function () {
+	                _this.node.answers.push(_this.selected);
+	            });
+	        });
+	    };
+	    TreeModalCtrl.prototype.deleteNode = function (id) {
+	        var _this = this;
+	        this.Restangular.one('api/v1/nodes/', this.node.id).get().then(function (res) {
+	            res.choice = _.pull(res.choice, id);
+	            var s = _this.cookies.getAll();
+	            res.customPUT('', '', '', {
+	                'X-CSRFToken': s.csrftoken
+	            }).then(function () {
+	                return _this.node.answers = _.pullAllBy(_this.node.answers, [
+	                    {
+	                        'id': id
+	                    }
+	                ], 'id');
+	            });
+	        });
+	    };
+	    TreeModalCtrl.prototype.close = function () {
+	        return this.dismiss({ $value: 'cancel' });
+	    };
+	    TreeModalCtrl.prototype.create = function (text) {
+	        var _this = this;
+	        var obj, s, type;
+	        if (this.node.category === 'npc') {
+	            type = 'player';
+	        }
+	        else {
+	            type = 'npc';
+	        }
+	        console.log(this.toAdd);
+	        obj = {
+	            "category": type,
+	            "text": this.toAdd.text,
+	            "is_fail": null || this.toAdd.is_fail,
+	            "is_success": null,
+	            "is_start": null,
+	            "type": null || this.toAdd.type,
+	            "choice": []
+	        };
+	        s = this.cookies.getAll();
+	        this.Restangular.one('api/v1/nodes/').get().then(function (res) {
+	            console.log(res);
+	        });
+	        this.Restangular.one('api/v1/nodes/').post('', obj, '', {
+	            'X-CSRFToken': s.csrftoken
+	        }).then(function (res) {
+	            _this.selected = res;
+	            _this.save();
+	        });
+	    };
+	    TreeModalCtrl.prototype.setFailure = function () {
+	        this.toAdd.is_fail = true;
+	        this.toAdd.is_success = null;
+	        return this.toAdd.type = 'failure';
+	    };
+	    TreeModalCtrl.prototype.setSuccess = function () {
+	        this.toAdd.is_fail = null;
+	        this.toAdd.is_success = true;
+	        return this.toAdd.type = 'success';
+	    };
+	    return TreeModalCtrl;
+	}());
+	TreeModalCtrl.$inject = ['Restangular', '$cookies'];
+	;
+	var TreeModalComponent = (function () {
+	    function TreeModalComponent() {
+	        this.bindings = {
+	            resolve: '<',
+	            close: '&',
+	            dismiss: '&'
+	        };
+	        this.template = treeModalTpl();
+	        this.controller = TreeModalCtrl;
+	        this.controllerAs = '$ctrl';
+	    }
+	    return TreeModalComponent;
+	}());
+	angular.module('app').component('modalComponent', new TreeModalComponent);
 
-	  treeModalCtrl.prototype.setFailure = function() {
-	    this.toAdd.is_fail = true;
-	    this.toAdd.is_success = null;
-	    return this.toAdd.type = 'failure';
-	  };
-
-	  treeModalCtrl.prototype.setSuccess = function() {
-	    this.toAdd.is_fail = null;
-	    this.toAdd.is_success = true;
-	    return this.toAdd.type = 'success';
-	  };
-
-	  treeModalCtrl.prototype.setDefault = function() {
-	    this.toAdd.is_fail = null;
-	    this.toAdd.is_success = null;
-	    return this.toAdd.type = '';
-	  };
-
-	  return treeModalCtrl;
-
-	})();
-
-	angular.module('app').component('modalComponent', {
-	  template: modalTpl(),
-	  bindings: {
-	    resolve: '<',
-	    close: '&',
-	    dismiss: '&'
-	  },
-	  controller: ['Restangular', '$cookies', treeModalCtrl]
-	});
-
-	// ---
-	// generated by coffee-script 1.9.2
 
 /***/ },
 /* 20 */
@@ -51398,7 +51369,7 @@
 
 	var pug = __webpack_require__(4);
 
-	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"modal-header\"\u003E\u003Cbutton class=\"close\" ng-click=\"$ctrl.cancel()\"\u003E\u003Cspan aria-hidden=\"true\"\u003E×\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cdiv class=\"modal-title\"\u003E\u003Ch4\u003E\u003Cb\u003EДобавление вариантов ответа\u003C\u002Fb\u003E\u003C\u002Fh4\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-body\"\u003E\u003Cp\u003E\u003Csmall\u003Eid - [[$ctrl.node.id]]\u003C\u002Fsmall\u003E\u003C\u002Fp\u003E\u003Cp\u003E\u003Csmall\u003Ecategory - [[$ctrl.node.category]]\u003C\u002Fsmall\u003E\u003C\u002Fp\u003E\u003Cp\u003E   [[$ctrl.node.text]]\u003C\u002Fp\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in $ctrl.node.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003Cbutton class=\"btn btn-danger\" ng-click=\"$ctrl.delete(element.id)\"\u003Ex\u003C\u002Fbutton\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cdiv\u003E\u003Cuib-tabset active=\"active\"\u003E\u003Cuib-tab index=\"0\" heading=\"Добавить\"\u003E\u003Cform\u003E\u003Cui-select ng-model=\"$ctrl.selected\" on-select=\"\"\u003E\u003Cui-select-match\u003E\u003Cspan ng-bind=\"$select.selected.text\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fui-select-match\u003E\u003Cui-select-choices repeat=\"item in $ctrl.resolve.tree\"\u003E\u003Cspan ng-bind=\"item.text\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fui-select-choices\u003E\u003C\u002Fui-select\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"$ctrl.save()\"\u003E\u003Cspan\u003EДобавить\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003C\u002Fform\u003E\u003C\u002Fuib-tab\u003E\u003Cuib-tab index=\"1\" heading=\"Создать новую\"\u003E\u003Cform\u003E\u003Ctextarea class=\"form-control\" rows=\"3\" ng-model=\"$ctrl.toAdd.text\"\u003E\u003C\u002Ftextarea\u003E\u003Cdiv class=\"btn-group\" role=\"group\" aria-label=\"...\"\u003E\u003Cbutton class=\"btn btn-danger\" type=\"button\" ng-click=\"$ctrl.setFailure()\"\u003E\u003Ci class=\"fa fa-frown-o\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" type=\"button\" ng-click=\"$ctrl.setDefault()\"\u003E\u003Ci class=\"fa fa-frown-o\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-success\" type=\"button\" ng-click=\"$ctrl.setSuccess()\"\u003E\u003Ci class=\"fa fa-smile-o\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"$ctrl.create($ctrl.textToSave)\"\u003E\u003Cspan\u003EСоздать\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003C\u002Fform\u003E\u003C\u002Fuib-tab\u003E\u003C\u002Fuib-tabset\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-footer\"\u003E\u003C!--button.btn(ng-click=\"$ctrl.cancel()\") Отменить--\u003E\u003Cbutton class=\"btn\" ng-disabled=\"addEntityForm.$invalid \" ng-click=\"$ctrl.close()\"\u003EЗакрыть\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
+	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"modal-header\"\u003E\u003Cbutton class=\"close\" ng-click=\"$ctrl.cancel()\"\u003E\u003Cspan aria-hidden=\"true\"\u003E×\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cdiv class=\"modal-title\"\u003E\u003Ch4\u003E\u003Cb\u003EДобавление вариантов ответа\u003C\u002Fb\u003E\u003C\u002Fh4\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-body\"\u003E\u003Cp\u003E\u003Csmall\u003Eid - [[$ctrl.node.id]]\u003C\u002Fsmall\u003E\u003C\u002Fp\u003E\u003Cp\u003E\u003Csmall\u003Ecategory - [[$ctrl.node.category]]\u003C\u002Fsmall\u003E\u003C\u002Fp\u003E\u003Cp\u003E   [[$ctrl.node.text]]\u003C\u002Fp\u003E\u003Cul\u003E\u003Cli ng-repeat=\"element in $ctrl.node.answers\"\u003E\u003Ca\u003E[[element.id]]. [[element.text]]\u003Cspan class=\"label label-primary\" ng-if=\"element.type\"\u003E[[element.type]]\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003Cbutton class=\"btn btn-danger\" ng-click=\"$ctrl.deleteNode(element.id)\"\u003Ex\u003C\u002Fbutton\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003Cdiv\u003E\u003Cuib-tabset active=\"active\"\u003E\u003Cuib-tab index=\"0\" heading=\"Добавить\"\u003E\u003Cform\u003E\u003Cui-select ng-model=\"$ctrl.selected\" on-select=\"\"\u003E\u003Cui-select-match\u003E\u003Cspan ng-bind=\"$select.selected.text\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fui-select-match\u003E\u003Cui-select-choices repeat=\"item in $ctrl.resolve.tree\"\u003E\u003Cspan ng-bind=\"item.text\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fui-select-choices\u003E\u003C\u002Fui-select\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"$ctrl.save()\"\u003E\u003Cspan\u003EДобавить\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003C\u002Fform\u003E\u003C\u002Fuib-tab\u003E\u003Cuib-tab index=\"1\" heading=\"Создать новую\"\u003E\u003Cform\u003E\u003Ctextarea class=\"form-control\" rows=\"3\" ng-model=\"$ctrl.toAdd.text\"\u003E\u003C\u002Ftextarea\u003E\u003Cdiv class=\"btn-group\" role=\"group\" aria-label=\"...\"\u003E\u003Cbutton class=\"btn btn-danger\" type=\"button\" ng-click=\"$ctrl.setFailure()\"\u003E\u003Ci class=\"fa fa-frown-o\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" type=\"button\" ng-click=\"$ctrl.setDefault()\"\u003E\u003Ci class=\"fa fa-frown-o\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-success\" type=\"button\" ng-click=\"$ctrl.setSuccess()\"\u003E\u003Ci class=\"fa fa-smile-o\"\u003E\u003C\u002Fi\u003E\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003Cbutton class=\"btn btn-primary\" ng-click=\"$ctrl.create($ctrl.textToSave)\"\u003E\u003Cspan\u003EСоздать\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003C\u002Fform\u003E\u003C\u002Fuib-tab\u003E\u003C\u002Fuib-tabset\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"modal-footer\"\u003E\u003C!--button.btn(ng-click=\"$ctrl.cancel()\") Отменить--\u003E\u003Cbutton class=\"btn\" ng-disabled=\"addEntityForm.$invalid \" ng-click=\"$ctrl.close()\"\u003EЗакрыть\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
 
 /***/ },
@@ -51415,7 +51386,7 @@
 	__webpack_require__(25);
 	__webpack_require__(26);
 	__webpack_require__(28);
-	__webpack_require__(32);
+	__webpack_require__(33);
 	var GameComponent = (function () {
 	    function GameComponent() {
 	        this.bindings = {
@@ -51596,7 +51567,7 @@
 	 */
 	var companyDetailTpl = __webpack_require__(29);
 	__webpack_require__(30);
-	__webpack_require__(36);
+	__webpack_require__(32);
 	__webpack_require__(25);
 	var CompanyDetailCtrl = (function () {
 	    function CompanyDetailCtrl(service, company) {
@@ -51702,13 +51673,41 @@
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	var angular = __webpack_require__(1);
+	/**
+	 * Created by user on 05.01.17.
+	 */
+	var Company = (function () {
+	    function Company(Restangular) {
+	        this.Restangular = Restangular;
+	        this.current = {};
+	        this.items = [];
+	    }
+	    Company.prototype.selectCurrent = function (id) {
+	        var _this = this;
+	        this.Restangular.one('api/v1/companies/', id).get().then(function (res) {
+	            _this.current = res;
+	        });
+	    };
+	    return Company;
+	}());
+	exports.Company = Company;
+	;
+	angular.module('app').service('Company', ['Restangular', Company]);
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/**
 	 * Created by user on 05.01.17.
 	 */
 	var profileCtrl, tpl,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	tpl = __webpack_require__(33);
+	tpl = __webpack_require__(34);
 
 	__webpack_require__(25);
 
@@ -51738,7 +51737,7 @@
 	// generated by coffee-script 1.9.2
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
@@ -51747,13 +51746,13 @@
 	module.exports = template;
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var angular = __webpack_require__(1);
 	var _ = __webpack_require__(11);
-	var newGameTpl = __webpack_require__(35);
+	var newGameTpl = __webpack_require__(36);
 	var NewGameCtrl = (function () {
 	    function NewGameCtrl(localStorage, Restangular, cookies) {
 	        this.localStorage = localStorage;
@@ -51990,41 +51989,13 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pug = __webpack_require__(4);
 
 	function template(locals) {var pug_html = "", pug_mixins = {}, pug_interp;pug_html = pug_html + "\u003Cdiv class=\"centered\"\u003E\u003Ch3\u003E[[ctrl.gameName]]\u003C\u002Fh3\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"container\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-12\"\u003E\u003Cdiv class=\"row\"\u003E\u003Cdiv class=\"col-lg-6\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"form-horizontal\"\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EИмя\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.first_name\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EФамилия\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.last_name\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"form-group\"\u003E\u003Clabel class=\"col-sm-3 control-label\"\u003EНазвание компании\u003C\u002Flabel\u003E\u003Cdiv class=\"col-sm-8\"\u003E\u003Cinput class=\"form-control\" type=\"text\" ng-model=\"ctrl.current.company\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Ch4\u003EОсталось очков - [[ctrl.points]]\u003C\u002Fh4\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ctable\u003E\u003Ctr ng-repeat=\"element in ctrl.stats.items\"\u003E\u003Ctd\u003E[[element.caption]]\u003C\u002Ftd\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.minus(element.id)\"\u003E-\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\"\u003E[[ctrl.current.stats.personality[element.name] ]]\u003C\u002Fbutton\u003E\u003Cbutton class=\"btn btn-default\" ng-click=\"ctrl.plus(element.id)\"\u003E+\u003C\u002Fbutton\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003C\u002Ftable\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ctable\u003E\u003Ctr\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EСпециализация\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Cli ng-repeat=\"sp in ctrl.specialties.items\"\u003E\u003Ca ng-click=\"ctrl.chooseSpecialty(sp.id)\" href=\"\" tooltip-placement=\"right\" uib-tooltip=\"[[sp.tooltip]]\"\u003E[[sp.caption]]\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003Ctd\u003E[[ctrl.current.specialties[0].caption]]\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003Ctr\u003E\u003Ctd\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EСектор работы компании\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Cli ng-repeat=\"element in ctrl.indusrty.items\"\u003E\u003Ca ng-click=\"ctrl.chooseIndustry(element.id)\" href=\"\" tooltip-placement=\"right\" uib-tooltip=\"[[element.tooltip]]\"\u003E[[element.caption]]\u003C\u002Fa\u003E\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003C\u002Ftd\u003E\u003Ctd\u003E[[ctrl.current.industry.caption]]\u003C\u002Ftd\u003E\u003C\u002Ftr\u003E\u003C\u002Ftable\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-3\"\u003E\u003Cdiv class=\"panel panel-default\" style=\"background-color:#C4D9D4\"\u003E\u003Cdiv class=\"panel-body\"\u003E\u003Ch4\u003E[[ctrl.current.first_name]] [[ctrl.current.last_name]]\u003C\u002Fh4\u003E\u003Cimg src=\"..\u002F..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[ctrl.current.image_path]]\" width=\"100\" height=\"150\"\u003E\u003Cdiv class=\"btn-group\"\u003E\u003Cbutton class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"\u003EВыбрать Аватар\u003Cspan class=\"caret\"\u003E\u003C\u002Fspan\u003E\u003C\u002Fbutton\u003E\u003Cul class=\"dropdown-menu\"\u003E\u003Ca href=\"\" ng-repeat=\"element in ctrl.images\" style=\"background-color:#F8FBF4\"\u003E\u003Cimg src=\"..\u002Fstatic\u002Fmanagers\u002Fimg\u002F[[element]]\" ng-click=\"ctrl.chooseAvatar(element)\" width=\"50\" height=\"75\"\u003E\u003C\u002Fa\u003E\u003C\u002Ful\u003E\u003C\u002Fdiv\u003E\u003Cp\u003E\u003Cul\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Деньги\"\u003E$: [[ctrl.current.money]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Влияет на возможность аргументировать возражения по продукту, нормально разговаривать с техническими директорами\"\u003EЗнание продукта: [[ctrl.current.knowProduct]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько нужно делать мин звонков в день\"\u003Emin Звонков: [[ctrl.current.minCalls]]\u003C\u002Fli\u003E\u003Cli tooltip-placement=\"left\" uib-tooltip=\"Cколько максимум можно сделать звонков\"\u003Emax Звонков:[[ctrl.current.maxCalls]]\u003C\u002Fli\u003E\u003C\u002Ful\u003E\u003C\u002Fp\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"row\" style=\"height:250px\"\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4 btn btn-default btn-lg\"\u003E\u003Ca ng-click=\"ctrl.create()\"\u003E\u003Cspan\u003EСоздать Персонажа\u003C\u002Fspan\u003E\u003C\u002Fa\u003E\u003C\u002Fdiv\u003E\u003Cdiv class=\"col-lg-4\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";;return pug_html;};
 	module.exports = template;
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var angular = __webpack_require__(1);
-	/**
-	 * Created by user on 05.01.17.
-	 */
-	var Company = (function () {
-	    function Company(Restangular) {
-	        this.Restangular = Restangular;
-	        this.current = {};
-	        this.items = [];
-	    }
-	    Company.prototype.selectCurrent = function (id) {
-	        var _this = this;
-	        this.Restangular.one('api/v1/companies/', id).get().then(function (res) {
-	            _this.current = res;
-	        });
-	    };
-	    return Company;
-	}());
-	exports.Company = Company;
-	;
-	angular.module('app').service('Company', ['Restangular', Company]);
-
 
 /***/ }
 /******/ ]);

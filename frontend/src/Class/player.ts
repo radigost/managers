@@ -5,8 +5,8 @@ import * as angular from "angular";
 import {storage} from "angular";
 import * as restangular from "restangular";
 import IService = restangular.IService;
-import * as _ from "lodash";
 import IQService = angular.IQService;
+import * as _ from "lodash";
 
 
 interface  IMyLocalStorageService extends storage.IStorageService {
@@ -22,7 +22,7 @@ export class Player {
   private fakeName: string;
   private money: string;
   private tree: Array<any>;
-  private nodes: Array<any>;
+  public nodes: Array<any>;
   private position: string;
   private current: any;
   private id: any;
