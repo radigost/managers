@@ -5,3 +5,8 @@ staticfiles
 db.sqlite3
 
 /db.json
+bower_components
+node_modules
+frontend/node_modules
+.idea
+*.map
