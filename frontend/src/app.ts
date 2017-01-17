@@ -65,6 +65,7 @@ require('./game/game.ts');
 
 require('./newgame/newgame.ts');
 
+
 // import { UpgradeAdapter } from '@angular/upgrade';
 //
 // var adapter = new UpgradeAdapter();
