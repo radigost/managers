@@ -2,20 +2,16 @@
  * Created by user on 05.01.17.
  */
 import * as angular from "angular";
-import {storage} from "angular";
 import * as restangular from "restangular";
 import IService = restangular.IService;
 import IQService = angular.IQService;
 import * as _ from "lodash";
 
 
-interface  IMyLocalStorageService extends storage.IStorageService {
-            player: any;
-            user:any;
-        }
+
 
 export class Player {
-  static $inject =['Restangular', '$localStorage', '$q'];
+  static $inject =['Restangular', '$q'];
   private type: string;
   private name: string;
   private company: string;
@@ -31,7 +27,6 @@ export class Player {
   private playerAvatarID: any;
   constructor(
       public Restangular :IService,
-      private localStorage: IMyLocalStorageService,
       private q:IQService
   )
   {
@@ -46,7 +41,7 @@ export class Player {
   }
 
   public init() {
-    this.id = this.localStorage.player.id;
+    this.id = localStorage.getItem("playerId");
     this.Restangular.one('api/v1/persons/', this.id).get().then((res)=>{
         return _.extend(this, res);
       }
@@ -148,5 +143,5 @@ export class Player {
 
 };
 
-angular.module('app').service('Player', ['Restangular', '$localStorage', '$q', Player]);
+angular.module('app').service('Player', ['Restangular', '$q', Player]);
 

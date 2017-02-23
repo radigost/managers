@@ -1,5 +1,4 @@
 import * as angular from "angular";
-import {storage} from "angular";
 import IService = restangular.IService;
 import * as restangular from "restangular";
 /**

@@ -1,5 +1,5 @@
 import * as angular from "angular";
-import {storage} from "angular";
+// import {storage} from "angular";
 import IService = restangular.IService;
 import {cookies} from "angular";
 import * as restangular from "restangular";
@@ -7,12 +7,12 @@ import * as _ from "lodash";
 import IComponentOptions = angular.IComponentOptions;
 
 var newGameTpl= require('./newgame.jade');
-interface  IMyStorageService extends storage.IStorageService {
-            player: any;
-            user:any;
-        }
+// interface  IMyStorageService extends storage.IStorageService {
+//             player: any;
+//             user:any;
+//         }
 class NewGameCtrl{
-  static $inject = ['$localStorage', 'Restangular', '$cookies'];
+  static $inject = ['Restangular', '$cookies'];
   $router;
   private images: Array<any>;
   private gameName: string;
@@ -25,7 +25,6 @@ class NewGameCtrl{
   private current: any;
   private showMenu: boolean;
   constructor(
-      private localStorage:IMyStorageService,
       private Restangular:IService,
       private cookies: cookies.ICookiesService
   ) {
@@ -238,7 +237,7 @@ class NewGameCtrl{
     s = this.cookies.getAll();
     this.current.name = this.current.first_name + this.current.last_name;
     this.current.related_companies = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    this.current.owner = this.localStorage.user.id;
+    this.current.owner = localStorage.getItem("userId");
     return this.Restangular.one('api/v1/persons').get().then((function(_this) {
       return function(res) {
         return res.post('', _this.current, '', {

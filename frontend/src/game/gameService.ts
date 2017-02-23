@@ -1,6 +1,6 @@
 import * as angular from "angular";
 import * as restangular from "restangular";
-import {storage} from "angular";
+// import {storage} from "angular";
 import {Player} from "../Class/player";
 /**
  * Created by user on 05.01.17.
@@ -8,12 +8,11 @@ import {Player} from "../Class/player";
 // require('../Class/player.ts');
 
 export class GameService {
-  static $inject = ['Restangular', '$localStorage', 'Player'];
+  static $inject = ['Restangular', 'Player'];
   public inited;
   public companies;
 
   constructor(private Restangular: restangular.IService,
-              private localStorage: storage.IStorageService,
               public player: Player) {
     this.inited = false;
   }

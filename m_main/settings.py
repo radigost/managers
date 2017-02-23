@@ -125,7 +125,6 @@ STATIC_URL = '/static/'
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'npm.finders.NpmFinder'
 ]
 # Extra places for collectstatic to find static files.
 # STATICFILES_DIRS = (
@@ -133,25 +132,6 @@ STATICFILES_FINDERS = [
 # )
 
 
-# BOWER_COMPONENTS_ROOT = BASE_DIR
-# BOWER_INSTALLED_APPS = (
-#     'angular',
-#     'bootstrap',
-#     'lodash',
-#     'restangular',
-#     'angular-bootstrap',
-# )
-
-
-# django-npm settings
-NPM_ROOT_PATH = BASE_DIR
-NPM_STATIC_FILES_PREFIX='js/lib'
-
-# this is to expose only excplicitly written files on prod
-# NPM_FILE_PATTERNS = {
-#     'react': ['react.js'],
-#     'express': ['lib/*.js', 'index.js']
-# }
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/

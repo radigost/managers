@@ -17,6 +17,7 @@
     "@angularclass/conventions-loader": "^1.0.2",
     "@angularclass/hmr": "~1.2.2",
     "@angularclass/hmr-loader": "~3.0.2",
+
     "angular": "^1.6.1",
     "angular-cookies": "^1.6.1",
     "angular-sanitize": "^1.6.1",

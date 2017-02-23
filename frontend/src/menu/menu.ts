@@ -3,7 +3,7 @@ import IComponentController = angular.IComponentController;
 import * as restangular from "restangular";
 import IService = restangular.IService;
 import {IModalService} from "angular-ui-bootstrap";
-import {storage} from "angular";
+// import {storage} from "angular";
 import {cookies} from "angular";
 import IComponentOptions = angular.IComponentOptions;
 
@@ -21,13 +21,13 @@ class MenuComponent implements IComponentOptions{
   controllerAs:string =  'ctrl';
 }
 
- interface  IMyStorageService extends storage.IStorageService {
-            player: any;
-            user:any;
-        }
+ // interface  IMyStorageService extends storage.IStorageService {
+ //            player: any;
+ //            user:any;
+ //        }
 
 class MenuCtrl  {
-  static $inject = ['$uibModal', 'Restangular', '$localStorage', '$cookies'];
+  static $inject = ['$uibModal', 'Restangular', '$cookies'];
   public canSeeEditor;
   public modal ;
   players;
@@ -35,7 +35,6 @@ class MenuCtrl  {
   constructor(
       private uibModal: IModalService,
       private Restangular: restangular.IService,
-      private localStorage: IMyStorageService,
       private cookies: cookies.ICookiesService
   ) {
     this.canSeeEditor = false;
@@ -43,7 +42,7 @@ class MenuCtrl  {
 
   $onInit():void {
     this.Restangular.one('api/v1/my/').get().then( (res)=> {
-        this.localStorage.user = {id: res.user_id};
+        localStorage.setItem("userId",res.user_id);
         this.canSeeEditor = res.see_editor;
         return;
     });
@@ -54,7 +53,7 @@ class MenuCtrl  {
   }
 
   goToGame(playerId) {
-    this.localStorage.player = {id: playerId};
+    localStorage.setItem("playerId",playerId );
     this.$router.navigate(['Game']);
   }
 

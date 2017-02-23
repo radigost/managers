@@ -1,10 +1,11 @@
+
+
 import IComponentOptions = angular.IComponentOptions;
 import * as angular from "angular";
 import IComponentController = angular.IComponentController;
 import * as restangular from "restangular";
 import IService = restangular.IService;
 import {IModalService} from "angular-ui-bootstrap";
-import {storage} from "angular";
 import {cookies} from "angular";
 /**
  * Created by user on 05.01.17.
@@ -22,7 +23,6 @@ angular
       'restangular',
       'ngComponentRouter',
       'ui.bootstrap',
-      'ngStorage',
       'ngCookies',
       'ngSanitize',
       'ui.select'
@@ -75,7 +75,6 @@ require('./newgame/newgame.ts');
 //       'restangular',
 //       'ngComponentRouter',
 //       'ui.bootstrap',
-//       'ngStorage',
 //       'ngCookies',
 //       'ngSanitize',
 //       'ui.select'
