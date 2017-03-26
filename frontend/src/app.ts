@@ -5,15 +5,6 @@ import * as angular from "angular";
 import IComponentController = angular.IComponentController;
 import * as restangular from "restangular";
 import IService = restangular.IService;
-import {IModalService} from "angular-ui-bootstrap";
-import {cookies} from "angular";
-/**
- * Created by user on 05.01.17.
- */
-// declare var angular: any;
-
-
-
 
 'use strict';
 
@@ -55,15 +46,11 @@ angular
 }   )
     .value('$routerRootComponent', 'app');
 
-require('./menu/menu.ts');
-
-require('./talk/talk.ts');
-
-require('./tree/tree.ts');
-
-require('./game/game.ts');
-
-require('./newgame/newgame.ts');
+import './menu/menu.ts';
+import './talk/talk.ts';
+import './tree/tree.ts';
+import './game/game.ts';
+import './newgame/newgame.ts';
 
 
 // import { UpgradeAdapter } from '@angular/upgrade';
